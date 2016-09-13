@@ -35,3 +35,22 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+#VS nonsense
+Groupr/.vs
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+~$*
+*~
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+.ntvs_analysis.dat
+Groupr/.ntvs_analysis.dat
+Groupr/Groupr/.ntvs_analysis.dat
+Groupr/Groupr/node_modules
+.vs
