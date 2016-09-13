@@ -1,0 +1,13 @@
+Getting started with the Project
+Download Visual Studio
+Open Project from Source Control
+Clone Github Directory, paste the url from github
+once the repository is cloned, click on it and open project
+
+you will need to download node.js
+https://nodejs.org/en/download/
+and download the Visual studio extension for node.js
+https://beta.visualstudio.com/vs/node-js/
+
+Open the Solution from the repository
+press F5 and it should run
