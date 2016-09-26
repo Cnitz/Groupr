@@ -1,0 +1,33 @@
+{
+  "name": "Cloud View",
+  "authors": [
+    "Richard L. Wisniewski <r.wisniewski1101@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#^1.5.8",
+    "angular-material": "^1.1.1",
+    "angular-sanitize": "^1.5.8",
+    "angular-translate": "^2.12.0",
+    "angular-ui-router": "^0.3.1",
+    "angular-validation-match": "^1.9.0",
+    "requirejs": "^2.3.1",
+    "domReady": "requirejs-domready#^2.0.1",
+    "angular-aria": "^1.5.8",
+    "angular-ui-tree": "^2.22.0",
+    "xregexp": "^3.1.1",
+    "underscore": "^1.8.3",
+    "viewport-units-buggyfill": "^0.6.0",
+    "angular-mocks": "^1.5.8"
+  }
+}

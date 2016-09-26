@@ -1,0 +1,43 @@
+{
+  "name": "xregexp",
+  "version": "3.1.1",
+  "description": "Extended regular expressions",
+  "homepage": "http://xregexp.com/",
+  "authors": [
+    "Steven Levithan <steves_list@hotmail.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slevithan/xregexp.git"
+  },
+  "keywords": [
+    "regex",
+    "regexp",
+    "regular expression",
+    "unicode"
+  ],
+  "main": "xregexp-all.js",
+  "ignore": [
+    "**/.*",
+    "package.json",
+    "README.md",
+    "src",
+    "tests",
+    "tools"
+  ],
+  "_release": "3.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.1.1",
+    "commit": "1f58b9208bd3255114785a0822dbbe22e6eabb97"
+  },
+  "_source": "https://github.com/slevithan/xregexp.git",
+  "_target": "^3.1.1",
+  "_originalSource": "xregexp"
+}

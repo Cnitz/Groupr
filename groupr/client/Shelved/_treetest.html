@@ -1,0 +1,28 @@
+<md-content>
+    <script type="text/ng-template" id="nodes_renderer.html">
+        <div class="md-list-item-text" tree-handle>
+            <p>
+                {{dir.name}}
+            </p>
+        </div>
+        <ol ui-tree-nodes="" ng-model="dir.subfolders">
+            <li ng-repeat="dir in dir.subfolders" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+        </ol>
+    </script>
+    <md-list layout-padding>
+		<div ng-repeat="account in accounts">
+			<md-list-item class="md-2-line">
+	            <!--<img ng-src="{{message.face}}" class="md-avatar" alt="{{message.who}}">-->
+				<div class="md-list-item-text" style="margin-bottom: 0px;">
+	                <h3>{{account.type}}</h3>
+	                <h4>{{account.username}}</h4>
+	            </div>
+	        </md-list-item>
+			<md-list-item ui-tree>
+				<ol ui-tree-nodes="" ng-model="account.dirs" id="tree-root" style="margin-top:0px;">
+					<li ng-repeat="dir in account.dirs" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+				</ol>
+			</md-list-item>
+		</div>
+    </md-list>
+</md-content>

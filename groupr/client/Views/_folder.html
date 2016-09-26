@@ -1,0 +1,127 @@
+<div id="body-div" layout="row">
+    <md-sidenav class="md-sidenav-left" md-component-id="left" layout="column" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
+        <md-toolbar class="md-tall">
+            <!-- md-theme="dark-grey"> -->
+            <span flex=""></span>
+            <div class="md-toolbar-tools">
+                <div layout="column" ng-if="user.hasName">
+                    <h2>{{user.name}}</h2>
+                    <p class="md-body-1" style="margin: 0;">{{user.username}}</p>
+                </div>
+                <h2 ng-if="!user.hasName">{{user.username}}</h2>
+                <span flex=""></span>
+            </div>
+        </md-toolbar>
+        <md-content>
+            <!-- TODO: sidebar nav content -->
+            <!--	TODO: list accounts -->
+            <!--	TODO: place directory tree -->
+            <section>
+                <md-subheader class="md-primary">Accounts</md-subheader>
+                <md-list md-theme="grey" style="padding-top: 0px;">
+                    <md-list-item class="md-2-line" ng-repeat="account in user.accounts" layout-align="start center">
+                        <!-- TODO: Click change state event -->
+                        <!--<div class="md-avatar cloud_ic cloud_ic_{{$index}}" style="border-radius: 0px;">
+                            <ng-include ng-if="account.active" src="'./Views/img/icons/ic_cloud_done_48px.svg'"></ng-include>
+							<ng-include  ng-if="!account.active" src="'./Views/img/icons/ic_cloud_off_48px.svg'"></ng-include>
+                        </div>
+					 class="account-check-{{$index}}"-->
+                        <md-checkbox ng-model="account.active" aria-label="{{account.username}}" id="account-check-{{$index}}"></md-checkbox>
+                        <div class="md-list-item-text">
+                            <h3>{{account.type}}</h3>
+                            <h4>{{account.username}}</h4>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </section>
+        </md-content>
+    </md-sidenav>
+    <div layout="column" flex="">
+        <md-toolbar class="md-tall">
+            <div layout="column" layout-fill layout-align="start start">
+                <div layout="row" class="md-toolbar-tools">
+                    <md-button class="md-icon-button" aria-label="Navigation" ng-click="ui.sideNav.toggleSidenav()" hide-gt-md>
+                        <md-icon md-svg-icon="Views/img/icons/menu.svg"></md-icon>
+                    </md-button>
+                    <h1>CloudView</h1>
+                    <span flex></span>
+                </div>
+                <span flex></span>
+                <div layout="row" style="overflow-x: auto;" class="md-toolbar-tools">
+                    <h1 style="white-space: nowrap;">My files &nbsp;&#9654;</h1>
+                    <h1 ng-repeat="f in folder.path | parentFolder: 3" style="white-space: nowrap;">
+                        <a ng-click="ui.folder.go(f.pid)">&emsp;{{f.name}}&nbsp;&nbsp;<span ng-if="!$last">&#9654;</span>
+                        </a>
+                    </h1>
+                </div>
+            </div>
+        </md-toolbar>
+        <md-content layout="column" flex>
+            <!-- TODO: stuff goes here -->
+            <div ng-show="(activeAccounts=(user.accounts | filter: {active: true })).length">
+                <div ng-show="(filteredFiles=(folder.files | selectedAccounts: user.accounts)).length || folder.subFolders.length">
+                    <section ng-show="folder.subfolders.length">
+                        <md-subheader class="md-primary">
+                            <span style="padding-left: 8px;">Folders</span>
+                        </md-subheader>
+                        <div layout="row" layout-wrap class="md-padding" style="padding-top: 0px;">
+                            <div flex-xs="100" flex-sm="50" flex-md="25" flex-lg="20" flex-xl="10" ng-repeat="sub in folder.subfolders">
+                                <md-card ng-click="ui.folder.go(sub.pid)">
+                                    <md-tooltip md-delay="1000">
+                                        {{sub.name}}
+                                    </md-tooltip>
+                                    <md-card-content layout="row" layout-align="start center" style="padding: .5rem; overflow: hidden;">
+                                        <img src="Views/img/icons/folder.svg" style="height: 2rem; padding-right: .5rem;"/>
+                                        <p style="margin-top: 8px; margin-bottom: 8px; display: block; width: 100%" class="folder_item md-body-1">
+                                            {{sub.name}}
+                                        </p>
+                                    </md-card-content>
+                                </md-card>
+                            </div>
+                        </div>
+                    </section>
+                    <section ng-show="filteredFiles.length">
+                        <md-subheader class="md-primary">
+                            <span style="padding-left: 8px;">Files</span>
+                        </md-subheader>
+                        <div class="md-padding" style="padding-top: 0px;">
+                            <md-grid-list id="files" md-cols-xs="2" md-cols-sm="4" md-cols-md="8" md-cols-lg="10" md-cols-xl="20" md-row-height="1:1" md-gutter="12px" md-gutter-gt-sm="8px">
+                                <md-grid-tile ng-repeat="file in filteredFiles" class="account-{{file.account}}" ng-click="ui.file.open(file.pid)">
+                                    <md-grid-tile-footer class="folder_file">
+                                        <md-tooltip md-delay="1000">
+                                            {{file.name}}
+                                        </md-tooltip>
+                                        <h3 style="margin: 16px;" class="folder_item">{{file.name}}</h3>
+                                    </md-grid-tile-footer>
+                                </md-grid-tile>
+                            </md-grid-list>
+                        </div>
+                    </section>
+					<md-fab-speed-dial md-open="ui.fab.isOpen" md-direction="left" ng-class="'md-scale'" style="position: fixed; right: 32px; bottom: 32px;">
+						<md-fab-trigger>
+							<md-button aria-label="Add" class="md-fab">
+								<md-icon md-svg-src="./Views/img/icons/ic_add_48px.svg"></md-icon>
+							</md-button>
+						</md-fab-trigger>
+						<md-fab-actions>
+							<md-button aria-label="New File" class="md-fab md-raised md-mini" ng-click="ui.folder.new_file()">
+								<md-icon md-svg-src="./Views/img/icons/ic_note_add_48px.svg" aria-label="New File"></md-icon>
+							</md-button>
+							<md-button aria-label="New Folder" class="md-fab md-raised md-mini" ng-click="ui.folder.new_folder()">
+								<md-icon md-svg-src="./Views/img/icons/folder.svg" aria-label="New Folder"></md-icon>
+							</md-button>
+						</md-fab-actions>
+					</md-fab-speed-dial>
+                </div>
+                <div ng-hide="filteredFiles.length || folder.subfolders.length" layout="column" layout-align="center center" flex>
+                    <h1 class="md-body-1">This folder is empty.
+                    </h1>
+                </div>
+            </div>
+            <div ng-hide="activeAccounts.length" layout="column" layout-align="center center" flex>
+                <h1 class="md-body-1">There are no active accounts.
+                </h1>
+            </div>
+        </md-content>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+#body-div {
+	height: 100vh;
+	width: 100vw;
+
+	content: 'viewport-units-buggyfill; height: 100vh; width: 100vw;';
+}
+/* account item colours */
+.account-0 {
+	background-color: #0088FF;
+}
+md-checkbox.md-checked#account-check-0 .md-icon {
+	background-color: #0088FF;
+}
+md-checkbox#account-check-0 .md-icon {
+	border-color: #0088FF;
+}
+.account-1 {
+	background-color: #AAFF66;
+}
+md-checkbox.md-checked#account-check-1 .md-icon {
+	background-color: #AAFF66;
+}
+md-checkbox#account-check-1 .md-icon {
+	border-color: #AAFF660;
+}
+.account-2 {
+	background-color: #FF7777;
+}
+md-checkbox.md-checked#account-check-2 .md-icon {
+	background-color: #FF7777;
+}
+md-checkbox#account-check-2 .md-icon {
+	border-color: #FF7777;
+}
+.account-3 {
+	background-color: #EEEE77;
+}
+md-checkbox.md-checked#account-check-3 .md-icon {
+	background-color: #EEEE77;
+}
+md-checkbox#account-check-3 .md-icon {
+	border-color: #EEEE77;
+}
+/* fixes folder items being too long for their box */
+.folder_item {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 100%;
+	display: block;
+}
+.folder_file figcaption {
+	width: 100%;
+	display: flex;
+}
+/* Not used at present, maybe will be brought back.  maybe. */
+.cloud_ic_0 svg path {
+	fill: #0088FF;
+}
+.cloud_ic_1 svg path {
+	fill: #AAFF66;
+}
+.cloud_ic_2 svg path {
+	fill: #FF7777;
+}
