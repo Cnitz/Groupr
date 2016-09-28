@@ -1,10 +1,10 @@
 define([
 	'./Module'
 ], function(module) {
-	return module.controller('Groupr.Controllers.Home', [
+	return module.controller('Groupr.Controllers.Main', [
 		'$scope',
 		'$state',
-		function HomeController($scope, $state) {
+		function MainController($scope, $state) {
 			$scope.login = function() {
 				$state.go('login');
 			};

@@ -1,10 +1,10 @@
 define([
 	'./Module'
 ], function(module) {
-	return module.controller('CloudView.Controllers.Login', [
+	return module.controller('Groupr.Controllers.Login', [
 		'$scope',
 		'$state',
-		'CloudView.Services.AccountServices',
+		'Groupr.Services.AccountServices',
 		function LoginController($scope, $state, AccountServices) {
 			$scope.username = '';
 			$scope.password = '';
@@ -24,7 +24,7 @@ define([
 				AccountServices.login(credentials)
 					.then(
 						function(result) {
-							$state.go('folder');
+							$state.go('home');
 						},
 						function(result) {
 							console.log(result.data);

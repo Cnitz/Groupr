@@ -1,5 +1,5 @@
 define([
 	'angular'
 ], function(angular){
-	return angular.module('CloudView.Filters', []);
+	return angular.module('Groupr.Filters', []);
 });

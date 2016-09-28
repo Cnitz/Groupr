@@ -1,10 +1,10 @@
 define([
 	'./Module'
 ], function(module) {
-	return module.controller('CloudView.Controllers.Signup', [
+	return module.controller('Groupr.Controllers.Signup', [
 		'$scope',
 		'$state',
-		'CloudView.Services.AccountServices',
+		'Groupr.Services.AccountServices',
 		function SignupController($scope, $state, AccountServices) {
 			$scope.name = '';
 			$scope.username = '';

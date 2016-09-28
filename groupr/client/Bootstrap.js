@@ -9,6 +9,6 @@ define([
     'use strict';
 	vpubf.init({hacks: hacks});
     require(['domReady!'], function(document) {
-        ng.bootstrap(document, ['CloudView']);
+        ng.bootstrap(document, ['Groupr']);
     });
 });

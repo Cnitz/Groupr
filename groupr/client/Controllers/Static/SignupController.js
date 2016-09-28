@@ -1,7 +1,7 @@
 define([
 	'./Module'
 ], function(module) {
-	return module.controller('CloudView.Controllers.Signup', [
+	return module.controller('Groupr.Controllers.Signup', [
 		'$scope',
 		'$state',
 		function SignupController($scope, $state) {

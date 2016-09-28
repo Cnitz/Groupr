@@ -1,6 +1,6 @@
 define(['Application', 'angular', 'ngMocks'], function(app, ng, mocks) {
     describe('testing signup controller', function() {
-        beforeEach(module('CloudView'));
+        beforeEach(module('Groupr'));
 
        var $controller;
 
@@ -11,7 +11,7 @@ define(['Application', 'angular', 'ngMocks'], function(app, ng, mocks) {
         describe('form validation', function() {
             it('nonmatching password', function() {
                 var $scope = {};
-                var controller = $controller('CloudView.Controllers.Signup', { $scope: $scope });
+                var controller = $controller('Groupr.Controllers.Signup', { $scope: $scope });
                 $scope.password = 'Correct';
                 $scope.confirm_password = 'Incorrect';
                 $scope.signup();
@@ -21,7 +21,7 @@ define(['Application', 'angular', 'ngMocks'], function(app, ng, mocks) {
 
             it('nonmatching email', function() {
                 var $scope = {};
-                var controller = $controller('CloudView.Controllers.Signup', { $scope: $scope });
+                var controller = $controller('Groupr.Controllers.Signup', { $scope: $scope });
                 $scope.email = 'Correct';
                 $scope.confirm_email = 'Incorrect';
                 $scope.signup();
@@ -31,7 +31,7 @@ define(['Application', 'angular', 'ngMocks'], function(app, ng, mocks) {
 
             it('no error', function() {
                 var $scope = {};
-                var controller = $controller('CloudView.Controllers.Signup', { $scope: $scope });
+                var controller = $controller('Groupr.Controllers.Signup', { $scope: $scope });
                 $scope.email = 'Correct';
                 $scope.confirm_email = 'Correct';
                 $scope.password = 'Correct';

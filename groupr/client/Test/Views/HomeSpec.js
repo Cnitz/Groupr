@@ -1,6 +1,6 @@
 define(['Application', 'angular', 'ngMocks', 'View.signup'], function(app, ng, mocks) {
     describe('testing signup view', function() {
-        beforeEach(module('CloudView'));
+        beforeEach(module('Groupr'));
 		beforeEach(module('templates'));
 
         var $scope;

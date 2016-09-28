@@ -1,7 +1,7 @@
 define([
 	'./Module'
 ], function(module) {
-	return module.factory('CloudView.Services.AccountServices', [
+	return module.factory('Groupr.Services.AccountServices', [
 		'$http',
 		function($http) {
 			var service = {};

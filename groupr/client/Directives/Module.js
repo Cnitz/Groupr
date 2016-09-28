@@ -1,5 +1,5 @@
 define([
 	'angular'
 ], function(angular) {
-	return angular.module('CloudView.Directives', []);
+	return angular.module('Groupr.Directives', []);
 });

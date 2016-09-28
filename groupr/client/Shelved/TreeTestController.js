@@ -1,7 +1,7 @@
 define([
     './Module'
 ], function(module) {
-    return module.controller('CloudView.Controllers.TreeTest', [
+    return module.controller('Groupr.Controllers.TreeTest', [
         '$scope',
         '$state',
         '$mdSidenav',

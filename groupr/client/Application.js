@@ -19,7 +19,7 @@ define([
     './Localisation/it'
 ], function(ng) {
     'use strict';
-    return ng.module('CloudView', [
+    return ng.module('Groupr', [
         'ngAnimate',
         'ngAria',
         'ngMaterial',
@@ -30,10 +30,10 @@ define([
         'ui.tree',
         'validation.match',
         //our modules
-        'CloudView.Controllers',
-        'CloudView.Directives',
-        'CloudView.Filters',
-        'CloudView.Services'
+        'Groupr.Controllers',
+        'Groupr.Directives',
+        'Groupr.Filters',
+        'Groupr.Services'
     ]).config([
         '$mdThemingProvider',
         function($mdThemingProvider) {

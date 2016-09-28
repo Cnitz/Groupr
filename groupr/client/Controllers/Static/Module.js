@@ -2,5 +2,5 @@ define([
 	'angular'
 ], function(ng) {
 	'use strict';
-	return ng.module('CloudView.Controllers', []);
+	return ng.module('Groupr.Controllers', []);
 });

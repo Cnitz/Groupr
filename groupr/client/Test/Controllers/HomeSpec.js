@@ -1,6 +1,6 @@
 define(['Application', 'angular', 'ngMocks'], function(app, ng, mocks) {
     describe('testing home controller', function() {
-        beforeEach(module('CloudView'));
+        beforeEach(module('Groupr'));
 
        var $controller;
 
