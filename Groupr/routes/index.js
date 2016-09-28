@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-//var api_access = require('../api_logic/google_access');
+// Models
+var User = require('../models/user');
 
 router.use((req, res, next) => {
     // Default route
@@ -17,13 +18,11 @@ router.route('/routes').get((req, res) => {
 });
 
 router.route('/create_account').get((req, res) => {
-	res.json({
-		status: 200
-	});
+	
 });
 
 router.route('/login').post((req, res) => {
-    // Check if user exists
+    
 
     // If user exists
     res.json({
@@ -34,9 +33,23 @@ router.route('/login').post((req, res) => {
 });
 
 router.route('/signup').post((req, res) => {
-	res.json({
-		things: true
-	})
+    console.log(req.body.name);
+    var newAccount = User();
+    newAccount.name = req.body.name;
+    newAccount.username = req.body.username;
+    newAccount.email = req.body.email;
+    newAccount.password = req.body.password;
+    newAccount.save((err) => {
+        if (err) {
+            res.status(500).json({
+                error: err,
+                message: 'Error: Account creation failed'
+            });
+        }
+    });
+    res.status(200).json({
+        message: 'Successful account creation'
+    });
 });
 
 // var savedAuth = null

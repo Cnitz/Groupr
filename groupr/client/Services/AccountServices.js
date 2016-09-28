@@ -6,7 +6,7 @@ define([
 		function($http) {
 			var service = {};
 
-			var url = 'http://localhost:8081/';
+			var url = 'http://localhost:3000/api/';
 			
 			service.login = function(credentials) {
 				return $http({
@@ -23,31 +23,6 @@ define([
 					data: userAccount
 				});
 			}
-
-			service.addGoogleDriveAccount = function(googleDriveCredentials) {
-				return $http({
-					method: 'POST',
-					url: url + '',
-					data: googleDriveCredentials
-				}); 
-			}
-
-			service.addDropboxAccount = function(dropboxCredentials) {
-				return $http({
-					method: 'POST',
-					url: url + '',
-					data: dropboxCredentials
-				});
-			}
-
-			service.addOneDriveAccount = function(oneDriveCredentials) {
-				return $http({
-					method: 'POST',
-					url: url + '',
-					data: oneDriveCredentials
-				});
-			}
-			
 			return service;
 		}
 	]);
