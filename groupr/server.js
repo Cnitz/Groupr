@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 // MONGO
-mongoose.connect('mongodb://localhost:27017/db_name');
+mongoose.connect('mongodb://localhost:27017/Groupr');
 
 // Create the app
 var app = express();
