@@ -17,19 +17,30 @@ router.route('/routes').get((req, res) => {
     res.json(router.stack);
 });
 
-router.route('/create_account').get((req, res) => {
-	
-});
-
 router.route('/login').post((req, res) => {
-    
-
-    // If user exists
-    res.json({
-    	token: 'token'
-    });
-
-    // else return 403
+    User.findOne({ 'username': req.body.username}, (err, user) => {
+        if (err) {
+            res.status(500).json({
+                message: 'Error: Database access'
+            });
+        }
+        else if (user === null) {
+            res.status(401).json({
+                message: 'Error: Invalid login'
+            });
+        }
+        else if (user.password != req.body.password) {
+            res.status(401).json({
+                message: 'Error: Invalid login'
+            });
+        }
+        else {
+            res.status(200).json({
+                user: user,
+                message: 'Successful login'
+            });
+        }
+    })
 });
 
 router.route('/signup').post((req, res) => {
@@ -46,9 +57,11 @@ router.route('/signup').post((req, res) => {
                 message: 'Error: Account creation failed'
             });
         }
-    });
-    res.status(200).json({
-        message: 'Successful account creation'
+        else {
+            res.status(200).json({
+                message: 'Successful account creation'
+            });
+        }
     });
 });
 

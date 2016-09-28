@@ -38,7 +38,7 @@ define([
 				AccountServices.signup(userAccount)
 					.then(
 						function(result) {
-							console.log(result.data);
+							$state.go('login');
 						},
 						function(result) {
 							console.log(result.data);

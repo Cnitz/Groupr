@@ -7,8 +7,4 @@ var UserSchema = new mongoose.Schema({
     password : { type: String, required: true },
 });
 
-UserSchema.methods.comparePassword = function(candidatePassword, cb) {
-    
-};
-
 module.exports = mongoose.model('User', UserSchema);

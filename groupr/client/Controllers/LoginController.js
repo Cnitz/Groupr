@@ -24,10 +24,10 @@ define([
 				AccountServices.login(credentials)
 					.then(
 						function(result) {
-							$state.go('folder', result.data);
+							$state.go('folder');
 						},
 						function(result) {
-							// do something with error
+							console.log(result.data);
 						}
 					);
 			};
