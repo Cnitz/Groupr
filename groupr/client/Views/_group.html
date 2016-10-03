@@ -1,0 +1,26 @@
+<div id="body-div" layout="column">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Groupr</h2>
+			<span flex></span>
+		</div>
+	</md-toolbar>
+<p data-ng-cloak data-ng-if="vm.groups.length == 0">You are not a memeber of any groups.</p>
+<table class="table-striped" data-ng-if="vm.groups.length > 0">
+    <thead>
+<tr>
+    <th>Group Name</th>
+    <th>Description</th>
+</tr>
+<tbody>
+    <tr data-ng-repeat="group in vm.groups ">
+        <td>{{group.name}}</td>
+        <td>{{group.description}}</td>
+    </tr>
+</tbody>
+</table>
+
+
+
+
+</div>

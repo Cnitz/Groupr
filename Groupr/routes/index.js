@@ -3,6 +3,7 @@ var router = express.Router();
 
 // Models
 var User = require('../models/user');
+var Group = require('../models/group');
 
 router.use((req, res, next) => {
     // Default route
@@ -64,6 +65,46 @@ router.route('/signup').post((req, res) => {
         }
     });
 });
+
+router.route('/create_group').post((req, res) => {
+    console.log(req.body);
+    var newGroup = Group();
+    newGroup.name = req.body.name;
+    newGroup.description = req.body.description;
+    newGroup.isPublic = req.body.isPublic;
+    newGroup.save((err) => {
+        if (err) {
+            res.status(500).json({
+                error: err,
+                message: 'Error: Group creation failed'
+            });
+        }
+        else {
+            res.status(200).json({
+                message: 'Successful group creation'
+            });
+        }
+    });
+});
+
+
+router.route('/get_groups').get((req, res) => {
+    
+  Group.find({}, function(err, groups) {
+    var groupApiModelList = [];
+    groups.forEach(function(group) {
+      groupApiModelList.push(groupApiModel(group));
+    });
+    res.send(groupApiModelList);  
+  });
+});
+
+function groupApiModel(group){
+    return {
+        'name' : group.name,
+        'description' : group.description
+    };
+}
 
 // var savedAuth = null
 

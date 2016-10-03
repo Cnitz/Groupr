@@ -63,3 +63,31 @@ md-checkbox#account-check-3 .md-icon {
 .cloud_ic_2 svg path {
 	fill: #FF7777;
 }
+
+.table-striped {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 70%;
+	margin: 0 auto 0 auto;
+}
+
+.table-striped > tbody > tr > td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+	max-width: 700px;
+}
+
+.table-striped > tbody > tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.side-panel-container{
+	float: left; 
+	position: fixed; 
+	width: 200px; 
+	height: 100%;
+	background: black; 
+	margin-top:64px;
+	z-index:1;
+}
