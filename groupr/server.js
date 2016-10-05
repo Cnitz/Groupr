@@ -12,7 +12,7 @@ var app = express();
 // App use
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true
 }));
 app.use(express.static(__dirname + '/client'));
 
