@@ -1,5 +1,10 @@
 var express = require('express');
+var jwt = require('jsonwebtoken');
+var passport = require('passport');
 var router = express.Router();
+
+// Config
+var conf = require('../config.js');
 
 // Models
 var User = require('../models/user');
@@ -36,8 +41,12 @@ router.route('/login').post((req, res) => {
             });
         }
         else {
+            var token = jwt.sign({ email: user.email }, conf.TOKEN_SECRET, {
+                expiresIn: '1h'
+            });
             res.status(200).json({
                 user: user,
+                token: token,
                 message: 'Successful login'
             });
         }
