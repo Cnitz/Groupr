@@ -4,7 +4,6 @@ var passport = require('passport');
 var router = express.Router();
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var gcal = require('google-calendar');
-var googleCal;
 // Config
 var conf = require('../config.js');
 
@@ -19,17 +18,25 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
-// passport.use(new GoogleStrategy({
-//     clientID:     "721031064145-8eec4v9olvj7o0808i56m2osjlk2ebte.apps.googleusercontent.com",
-//     clientSecret: "U1gDlLfab-oeclNN6xQ2wAir",
-//     callbackURL: "http://127.0.0.1:3000/api/auth/google/callback",
-//     passReqToCallback   : true
-//   },
-//   function(request, accessToken, refreshToken, profile, done) {
-//     console.log('here');
-//     return done(null, profile);
-//   }
-// ));
+passport.use(new GoogleStrategy({
+    clientID:     "721031064145-8eec4v9olvj7o0808i56m2osjlk2ebte.apps.googleusercontent.com",
+    clientSecret: "U1gDlLfab-oeclNN6xQ2wAir",
+    callbackURL: "http://127.0.0.1:3000/api/auth/google/callback",
+    passReqToCallback   : true
+  },
+  function(request, accessToken, refreshToken, profile, done) {
+
+    return done(null, profile);
+  }
+));
+
+router.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar']}));
+
+router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  }
+);
 
 
 router.use((req, res, next) => {
@@ -124,18 +131,7 @@ router.route('/signup').post((req, res) => {
 //     }
 // });
 
-// router.route('/auth/google').get((req, res) => {
-//   console.log("getting Here");
-//   passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar']});
-//   console.log("Here Too");
-// });
-//
-// router.route('/auth/google/callback').get((req, res) => {
-//   passport.authenticate('google', { session: false, failureRedirect: '/login' }),
-//   function(req, res) {
-//     res.redirect('/');
-//   }
-// });
+
 
 router.route('/create_group').post((req, res) => {
     console.log(req.body);

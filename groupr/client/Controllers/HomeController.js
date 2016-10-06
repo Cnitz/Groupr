@@ -5,13 +5,12 @@ define([
 		'$scope',
 		'$state',
 		'$window',
+		'$location',
 		'Groupr.Services.AccountServices',
-		function HomeController($scope, $state, $window, AccountServices) {
+		function HomeController($scope, $state, $window, $location, AccountServices) {
 
-			function googleLogin(){
-				$window.location.href = ('http://localhost:3000/api/auth/google');
-			}
-			googleLogin();
+
+
 		}
 
 	]);
