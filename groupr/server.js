@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 // MONGO
-mongoose.connect('mongodb://localhost:27017/Groupr');
+mongoose.connect('mongodb://grouprdev:bobrossisour7th@jello.modulusmongo.net:27017/Ej2abuqu');
 
 // Create the app
 var app = express();
@@ -12,7 +12,7 @@ var app = express();
 // App use
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true
 }));
 app.use(express.static(__dirname + '/client'));
 

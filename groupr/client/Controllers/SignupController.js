@@ -31,8 +31,8 @@ define([
 			$scope.signup = function() {
 				var userAccount = {
 						name: $scope.name,
-						username: $scope.username,
-						email: $scope.email,
+						username: $scope.username.toLowerCase(),
+						email: $scope.email.toLowerCase(),
 						password: $scope.password
 				};
 				AccountServices.signup(userAccount)
