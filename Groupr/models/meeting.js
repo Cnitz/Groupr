@@ -8,4 +8,4 @@ var MeetingSchema = new mongoose.Schema({
     date: { type: Date, required: true },
 });
 
-module.exports = mongoose.model('Group', GroupSchema);
+module.exports = mongoose.model('Meeting', MeetingSchema);

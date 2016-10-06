@@ -1,7 +1,9 @@
 // Load required packages
 var express = require('express');
 var mongoose = require('mongoose');
+var passport = require('passport');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 // MONGO
 mongoose.connect('mongodb://grouprdev:bobrossisour7th@jello.modulusmongo.net:27017/Ej2abuqu');

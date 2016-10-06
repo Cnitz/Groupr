@@ -1,5 +1,10 @@
 var express = require('express');
+var jwt = require('jsonwebtoken');
+var passport = require('passport');
 var router = express.Router();
+
+// Config
+var conf = require('../config.js');
 
 // Models
 var User = require('../models/user');
@@ -36,8 +41,12 @@ router.route('/login').post((req, res) => {
             });
         }
         else {
+            var token = jwt.sign({ email: user.email }, conf.TOKEN_SECRET, {
+                expiresIn: '1h'
+            });
             res.status(200).json({
                 user: user,
+                token: token,
                 message: 'Successful login'
             });
         }
@@ -64,6 +73,32 @@ router.route('/signup').post((req, res) => {
             });
         }
     });
+});
+
+// Route Protector
+router.use((req, res, next) => {
+    var token = req.body.token;
+    if (!token) {
+        token = req.query.state;
+    }
+    if (token) {
+        jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
+            if (err) {
+                res.status(450).json({
+                    message: 'Error: Invalid token'
+                });
+            }
+            else {
+                req.decoded = decoded;
+                next();
+            }
+        });
+    }
+    else {
+        res.status(450).json({
+            message: 'Error: Invalid token'
+        });
+    }
 });
 
 router.route('/create_group').post((req, res) => {

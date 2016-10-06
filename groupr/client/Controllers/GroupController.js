@@ -5,7 +5,8 @@ define([
 		'$scope',
 		'$state',
         'Groupr.Services.GroupServices',
-		function GroupController($scope, $state, GroupServices) {
+        'Groupr.Services.AccountServices',
+		function GroupController($scope, $state, GroupServices, AccountServices) {
             var vm = this;
             {
                 vm.groups =[];

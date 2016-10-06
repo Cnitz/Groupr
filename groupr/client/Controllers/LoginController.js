@@ -24,6 +24,7 @@ define([
 				AccountServices.login(credentials)
 					.then(
 						function(result) {
+							AccountServices.login_success(result.data);
 							$state.go('home');
 						},
 						function(result) {

@@ -13,7 +13,11 @@
     "karma-requirejs": "^1.1.0",
     "mocha": "^3.0.2",
     "mongoose": "^4.6.0",
-    "requirejs": "^2.3.2"
+    "requirejs": "^2.3.2",
+    "express-session": "^1.14.1",
+    "passport": "^0.3.2",
+    "jsonwebtoken": "^7.1.9"
+
   },
   "author": "",
   "license": "ISC"

@@ -2,9 +2,9 @@ var mongoose = require('mongoose');
 
 var GroupSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    creator: { type: ObjectId, required: true},
+    creator: { type: String, required: true},
     users: [{type: String, required: true}],
-    calendar: [ObjectId],
+    //calendar: [ObjectId],
     chat: [{ body: String, user: String, date: Date }],
     complaints: [{ body: String, date: Date }],
 });
