@@ -31,13 +31,26 @@ define([
 				controller:		'Groupr.Controllers.Home',
 				controllerAs:  	'vm'
 			})
+			.state('PersonalCalendar', {
+				url:			'/PersonalCalendar',
+				templateUrl:	'Views/_personalCalendar.html',
+				controller:		'Groupr.Controllers.PersonalCalendar',
+				controllerAs:  	'vm'
+			})
+			.state('GoogleCallBack', {
+				url:			'/auth/google/callback',
+				templateUrl:	'Views/_GoogleCallBackPage.html',
+				controller:		'Groupr.Controllers.GoogleCallBack',
+				controllerAs:  	'vm'
+			})
 			.state('groups', {
 				url:			'/groups',
 				templateUrl:	'Views/_group.html',
 				controller:		'Groupr.Controllers.Group',
 				controllerAs:   'vm'
 			});
-			$urlRouterProvider.otherwise('main');
+
+			$urlRouterProvider.otherwise('home');
 		}
 	]);
 });

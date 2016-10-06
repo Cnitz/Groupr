@@ -2,6 +2,8 @@
  * Serve JSON to our AngularJS client
  */
 var express = require('express');
+var passport = requre('passport');
+var googleCal = require('google-calendar');
 var router = express.Router();
 
 // Models
@@ -61,6 +63,15 @@ router.get('/api/groups/id*', function (req, res, next) {
     });
 });
 router.get('/api/groups/meeting*', function (req, res, next) {
+    var query = formMeetingQuery(req.param);
+    Meeting.findOne(query, function (err, meeting) {
+        if (err)
+            res.status(500).json({ message: 'Error: Database access' });
+        else
+            res.status(200).json({ meeting: meeting });
+    });
+});
+router.get('/api/calender/list*', function (req, res, next) {
     var query = formMeetingQuery(req.param);
     Meeting.findOne(query, function (err, meeting) {
         if (err)
