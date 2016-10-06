@@ -6,6 +6,11 @@ define([
 		function($http) {
 			var service = {};
 
+			service.userAccount = {
+				user: {},
+				token: '',
+			}
+
 			var url = 'http://localhost:3000/api/';
 			
 			service.login = function(credentials) {
@@ -15,6 +20,14 @@ define([
 					data: credentials
 				});
 			}
+
+			service.login_success = function(data) {
+				console.log(data);
+				service.userAccount.token = data.token;
+				service.userAccount.user = data.user;
+				console.log(service.userAccount);
+
+			}
 			
 			service.signup = function(userAccount) {
 				return $http({
@@ -23,6 +36,11 @@ define([
 					data: userAccount
 				});
 			}
+
+			service.logout = function() {
+				AccountServices.userAccount.token = '';
+			}
+
 			return service;
 		}
 	]);

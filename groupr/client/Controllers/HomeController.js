@@ -4,7 +4,8 @@ define([
 	return module.controller('Groupr.Controllers.Home', [
 		'$scope',
 		'$state',
-		function HomeController($scope, $state) {
+		'Groupr.Services.AccountServices',
+		function HomeController($scope, $state, AccountServices) {
 
 		}
 	]);

@@ -75,6 +75,32 @@ router.route('/signup').post((req, res) => {
     });
 });
 
+// Route Protector
+router.use((req, res, next) => {
+    var token = req.body.token;
+    if (!token) {
+        token = req.query.state;
+    }
+    if (token) {
+        jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
+            if (err) {
+                res.status(450).json({
+                    message: 'Error: Invalid token'
+                });
+            }
+            else {
+                req.decoded = decoded;
+                next();
+            }
+        });
+    }
+    else {
+        res.status(450).json({
+            message: 'Error: Invalid token'
+        });
+    }
+});
+
 router.route('/create_group').post((req, res) => {
     console.log(req.body);
     var newGroup = Group();
