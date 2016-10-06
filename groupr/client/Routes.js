@@ -37,12 +37,6 @@ define([
 				controller:		'Groupr.Controllers.PersonalCalendar',
 				controllerAs:  	'vm'
 			})
-			.state('GoogleCallBack', {
-				url:			'/auth/google/callback',
-				templateUrl:	'Views/_GoogleCallBackPage.html',
-				controller:		'Groupr.Controllers.GoogleCallBack',
-				controllerAs:  	'vm'
-			})
 			.state('groups', {
 				url:			'/groups',
 				templateUrl:	'Views/_group.html',
@@ -50,7 +44,7 @@ define([
 				controllerAs:   'vm'
 			});
 
-			$urlRouterProvider.otherwise('home');
+			$urlRouterProvider.otherwise('main');
 		}
 	]);
 });

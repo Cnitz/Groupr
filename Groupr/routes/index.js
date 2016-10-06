@@ -2,13 +2,35 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var passport = require('passport');
 var router = express.Router();
-
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var gcal = require('google-calendar');
+var googleCal;
 // Config
 var conf = require('../config.js');
 
 // Models
 var User = require('../models/user');
 var Group = require('../models/group');
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+// passport.use(new GoogleStrategy({
+//     clientID:     "721031064145-8eec4v9olvj7o0808i56m2osjlk2ebte.apps.googleusercontent.com",
+//     clientSecret: "U1gDlLfab-oeclNN6xQ2wAir",
+//     callbackURL: "http://127.0.0.1:3000/api/auth/google/callback",
+//     passReqToCallback   : true
+//   },
+//   function(request, accessToken, refreshToken, profile, done) {
+//     console.log('here');
+//     return done(null, profile);
+//   }
+// ));
+
 
 router.use((req, res, next) => {
     // Default route
@@ -76,30 +98,44 @@ router.route('/signup').post((req, res) => {
 });
 
 // Route Protector
-router.use((req, res, next) => {
-    var token = req.body.token;
-    if (!token) {
-        token = req.query.state;
-    }
-    if (token) {
-        jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
-            if (err) {
-                res.status(450).json({
-                    message: 'Error: Invalid token'
-                });
-            }
-            else {
-                req.decoded = decoded;
-                next();
-            }
-        });
-    }
-    else {
-        res.status(450).json({
-            message: 'Error: Invalid token'
-        });
-    }
-});
+// router.use((req, res, next) => {
+//     console.log("In Use");
+//     var token = req.body.token;
+//     if (!token) {
+//         token = req.query.state;
+//     }
+//     if (token) {
+//         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
+//             if (err) {
+//                 res.status(450).json({
+//                     message: 'Error: Invalid token'
+//                 });
+//             }
+//             else {
+//                 req.decoded = decoded;
+//                 next();
+//             }
+//         });
+//     }
+//     else {
+//         res.status(450).json({
+//             message: 'Error: Invalid token'
+//         });
+//     }
+// });
+
+// router.route('/auth/google').get((req, res) => {
+//   console.log("getting Here");
+//   passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar']});
+//   console.log("Here Too");
+// });
+//
+// router.route('/auth/google/callback').get((req, res) => {
+//   passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+//   function(req, res) {
+//     res.redirect('/');
+//   }
+// });
 
 router.route('/create_group').post((req, res) => {
     console.log(req.body);
@@ -124,13 +160,13 @@ router.route('/create_group').post((req, res) => {
 
 
 router.route('/get_groups').get((req, res) => {
-    
+
   Group.find({}, function(err, groups) {
     var groupApiModelList = [];
     groups.forEach(function(group) {
       groupApiModelList.push(groupApiModel(group));
     });
-    res.send(groupApiModelList);  
+    res.send(groupApiModelList);
   });
 });
 
@@ -140,6 +176,16 @@ function groupApiModel(group){
         'description' : group.description
     };
 }
+
+
+
+
+// app.get('/listCal', function(req, res) {
+//   googleCal.calendarList.list(function(err, data) {
+//     if(err) return res.send(500,err);
+//     return res.send(data);
+//   });
+// });
 
 // var savedAuth = null
 

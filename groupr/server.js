@@ -30,6 +30,10 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
+    console.log(accessToken);
+    googleCal = new gcal.GoogleCalendar(accessToken);
+
+
     return done(null, profile);
   }
 ));
@@ -49,7 +53,7 @@ passport.authenticate('google', { session: false, failureRedirect: '/login' }),
   function(req, res) {
 
 
-    res.redirect('/');
+    res.redirect('/listCal');
 });
 app.get('/listCal', function(req, res) {
   googleCal.calendarList.list(function(err, data) {
