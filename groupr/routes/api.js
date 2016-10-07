@@ -33,6 +33,35 @@ var formMeetingQuery = function(param) {
     return query;
 };
 
+// Route Protector
+router.use((req, res, next) => {
+    var token = req.body.token;
+    console.log("hello");
+    if (!token) {
+        token = req.query.state;
+    }
+    if (token) {
+        jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
+            if (err) {
+                res.status(450).json({
+                    message: 'Error: Invalid token'
+                });
+            }
+            else {
+                req.decoded = decoded;
+                next();
+            }
+        });
+    }
+    else {
+        res.status(450).json({
+            message: 'Error: Invalid token'
+        });
+    }
+});
+
+
+
 router.get('/api/groups/all', function (req, res, next) {
     var query = formGroupQuery(req.body);
     Group.findOne(query, function (err, group) {
@@ -70,30 +99,6 @@ router.get('/api/groups/meeting', function (req, res, next) {
     });
 });
 
-// Route Protector
-router.use((req, res, next) => {
-    var token = req.body.token;
-    if (!token) {
-        token = req.query.state;
-    }
-    if (token) {
-        jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
-            if (err) {
-                res.status(450).json({
-                    message: 'Error: Invalid token'
-                });
-            }
-            else {
-                req.decoded = decoded;
-                next();
-            }
-        });
-    }
-    else {
-        res.status(450).json({
-            message: 'Error: Invalid token'
-        });
-    }
-});
+
 
 module.exports = router;

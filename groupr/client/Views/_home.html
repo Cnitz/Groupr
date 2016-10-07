@@ -1,9 +1,17 @@
 <div id="body-div" layout="column">
 	<md-toolbar>
 		<div class="md-toolbar-tools">
-			<h2>Groupr</h2>
+<h2 class="clickable" data-ng-click="vm.goHome()">Groupr</h2>
+
 			<span flex></span>
 		</div>
 	</md-toolbar>
+
+<md-button>
+</md-button>
+<md-button ng-click="vm.navigateToGroups()" onclick="disabled='true';" class="md-primary" type="button" >Groups</md-button>
+<md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
+
+
 
 </div>

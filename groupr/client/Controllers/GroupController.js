@@ -11,6 +11,7 @@ define([
             {
                 vm.groups =[];
             }
+			vm.goHome = goHome;
 
             activate();
 						$scope.createGroup = function()
@@ -41,6 +42,9 @@ define([
                 });
             }
 
+			function goHome(){
+				$state.go('home');
+			}
 
 
 		}

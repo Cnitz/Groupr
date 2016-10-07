@@ -16,10 +16,11 @@ define([
 				});
 			}
 
-            service.getGroups = function(id) {
+            service.getGroups = function(credentials) {
 				return $http({
 					method: 'GET',
-					url: url + 'get_groups'
+					url: url + 'get_groups',
+					data: credentials
 				});
 			}
 			return service;

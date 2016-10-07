@@ -91,3 +91,7 @@ md-checkbox#account-check-3 .md-icon {
 	margin-top:64px;
 	z-index:1;
 }
+
+.clickable:hover{
+	cursor: pointer; 
+}
