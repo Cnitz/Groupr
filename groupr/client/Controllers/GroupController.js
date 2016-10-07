@@ -14,31 +14,34 @@ define([
 			vm.goHome = goHome;
 
             activate();
-						$scope.createGroup = function()
-						{
-							var groupName = prompt("Please enter the name of your new group.", "The Sausage Pilots");
-							var groupDescription = prompt("Please enter the description of your new group.", "We pilot sausages for days.");
-							if (groupName == null || groupDescription == null) {
-								return;
-							}
-							var group = {name: groupName, description: groupDescription}
-							vm.groups.push(group);
-						}
-						$scope.joinGroup = function(ele)
-						{
+			$scope.createGroup = function()
+			{
+				var groupName = prompt("Please enter the name of your new group.", "The Sausage Pilots");
+				var groupDescription = prompt("Please enter the description of your new group.", "We pilot sausages for days.");
+				if (groupName == null || groupDescription == null) {
+					return;
+				}
+				var group = {name: groupName, description: groupDescription}
+				vm.groups.push(group);
+			}
+			$scope.joinGroup = function(ele) {
 							
-						}
+			}
 
             return this;
 
             function activate(){
-							var data = {token: AccountServices.userAccount.token, username: AccountServices.userAccount.user.username}
+				var data = {
+                    token: AccountServices.userAccount.token, 
+                    username: AccountServices.userAccount.user.username
+                }
+                console.log(data);
                 GroupServices.getGroups(data)
                     .then(function(res){
                         vm.groups = res.data;
 
                 }, function(res){
-										console.log(res.data)
+					console.log(res.data)
                 });
             }
 
