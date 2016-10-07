@@ -48,7 +48,9 @@ define([
                         vm.groups = res.data;
 
                 }, function(res){
-					console.log(res.data)
+					console.log(res.data);
+                    if (res.status == 450)
+                        $state.go('login');
                 });
             }
 
