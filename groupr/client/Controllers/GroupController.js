@@ -21,8 +21,15 @@ define([
 				if (groupName == null || groupDescription == null) {
 					return;
 				}
-				var group = {name: groupName, description: groupDescription}
-				vm.groups.push(group);
+				var group = {name: groupName, description: groupDescription, isPublic: true}
+				var data = {
+                    token: AccountServices.userAccount.token, 
+                    username: AccountServices.userAccount.user.username
+                }
+				GroupServices.createGroup(group, data)
+					.then(function(){
+						vm.groups.push(group);
+					})
 			}
 			$scope.joinGroup = function(ele) {
 							

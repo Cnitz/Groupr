@@ -112,15 +112,19 @@ router.route('/create_group').post((req, res) => {
     var newGroup = Group();
     newGroup.name = req.body.name;
     newGroup.description = req.body.description;
+    newGroup.creator = req.body.username;
+    newGroup.users = [req.body.username];
     newGroup.isPublic = req.body.isPublic;
     newGroup.save((err) => {
         if (err) {
+            
             res.status(500).json({
                 error: err,
                 message: 'Error: Group creation failed'
             });
         }
         else {
+            console.log('Successful');
             res.status(200).json({
                 message: 'Successful group creation'
             });

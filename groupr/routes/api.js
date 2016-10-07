@@ -62,42 +62,7 @@ router.use((req, res, next) => {
 
 
 
-router.get('/api/groups/all', function (req, res, next) {
-    var query = formGroupQuery(req.body);
-    Group.findOne(query, function (err, group) {
-        if (err)
-            res.status(500).json({ message: 'Error: Database access' });
-        else
-            res.status(200).json({ group: group });
-    });
-});
-router.get('/api/groups/calendar', function (req, res, next) {
-    var query = formGroupQuery(req.body);
-    Group.findOne(query, 'calendar', function (err, group) {
-        if (err)
-            res.status(500).json({ message: 'Error: Database access' });
-        else
-            res.status(200).json({ calendar: group });
-    });
-});
-router.get('/api/groups/id', function (req, res, next) {
-    var query = formGroupQuery(req.body);
-    Group.findOne(query, '_id', function (err, group) {
-        if (err)
-            res.status(500).json({ message: 'Error: Database access' });
-        else
-            res.status(200).json({ calendar: group });
-    });
-});
-router.get('/api/groups/meeting', function (req, res, next) {
-    var query = formMeetingQuery(req.body);
-    Meeting.findOne(query, function (err, meeting) {
-        if (err)
-            res.status(500).json({ message: 'Error: Database access' });
-        else
-            res.status(200).json({ meeting: meeting });
-    });
-});
+
 
 
 
