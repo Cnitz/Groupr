@@ -95,6 +95,9 @@ define([], function() {
 				CONTACT_ADMIN:	_en.CONTACT_ADMIN
 			},
 			SIGNOUT:		"Sign out"
+		},
+		GROUP: {
+			ADD: "Add Group"
 		}
 	};
 });

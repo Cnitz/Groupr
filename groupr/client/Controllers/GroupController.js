@@ -13,17 +13,35 @@ define([
             }
 
             activate();
-            
+						$scope.createGroup = function()
+						{
+							var groupName = prompt("Please enter the name of your new group.", "The Sausage Pilots");
+							var groupDescription = prompt("Please enter the description of your new group.", "We pilot sausages for days.");
+							if (groupName == null || groupDescription == null) {
+								return;
+							}
+							var group = {name: groupName, description: groupDescription}
+							vm.groups.push(group);
+						}
+						$scope.joinGroup = function(ele)
+						{
+							
+						}
+
             return this;
 
             function activate(){
-                GroupServices.getGroups()
+							var data = {token: AccountServices.userAccount.token, username: AccountServices.userAccount.user.username}
+                GroupServices.getGroups(data)
                     .then(function(res){
                         vm.groups = res.data;
-                }, function(){
 
+                }, function(res){
+										console.log(res.data)
                 });
             }
+
+
 
 		}
 

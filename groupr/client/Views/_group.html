@@ -5,7 +5,7 @@
 			<span flex></span>
 		</div>
 	</md-toolbar>
-<p data-ng-cloak data-ng-if="vm.groups.length == 0">You are not a memeber of any groups.</p>
+<p data-ng-cloak data-ng-if="vm.groups.length == 0">You are not a member of any groups.</p>
 <table class="table-striped" data-ng-if="vm.groups.length > 0">
     <thead>
 <tr>
@@ -16,9 +16,15 @@
     <tr data-ng-repeat="group in vm.groups ">
         <td>{{group.name}}</td>
         <td>{{group.description}}</td>
+				<td><md-button id="joingroup-button" ng-click="joinGroup(this)" onclick="disabled='true';" class="md-primary" type="button" aria-label="Join Group">JOIN GROUP</md-button></td>
     </tr>
 </tbody>
 </table>
+
+<md-button id="creategroup-button" ng-click="createGroup()" class="md-primary" type="button" aria-label="Create Group">
+	CREATE GROUP
+</md-button>
+
 
 
 

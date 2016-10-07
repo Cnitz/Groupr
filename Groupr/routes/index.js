@@ -76,6 +76,7 @@ router.route('/signup').post((req, res) => {
 });
 
 // Route Protector
+/*
 router.use((req, res, next) => {
     var token = req.body.token;
     if (!token) {
@@ -100,6 +101,7 @@ router.use((req, res, next) => {
         });
     }
 });
+*/
 
 router.route('/create_group').post((req, res) => {
     console.log(req.body);
@@ -124,13 +126,13 @@ router.route('/create_group').post((req, res) => {
 
 
 router.route('/get_groups').get((req, res) => {
-    
+
   Group.find({}, function(err, groups) {
     var groupApiModelList = [];
     groups.forEach(function(group) {
       groupApiModelList.push(groupApiModel(group));
     });
-    res.send(groupApiModelList);  
+    res.send(groupApiModelList);
   });
 });
 
