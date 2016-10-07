@@ -10,6 +10,7 @@ var conf = require('../config.js');
 // Models
 var User = require('../models/user');
 var Group = require('../models/group');
+var GoogleAccount = require('../models/google');
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -25,16 +26,31 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-
+    var newGoogleAccount = new GoogleAccount();
+    newGoogleAccount.accessToken = accessToken;
+    console.log("Refresh Token" + refreshToken);
+    newGoogleAccount.refreshToken = refreshToken;
+    newGoogleAccount.id = profile.id;
+    newGoogleAccount.username = "";
+    //console.log(request);
+    newGoogleAccount.save((err) => {
+        if (err) {
+            console.log("Failure");
+            console.log(err);
+        }
+        else {
+            console.log("Success");
+        }
+    });
     return done(null, profile);
   }
 ));
 
-router.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar']}));
+router.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar'], accessType: 'offline'}));
 
 router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/'); // Need to Change this some how to be defined by spot taken from
   }
 );
 
