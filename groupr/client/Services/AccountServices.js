@@ -38,7 +38,7 @@ define([
 			}
 
 			service.logout = function() {
-				AccountServices.userAccount.token = '';
+				service.userAccount.token = '';
 			}
 
 			return service;
