@@ -10,6 +10,7 @@ define([
 vm.goHome = goHome;
 vm.navigateToGroups = navigateToGroups;
 vm.logout = logout;
+$scope.currentNavItem = "home";
 
 return vm;
 			function goHome(){

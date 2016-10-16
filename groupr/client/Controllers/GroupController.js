@@ -12,6 +12,7 @@ define([
                 vm.groups =[];
             }
 			vm.goHome = goHome;
+			$scope.currentNavItem = "groups";
 
             activate();
 			$scope.createGroup = function()
@@ -23,7 +24,7 @@ define([
 				}
 				var group = {name: groupName, description: groupDescription, isPublic: true}
 				var data = {
-                    token: AccountServices.userAccount.token, 
+                    token: AccountServices.userAccount.token,
                     username: AccountServices.userAccount.user.username
                 }
 				GroupServices.createGroup(group, data)
@@ -32,14 +33,14 @@ define([
 					})
 			}
 			$scope.joinGroup = function(ele) {
-							
+
 			}
 
             return this;
 
             function activate(){
 				var data = {
-                    token: AccountServices.userAccount.token, 
+                    token: AccountServices.userAccount.token,
                     username: AccountServices.userAccount.user.username
                 }
                 console.log(data);

@@ -1,17 +1,13 @@
 <div id="body-div" layout="column">
-	<md-toolbar>
-		<div class="md-toolbar-tools">
-<h2 class="clickable" data-ng-click="vm.goHome()">Groupr</h2>
+	<md-nav-bar md-selected-nav-item="currentNavItem">
+		<md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
+		<md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Groups</md-nav-item>
+		<span flex></span>
+		<md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
+	</md-nav-bar>
+	<md-content class="md-padding" layout="column" layout-align="center center" flex="">
+		<md-card style="max-width:50%;" layout="row">
 
-			<span flex></span>
-		</div>
-	</md-toolbar>
-
-<md-button>
-</md-button>
-<md-button ng-click="vm.navigateToGroups()" onclick="disabled='true';" class="md-primary" type="button" >Groups</md-button>
-<md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
-
-
-
+		</md-card>
+	</md-content>
 </div>
