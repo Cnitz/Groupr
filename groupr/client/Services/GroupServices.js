@@ -9,13 +9,14 @@ define([
 			var url = 'http://localhost:3000/api/';
 			
 			service.createGroup = function(group, credentials) {
-				var data = { name: group.name,
-				description: group.description,
-				isPublic: group.isPublic,
-				token: credentials.token,
-				username: credentials.username
+				var data = { 
+					name: group.name,
+					description: group.description,
+					isPublic: group.isPublic,
+					token: credentials.token,
+					username: credentials.username
 				}
-console.log(data);
+				console.log(data);
 				return $http({
 					method: 'POST',
 					url: url + 'create_group',

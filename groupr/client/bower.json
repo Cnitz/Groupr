@@ -28,6 +28,7 @@
     "xregexp": "^3.1.1",
     "underscore": "^1.8.3",
     "viewport-units-buggyfill": "^0.6.0",
-    "angular-mocks": "^1.5.8"
+    "angular-mocks": "^1.5.8",
+    "angular-cookies": "^1.5.8"
   }
 }

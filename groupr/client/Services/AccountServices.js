@@ -3,12 +3,14 @@ define([
 ], function(module) {
 	return module.factory('Groupr.Services.AccountServices', [
 		'$http',
-		function($http) {
+		'$cookies',
+		function($http, $cookies) {
 			var service = {};
+
+			var cookie_token_key = 'grouprToken';
 
 			service.userAccount = {
 				user: {},
-				token: '',
 			}
 
 			var url = 'http://localhost:3000/api/';
@@ -20,14 +22,6 @@ define([
 					data: credentials
 				});
 			}
-
-			service.login_success = function(data) {
-				console.log(data);
-				service.userAccount.token = data.token;
-				service.userAccount.user = data.user;
-				console.log(service.userAccount);
-
-			}
 			
 			service.signup = function(userAccount) {
 				return $http({
@@ -38,9 +32,15 @@ define([
 			}
 
 			service.logout = function() {
-				service.userAccount.token = '';
+				$cookies.remove(cookie_token_key);
 			}
 
+			service.verifyToken = function() {
+				return $http({
+					method: 'GET',
+					url: url + 'verify_token',
+				});
+			}
 			return service;
 		}
 	]);

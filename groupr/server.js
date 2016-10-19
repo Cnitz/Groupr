@@ -3,6 +3,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 // MONGO
@@ -12,6 +13,7 @@ mongoose.connect('mongodb://grouprdev:bobrossisour7th@jello.modulusmongo.net:270
 var app = express();
 
 // App use
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true

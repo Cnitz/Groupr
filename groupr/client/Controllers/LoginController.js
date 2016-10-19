@@ -4,8 +4,9 @@ define([
 	return module.controller('Groupr.Controllers.Login', [
 		'$scope',
 		'$state',
+		'$cookies',
 		'Groupr.Services.AccountServices',
-		function LoginController($scope, $state, AccountServices) {
+		function LoginController($scope, $state, $cookies, AccountServices) {
 			$scope.username = '';
 			$scope.password = '';
 
@@ -24,7 +25,6 @@ define([
 				AccountServices.login(credentials)
 					.then(
 						function(result) {
-							AccountServices.login_success(result.data);
 							$state.go('home');
 						},
 						function(result) {

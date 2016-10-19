@@ -7,12 +7,12 @@ define([
 		'Groupr.Services.AccountServices',
 		function HomeController($scope, $state, AccountServices) {
 			var vm = this;
-vm.goHome = goHome;
-vm.navigateToGroups = navigateToGroups;
-vm.logout = logout;
-$scope.currentNavItem = "home";
+			vm.goHome = goHome;
+			vm.navigateToGroups = navigateToGroups;
+			vm.logout = logout;
+			$scope.currentNavItem = "home";
 
-return vm;
+			return vm;
 			function goHome(){
 				$state.go('home');
 			}

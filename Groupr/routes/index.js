@@ -1,4 +1,5 @@
 var express = require('express');
+var cookieParser = require('cookie-parser');
 var jwt = require('jsonwebtoken');
 var passport = require('passport');
 var router = express.Router();
@@ -6,90 +7,62 @@ var router = express.Router();
 // Config
 var conf = require('../config.js');
 
+// API logic
+var api_account = require('../api_logic/api_account');
+
 // Models
 var User = require('../models/user');
 var Group = require('../models/group');
-
-router.use((req, res, next) => {
-    // Default route
-    next();
-});
-
-router.route('/').get((req, res) => {
-    console.log('Got here');
-});
 
 router.route('/routes').get((req, res) => {
     res.json(router.stack);
 });
 
 router.route('/login').post((req, res) => {
-    User.findOne({ 'username': req.body.username}, (err, user) => {
-        if (err) {
-            res.status(500).json({
-                message: 'Error: Database access'
-            });
-        }
-        else if (user === null) {
-            res.status(401).json({
-                message: 'Error: Invalid login'
-            });
-        }
-        else if (user.password != req.body.password) {
-            res.status(401).json({
-                message: 'Error: Invalid login'
-            });
-        }
-        else {
-            var token = jwt.sign({ email: user.email }, conf.TOKEN_SECRET, {
-                expiresIn: '1h'
-            });
-            res.status(200).json({
-                user: user,
-                token: token,
-                message: 'Successful login'
-            });
-        }
-    })
+    api_account.login(req.body.username, req.body.password, conf.TOKEN_SECRET, res);
 });
 
 router.route('/signup').post((req, res) => {
-    console.log(req.body.name);
-    var newAccount = User();
-    newAccount.name = req.body.name;
-    newAccount.username = req.body.username;
-    newAccount.email = req.body.email;
-    newAccount.password = req.body.password;
-    newAccount.save((err) => {
-        if (err) {
-            res.status(500).json({
-                error: err,
-                message: 'Error: Account creation failed'
-            });
-        }
-        else {
-            res.status(200).json({
-                message: 'Successful account creation'
-            });
-        }
-    });
+    var account_info = {
+        name: req.body.name,
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+    }
+    api_account.signup(account_info, res); 
 });
 
-
-
-
-// Route Protector
-
-router.use((req, res, next) => {
-    console.log(req.body.token);
-    var token = req.body.token;
-    if (!token) {
-        token = req.query.state;
-    }
+router.route('/verify_token').get((req, res) => {
+    var token = req.cookies.grouprToken;
+    console.log(token);   
     if (token) {
         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
             if (err) {
-                res.status(450).json({
+                res.status(403).json({
+                    message: 'Error: Invalid token'
+                });
+            }
+            else {
+                res.status(200).json({
+                    message: 'Success'
+                });
+            }
+        });
+    }
+    else {
+        res.status(403).json({
+            message: 'Error: Invalid token'
+        });
+    }
+});
+
+// Route Protector
+router.use((req, res, next) => {
+    var token = req.cookies.grouprToken;   
+    if (token) {
+        jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
+            if (err) {
+                res.status(403).json({
                     message: 'Error: Invalid token'
                 });
             }
@@ -100,7 +73,7 @@ router.use((req, res, next) => {
         });
     }
     else {
-        res.status(450).json({
+        res.status(403).json({
             message: 'Error: Invalid token'
         });
     }
@@ -186,32 +159,5 @@ router.get('/api/groups/meeting', function (req, res, next) {
             res.status(200).json({ meeting: meeting });
     });
 });
-
-// var savedAuth = null
-
-// router.route('/authorize_google').get((req, res) => {
-// 	function saveAuth(auth) {
-// 		savedAuth = auth;
-// 		res.send("saved auth");
-// 	}
-
-// 	api_access.login_google(saveAuth);
-// });
-
-// router.route('/get_google_files').get((req, res) => {
-// 	function result(obj) {
-// 		res.json(obj)
-// 	}
-// 	var folder = req.query.folderId;
-// 	api_access.get_google_files(savedAuth, folder, null, result)
-// });
-
-// router.route('/upload_google_text').get((req, res) => {
-// 	function result(obj) {
-// 		res.json(obj)
-// 	}
-// 	var fileObj = {mimeType: 'text/plain', body: 'hello world!'};
-// 	api_access.put_google_file(savedAuth, "hello.txt", fileObj, result)
-// });
 
 module.exports = router;

@@ -4,21 +4,24 @@ define([
 	return module.controller('Groupr.Controllers.Main', [
 		'$scope',
 		'$state',
-		function MainController($scope, $state) {
+		'Groupr.Services.AccountServices',
+		function MainController($scope, $state, AccountServices) {
 			var vm = this;
-			vm.goHome = goHome;
 
+			AccountServices.verifyToken()
+				.then(
+					function(result) {
+						$state.go('home');
+					},
+					function(result) {}
+				)
+			
 			$scope.login = function() {
 				$state.go('login');
 			};
 			$scope.signup = function() {
 				$state.go('signup');
 			};
-			function goHome(){
-				$state.go('home');
-			}
-
-
 
 			return vm;
 		}
