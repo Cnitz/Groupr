@@ -1,9 +1,13 @@
 /*
  * Serve JSON to our AngularJS client
  */
-var express = require('express');
-var router = express.Router();
+ var express = require('express');
+ var jwt = require('jsonwebtoken');
+ var passport = require('passport');
+ var router = express.Router();
 
+ // Config
+ var conf = require('../config.js');
 // Models
 var User = require('../models/user');
 var Meeting = require('../models/meeting');
@@ -60,9 +64,42 @@ router.use((req, res, next) => {
     }
 });
 
-
-
-
+router.post('/api/groups/all', function (req, res, next) {
+    var query = formGroupQuery(req.body);
+    Group.findOne(query, function (err, group) {
+        if (err)
+            res.status(500).json({ message: 'Error: Database access' });
+        else
+            res.status(200).json({ group: group });
+    });
+});
+router.post('/api/groups/calendar', function (req, res, next) {
+    var query = formGroupQuery(req.body);
+    Group.findOne(query, 'calendar', function (err, group) {
+        if (err)
+            res.status(500).json({ message: 'Error: Database access' });
+        else
+            res.status(200).json({ calendar: group });
+    });
+});
+router.post('/api/groups/id', function (req, res, next) {
+    var query = formGroupQuery(req.body);
+    Group.findOne(query, '_id', function (err, group) {
+        if (err)
+            res.status(500).json({ message: 'Error: Database access' });
+        else
+            res.status(200).json({ calendar: group });
+    });
+});
+router.post('/api/groups/meeting', function (req, res, next) {
+    var query = formMeetingQuery(req.body);
+    Meeting.findOne(query, function (err, meeting) {
+        if (err)
+            res.status(500).json({ message: 'Error: Database access' });
+        else
+            res.status(200).json({ meeting: meeting });
+    });
+});
 
 
 
