@@ -14,6 +14,8 @@ var api_account = require('../api_logic/api_account');
 var User = require('../models/user');
 var Group = require('../models/group');
 
+
+
 router.route('/routes').get((req, res) => {
     res.json(router.stack);
 });
@@ -80,14 +82,26 @@ router.use((req, res, next) => {
 });
 
 
-router.route('/create_group').post((req, res) => {
-    console.log(req.body);
+router.route('/groups/create').post((req, res) => {
+var username = '';
+if(req.cookies.grouprToken){
+    var cursor = User.find({token: req.cookies.grouprToken},function(err, user){
+       
+    });
+   
+}
+});
+
+
+function createGroup(username, req, res){
+    console.log(username);
     var newGroup = Group();
     newGroup.name = req.body.name;
     newGroup.description = req.body.description;
-    newGroup.creator = req.body.username;
-    newGroup.users = [req.body.username];
+    newGroup.creator = username;
+    newGroup.users = [username];
     newGroup.isPublic = req.body.isPublic;
+
     newGroup.save((err) => {
         if (err) {
 
@@ -103,10 +117,12 @@ router.route('/create_group').post((req, res) => {
             });
         }
     });
-});
+}
 
 
-router.route('/get_groups').post((req, res) => {
+//Get all groups
+
+router.route('/groups/all').get((req, res) => {
   Group.find({}, function(err, groups) {
     var groupApiModelList = [];
     groups.forEach(function(group) {
@@ -116,11 +132,50 @@ router.route('/get_groups').post((req, res) => {
   });
 });
 
+//Get groups that the user is a part of
+router.route('/groups').get((req, res) => {
+
+var groups = [];
+
+if(req.cookies.grouprToken){
+    User.find({token: req.cookies.grouprToken},function(err, user) {
+        if(user.groups){
+            user.groups.forEach(function (userGroup){
+                Group.find({_id: userGroup._id}, function (err, group){
+                    groups.push(groupApiModel(group));
+                });
+            });
+        }
+    });
+    res.send(groups);
+    }
+});
+
+
 function groupApiModel(group){
     return {
         'name' : group.name,
         'description' : group.description
     };
 }
+
+// function getUser(token){
+// var currentUser = {};
+//      return User.findOne({token: token},function(err, user) {     
+// }).then(function(){
+//      return userApiModel(user);
+// });
+
+
+// }
+
+// function userApiModel(user){
+//     return{
+//     username: user.username,
+//     email: user.email,
+//     name: user.name 
+//     }; 
+// }
+
 
 module.exports = router;

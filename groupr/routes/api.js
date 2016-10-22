@@ -64,7 +64,9 @@ router.use((req, res, next) => {
     }
 });
 
-router.post('/api/groups/all', function (req, res, next) {
+router.get('/api/groups/all', function (req, res, next) {
+    debugger;
+    console.log(req.body);
     var query = formGroupQuery(req.body);
     Group.findOne(query, function (err, group) {
         if (err)
@@ -92,6 +94,15 @@ router.post('/api/groups/id', function (req, res, next) {
     });
 });
 router.post('/api/groups/meeting', function (req, res, next) {
+    var query = formMeetingQuery(req.body);
+    Meeting.findOne(query, function (err, meeting) {
+        if (err)
+            res.status(500).json({ message: 'Error: Database access' });
+        else
+            res.status(200).json({ meeting: meeting });
+    });
+});
+router.post('/api/groups/create', function (req, res, next) {
     var query = formMeetingQuery(req.body);
     Meeting.findOne(query, function (err, meeting) {
         if (err)
