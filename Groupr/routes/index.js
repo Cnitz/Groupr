@@ -34,7 +34,6 @@ router.route('/signup').post((req, res) => {
 
 router.route('/verify_token').get((req, res) => {
     var token = req.cookies.grouprToken;
-    console.log(token);   
     if (token) {
         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
             if (err) {
