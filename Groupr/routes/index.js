@@ -29,7 +29,7 @@ router.route('/signup').post((req, res) => {
         email: req.body.email,
         password: req.body.password
     }
-    api_account.signup(account_info, res); 
+    api_account.signup(account_info, res);
 });
 
 router.route('/verify_token').get((req, res) => {
@@ -57,7 +57,7 @@ router.route('/verify_token').get((req, res) => {
 
 // Route Protector
 router.use((req, res, next) => {
-    var token = req.cookies.grouprToken;   
+    var token = req.cookies.grouprToken;
     if (token) {
         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
             if (err) {
@@ -89,7 +89,7 @@ router.route('/create_group').post((req, res) => {
     newGroup.isPublic = req.body.isPublic;
     newGroup.save((err) => {
         if (err) {
-            
+
             res.status(500).json({
                 error: err,
                 message: 'Error: Group creation failed'
@@ -121,42 +121,5 @@ function groupApiModel(group){
         'description' : group.description
     };
 }
-
-router.get('/groups/all', function (req, res, next) {
-    var query = formGroupQuery(req.body);
-    Group.findOne(query, function (err, group) {
-        if (err)
-            res.status(500).json({ message: 'Error: Database access' });
-        else
-            res.status(200).json({ group: group });
-    });
-});
-router.get('/groups/calendar', function (req, res, next) {
-    var query = formGroupQuery(req.body);
-    Group.findOne(query, 'calendar', function (err, group) {
-        if (err)
-            res.status(500).json({ message: 'Error: Database access' });
-        else
-            res.status(200).json({ calendar: group });
-    });
-});
-router.get('/groups/id', function (req, res, next) {
-    var query = formGroupQuery(req.body);
-    Group.findOne(query, '_id', function (err, group) {
-        if (err)
-            res.status(500).json({ message: 'Error: Database access' });
-        else
-            res.status(200).json({ calendar: group });
-    });
-});
-router.get('/api/groups/meeting', function (req, res, next) {
-    var query = formMeetingQuery(req.body);
-    Meeting.findOne(query, function (err, meeting) {
-        if (err)
-            res.status(500).json({ message: 'Error: Database access' });
-        else
-            res.status(200).json({ meeting: meeting });
-    });
-});
 
 module.exports = router;

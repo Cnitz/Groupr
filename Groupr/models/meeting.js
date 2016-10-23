@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
-
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
+    
 var MeetingSchema = new mongoose.Schema({
     group: { type: ObjectId, required: true},
     name: String,
