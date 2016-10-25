@@ -4,6 +4,10 @@ var jwt = require('jsonwebtoken');
 var passport = require('passport');
 var router = express.Router();
 
+//Google Auth
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var gcal = require('google-calendar');
+
 // Config
 var conf = require('../config.js');
 
@@ -58,6 +62,32 @@ router.route('account/verify_token').get((req, res) => {
     }
 });
 /* End Open Account APIs */
+
+/* Start of Google Auth -- Check if this is better placed elsewhere 10/25 */
+
+passport.use(new GoogleStrategy({
+    clientID:     "721031064145-8eec4v9olvj7o0808i56m2osjlk2ebte.apps.googleusercontent.com",
+    clientSecret: "U1gDlLfab-oeclNN6xQ2wAir",
+    callbackURL: "http://127.0.0.1:3000/api/auth/google/callback",
+    passReqToCallback   : true
+  },
+  function(request, accessToken, refreshToken, profile, done) {
+    //Should be retrieving cal events here?
+
+
+    return done(null, profile);
+  }
+));
+
+router.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar'], accessType: 'offline'}));
+
+router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/groups' }), //Set to groups for testing
+  function(req, res) {
+    res.redirect('/groups'); // Need to Change this some how to be defined by spot taken from
+  }
+);
+
+/*End of Google Auth */
 
 // Route Protector
 router.use((req, res, next) => {
