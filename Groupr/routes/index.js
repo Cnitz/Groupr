@@ -9,6 +9,7 @@ var conf = require('../config.js');
 
 // API logic
 var api_account = require('../api_logic/api_account');
+var api_calendar = require('../api_logic/api_calendar');
 
 // Models
 var User = require('../models/user');
@@ -18,6 +19,8 @@ router.route('/routes').get((req, res) => {
     res.json(router.stack);
 });
 
+
+/* Account APIs */
 router.route('/login').post((req, res) => {
     api_account.login(req.body.username, req.body.password, conf.TOKEN_SECRET, res);
 });
@@ -54,6 +57,7 @@ router.route('/verify_token').get((req, res) => {
         });
     }
 });
+/* End Account APIs */
 
 // Route Protector
 router.use((req, res, next) => {
@@ -78,7 +82,7 @@ router.use((req, res, next) => {
     }
 });
 
-
+/* Group APIs */
 router.route('/create_group').post((req, res) => {
     console.log(req.body);
     var newGroup = Group();
@@ -121,5 +125,38 @@ function groupApiModel(group){
         'description' : group.description
     };
 }
+/* End Group APIs */
+
+/* Calendar APIs */
+router.route('/calendar/add_event').post((req, res) => {
+    var event_details = req.body;
+    if (event_details.type === 'user') {
+        api_calendar.user.add_event(event_details, res);
+    }
+    else {
+        api_calendar.group.add_event(event_details, res);
+    }
+});
+
+router.route('/calendar/delete_event').post((req, res) => {
+    var event_details = req.body;
+    if (event_details.type === 'user') {
+        api_calendar.user.delete_event(event_details, res);
+    }
+    else {
+        api_calendar.group.delete_event(event_details, res);
+    }
+});
+
+router.route('/calendar/edit_event').post((req, res) => {
+    var event_details = req.body;
+    if (event_details.type === 'user') {
+        api_calendar.user.edit_event(event_details, res);
+    }
+    else {
+        api_calendar.group.edit_event(event_details, res);
+    }
+});
+/* End Calendar APIs */
 
 module.exports = router;
