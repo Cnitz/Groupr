@@ -17,7 +17,7 @@ calendar.event_action = function(eventConfig, eventData, actionType, propagate, 
                 res.status(403).json({message: 'Error: Group does not exist'});
             }
             else {
-
+                
             }
         })
     }
