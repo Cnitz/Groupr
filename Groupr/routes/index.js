@@ -20,12 +20,12 @@ router.route('/routes').get((req, res) => {
 });
 
 
-/* Account APIs */
-router.route('/login').post((req, res) => {
+/* Open Account APIs */
+router.route('account/login').post((req, res) => {
     api_account.login(req.body.username, req.body.password, conf.TOKEN_SECRET, res);
 });
 
-router.route('/signup').post((req, res) => {
+router.route('account/signup').post((req, res) => {
     var account_info = {
         name: req.body.name,
         username: req.body.username,
@@ -35,7 +35,7 @@ router.route('/signup').post((req, res) => {
     api_account.signup(account_info, res);
 });
 
-router.route('/verify_token').get((req, res) => {
+router.route('account/verify_token').get((req, res) => {
     var token = req.cookies.grouprToken;
     if (token) {
         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
@@ -57,7 +57,7 @@ router.route('/verify_token').get((req, res) => {
         });
     }
 });
-/* End Account APIs */
+/* End Open Account APIs */
 
 // Route Protector
 router.use((req, res, next) => {
@@ -81,6 +81,14 @@ router.use((req, res, next) => {
         });
     }
 });
+
+/* Account APIs */
+router.route('account/get_user').get((req, res) => {
+    var token = req.cookies.grouprToken;
+    api_account.get_user(token, res);
+});
+
+/* End Account APIs */
 
 /* Group APIs */
 router.route('/create_group').post((req, res) => {
@@ -129,33 +137,26 @@ function groupApiModel(group){
 
 /* Calendar APIs */
 router.route('/calendar/add_event').post((req, res) => {
-    var event_details = req.body;
-    if (event_details.type === 'user') {
-        api_calendar.user.add_event(event_details, res);
-    }
-    else {
-        api_calendar.group.add_event(event_details, res);
-    }
+    var eventConfig = req.body.config;
+    var eventData = req.body.event;
+    api_calendar.add_event(eventConfig, eventData, res);
 });
 
 router.route('/calendar/delete_event').post((req, res) => {
-    var event_details = req.body;
-    if (event_details.type === 'user') {
-        api_calendar.user.delete_event(event_details, res);
-    }
-    else {
-        api_calendar.group.delete_event(event_details, res);
-    }
+    var eventConfig = req.body.config;
+    var eventData = req.body.event;
+    api_calendar.delete_event(eventConfig, eventData, res);
 });
 
 router.route('/calendar/edit_event').post((req, res) => {
-    var event_details = req.body;
-    if (event_details.type === 'user') {
-        api_calendar.user.edit_event(event_details, res);
-    }
-    else {
-        api_calendar.group.edit_event(event_details, res);
-    }
+    var eventConfig = req.body.config;
+    var eventData = req.body.event;
+    api_calendar.edit_event(eventConfig, eventData, res);
+});
+
+router.route('/calendar/get_events').post((req, res) => {
+    var calendarId = req.body.calendarId;
+    api_calendar.get_events(calendarId, res);
 });
 /* End Calendar APIs */
 

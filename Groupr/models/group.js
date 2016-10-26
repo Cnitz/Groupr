@@ -7,7 +7,7 @@ var GroupSchema = new mongoose.Schema({
     creator: { type: String, required: true},
     description: { type: String},
     users: [{type: String, required: true}],
-    calendar: [ObjectId],
+    calendar: { type: ObjectId, ref: 'Calendar' },
     isPublic: {type: Boolean, required: true},
     chat: [{ body: String, user: String, date: Date }],
     complaints: [{ body: String, date: Date }],

@@ -3,6 +3,7 @@ var jwt = require('jsonwebtoken');
 
 // Models
 var User = require('../models/user');
+var Calendar = require('../models/calendar');
 
 var account = new Object();
 
@@ -42,12 +43,49 @@ account.signup = function(account_info, res) {
     newAccount.username = account_info.username;
     newAccount.email = account_info.email;
     newAccount.password = account_info.password;
-    newAccount.save((err) => {
+    newAccount.save((err, account) => {
         if (err) {
         	res.status(500).json({message: 'Error: Account creation failed'});
         }
         else {
-        	res.status(200).json({message: 'Successful account creation'});
+            var newCalendar = Calendar();
+            newCalendar.events = [];
+            newCalendar.save((err, calendar) => {
+                if (err) {
+                    account.remove((err) => {
+                        res.status(500).json({message: 'Error: Account creation failed'});
+                    })
+                }
+                else {
+                    account.calendar = calendar._id;
+                    account.save((err) => {
+                        if (err) {
+                            calendar.remove((err) => {})
+                            account.remove((err) => {
+                                res.status(500).json({message: 'Error: Account creation failed'});
+                            })
+                        }
+                        else {
+                            res.status(200).json({message: 'Successful account creation'});
+                        }
+                    })
+                }
+            })
+        }
+    });
+}
+
+// get User Info
+account.get_user = function(token, res) {
+    User.findOne({ 'token': token}, (err) => {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else if (user === null) {
+            res.status(403).json({message: 'Error: No User found'});
+        }
+        else {
+            res.status(200).json(user);
         }
     });
 }

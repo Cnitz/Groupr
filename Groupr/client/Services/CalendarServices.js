@@ -6,13 +6,13 @@ define([
 		function($http) {
 			var service = {};
 
-			var url = 'http://localhost:3000/api/';
+			var url = 'http://localhost:3000/api/calendar/';
 
 
 			service.addEvent = function(calendarEvent) {
 				return $http({
 					method: 'POST',
-					url: url + 'calendar/add_event',
+					url: url + 'add_event',
 					data: calendarEvent
 				});
 			}
@@ -20,7 +20,7 @@ define([
 			service.deleteEvent = function(calendarEvent) {
 				return $http({
 					method: 'POST',
-					url: url + 'calendar/delete_event',
+					url: url + 'delete_event',
 					data: calendarEvent
 				});
 			}
@@ -28,8 +28,16 @@ define([
 			service.editEvent = function(calendarEvent) {
 				return $http({
 					method: 'POST',
-					url: url + 'calendar/edit_event',
+					url: url + 'edit_event',
 					data: calendarEvent
+				});
+			}
+
+			service.getEvents = function(calendar) {
+				return $http({
+					method: 'POST',
+					url: url + 'get_events',
+					data: calendar
 				});
 			}
 
