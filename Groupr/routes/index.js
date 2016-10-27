@@ -85,21 +85,13 @@ router.use((req, res, next) => {
 router.route('/groups/create').post((req, res) => {
 var username = '';
 if(req.cookies.grouprToken){
-    var cursor = User.find({token: req.cookies.grouprToken},function(err, user){
-       
-    });
-   
-}
-});
+    var cursor = User.findOne({token: req.cookies.grouprToken},function(err, user){
 
-
-function createGroup(username, req, res){
-    console.log(username);
     var newGroup = Group();
     newGroup.name = req.body.name;
     newGroup.description = req.body.description;
-    newGroup.creator = username;
-    newGroup.users = [username];
+    newGroup.creator = user.username;
+    newGroup.users = [user.username];
     newGroup.isPublic = req.body.isPublic;
 
     newGroup.save((err) => {
@@ -111,13 +103,32 @@ function createGroup(username, req, res){
             });
         }
         else {
-            console.log('Successful');
-            res.status(200).json({
-                message: 'Successful group creation'
+            
+            user.groups.push(newGroup._id);
+            user.save((err) => {
+                if(err){
+
+            res.status(500).json({
+                error: err,
+                message: 'Error: Group creation failed'
             });
+                }
+                else { 
+                    res.status(200).json({
+                    message: 'Successful group creation'
+            });
+                }
+            })
+
         }
     });
+    });
+   
 }
+});
+
+
+
 
 
 //Get all groups
@@ -135,19 +146,25 @@ router.route('/groups/all').get((req, res) => {
 //Get groups that the user is a part of
 router.route('/groups').get((req, res) => {
 
+
 var groups = [];
 
 if(req.cookies.grouprToken){
-    User.find({token: req.cookies.grouprToken},function(err, user) {
-        if(user.groups){
-            user.groups.forEach(function (userGroup){
-                Group.find({_id: userGroup._id}, function (err, group){
-                    groups.push(groupApiModel(group));
-                });
+
+    User.findOne({token: req.cookies.grouprToken}).populate('groups').exec(function(err,user){
+
+        if(err)
+            res.status(500).json({
+                error: err,
+                message: 'Error: Invalid Access'
             });
-        }
+
+                    
+        res.status(200).json(user.groups);
     });
-    res.send(groups);
+
+
+    
     }
 });
 
