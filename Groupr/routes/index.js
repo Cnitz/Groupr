@@ -151,7 +151,9 @@ var groups = [];
 
 if(req.cookies.grouprToken){
 
-    User.findOne({token: req.cookies.grouprToken}).populate('groups').exec(function(err,user){
+    User.findOne({token: req.cookies.grouprToken}).lean().populate('groups').exec(function(err,user){
+
+        console.log(user);
 
         if(err)
             res.status(500).json({
