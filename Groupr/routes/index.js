@@ -9,6 +9,7 @@ var conf = require('../config.js');
 
 // API logic
 var api_account = require('../api_logic/api_account');
+var api_groups = require('../api_logic/api_groups');
 
 // Models
 var User = require('../models/user');
@@ -81,120 +82,31 @@ router.use((req, res, next) => {
     }
 });
 
+/*
+ * Group Api routes
+ *
+ *
+ *
+ *
+ *
+ */
+
+//Create a brand new group
 
 router.route('/groups/create').post((req, res) => {
-var username = '';
-if(req.cookies.grouprToken){
-    var cursor = User.findOne({token: req.cookies.grouprToken},function(err, user){
-
-    var newGroup = Group();
-    newGroup.name = req.body.name;
-    newGroup.description = req.body.description;
-    newGroup.creator = user.username;
-    newGroup.users = [user.username];
-    newGroup.isPublic = req.body.isPublic;
-
-    newGroup.save((err) => {
-        if (err) {
-
-            res.status(500).json({
-                error: err,
-                message: 'Error: Group creation failed'
-            });
-        }
-        else {
-            
-            user.groups.push(newGroup._id);
-            user.save((err) => {
-                if(err){
-
-            res.status(500).json({
-                error: err,
-                message: 'Error: Group creation failed'
-            });
-                }
-                else { 
-                    res.status(200).json({
-                    message: 'Successful group creation'
-            });
-                }
-            })
-
-        }
-    });
-    });
-   
-}
+api_groups.create_group(req, res);
 });
 
-
-
-
-
 //Get all groups
-
 router.route('/groups/all').get((req, res) => {
-  Group.find({}, function(err, groups) {
-    var groupApiModelList = [];
-    groups.forEach(function(group) {
-      groupApiModelList.push(groupApiModel(group));
-    });
-    res.send(groupApiModelList);
-  });
+api_groups.get_all_groups(req, res);
 });
 
 //Get groups that the user is a part of
 router.route('/groups').get((req, res) => {
-
-
-var groups = [];
-
-if(req.cookies.grouprToken){
-
-    User.findOne({token: req.cookies.grouprToken}).lean().populate('groups', 'name description').exec(function(err,user){
-
-        console.log(user);
-
-        if(err)
-            res.status(500).json({
-                error: err,
-                message: 'Error: Invalid Access'
-            });
-
-                    
-        res.status(200).json(user.groups);
-    });
-
-
-    
-    }
+    api_groups.get_user_groups(req, res);
 });
 
-
-function groupApiModel(group){
-    return {
-        'name' : group.name,
-        'description' : group.description
-    };
-}
-
-// function getUser(token){
-// var currentUser = {};
-//      return User.findOne({token: token},function(err, user) {     
-// }).then(function(){
-//      return userApiModel(user);
-// });
-
-
-// }
-
-// function userApiModel(user){
-//     return{
-//     username: user.username,
-//     email: user.email,
-//     name: user.name 
-//     }; 
-// }
 
 
 module.exports = router;
