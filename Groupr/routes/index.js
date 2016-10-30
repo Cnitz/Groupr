@@ -88,7 +88,7 @@ router.use((req, res, next) => {
  *  -Get all groups
  *  -Get all groups by current user
  *  -Get group by id
- *
+ * 
  */
 
 //Create a brand new group
