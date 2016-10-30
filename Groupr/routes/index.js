@@ -84,15 +84,14 @@ router.use((req, res, next) => {
 
 /*
  * Group Api routes
- *
- *
- *
- *
+ *  -Create Group
+ *  -Get all groups
+ *  -Get all groups by current user
+ *  -Get group by id
  *
  */
 
 //Create a brand new group
-
 router.route('/groups/create').post((req, res) => {
 api_groups.create_group(req, res);
 });
@@ -102,9 +101,14 @@ router.route('/groups/all').get((req, res) => {
 api_groups.get_all_groups(req, res);
 });
 
-//Get groups that the user is a part of
+//Get groups by current user
 router.route('/groups').get((req, res) => {
     api_groups.get_user_groups(req, res);
+});
+
+//Get information pertaining to a specific Group
+router.route('/groups/:id').get((req, res) => {
+    api_groups.get_group_by_id(req, res, req.params.id);
 });
 
 
