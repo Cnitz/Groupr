@@ -23,11 +23,8 @@ define([
 					return;
 				}
 				var group = {name: groupName, description: groupDescription, isPublic: true}
-				var data = {
-                    token: AccountServices.userAccount.token,
-                    username: AccountServices.userAccount.user.username
-                }
-				GroupServices.createGroup(group, data)
+
+				GroupServices.createGroup(group)
 					.then(function(){
 						vm.groups.push(group);
 					})

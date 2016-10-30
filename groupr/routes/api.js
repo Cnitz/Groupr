@@ -98,6 +98,7 @@ router.use((req, res, next) => {
     }
 });
 
+
 router.post('/api/groups/all', function (req, res, next) {
     passUser(req.cookies.grouprToken, function (err, user) {
         var query = formGroupQuery({body: req.body, user: user});
@@ -107,6 +108,7 @@ router.post('/api/groups/all', function (req, res, next) {
             else
                 res.status(200).json({ group: group });
         });
+
     });
 });
 router.post('/api/groups/calendar', function (req, res, next) {
@@ -155,6 +157,15 @@ router.post('api/tasks/all', function (req, res, next) {
             else
                 res.status(200).json({ task: task });
         });
+    });
+});
+router.post('/api/groups/create', function (req, res, next) {
+    var query = formMeetingQuery(req.body);
+    Meeting.findOne(query, function (err, meeting) {
+        if (err)
+            res.status(500).json({ message: 'Error: Database access' });
+        else
+            res.status(200).json({ meeting: meeting });
     });
 });
 

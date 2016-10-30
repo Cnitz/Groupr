@@ -9,10 +9,13 @@ var conf = require('../config.js');
 
 // API logic
 var api_account = require('../api_logic/api_account');
+var api_groups = require('../api_logic/api_groups');
 
 // Models
 var User = require('../models/user');
 var Group = require('../models/group');
+
+
 
 router.route('/routes').get((req, res) => {
     res.json(router.stack);
@@ -78,48 +81,35 @@ router.use((req, res, next) => {
     }
 });
 
+/*
+ * Group Api routes
+ *  -Create Group
+ *  -Get all groups
+ *  -Get all groups by current user
+ *  -Get group by id
+ * 
+ */
 
-router.route('/create_group').post((req, res) => {
-    console.log(req.body);
-    var newGroup = Group();
-    newGroup.name = req.body.name;
-    newGroup.description = req.body.description;
-    newGroup.creator = req.body.username;
-    newGroup.users = [req.body.username];
-    newGroup.isPublic = req.body.isPublic;
-    newGroup.save((err) => {
-        if (err) {
+//Create a brand new group
+router.route('/groups/create').post((req, res) => {
+api_groups.create_group(req, res);
+});
 
-            res.status(500).json({
-                error: err,
-                message: 'Error: Group creation failed'
-            });
-        }
-        else {
-            console.log('Successful');
-            res.status(200).json({
-                message: 'Successful group creation'
-            });
-        }
-    });
+//Get all groups
+router.route('/groups/all').get((req, res) => {
+api_groups.get_all_groups(req, res);
+});
+
+//Get groups by current user
+router.route('/groups').get((req, res) => {
+    api_groups.get_user_groups(req, res);
+});
+
+//Get information pertaining to a specific Group
+router.route('/groups/:id').get((req, res) => {
+    api_groups.get_group_by_id(req, res, req.params.id);
 });
 
 
-router.route('/get_groups').post((req, res) => {
-  Group.find({}, function(err, groups) {
-    var groupApiModelList = [];
-    groups.forEach(function(group) {
-      groupApiModelList.push(groupApiModel(group));
-    });
-    res.send(groupApiModelList);
-  });
-});
-
-function groupApiModel(group){
-    return {
-        'name' : group.name,
-        'description' : group.description
-    };
-}
 
 module.exports = router;
