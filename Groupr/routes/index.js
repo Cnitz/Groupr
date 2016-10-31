@@ -10,6 +10,7 @@ var conf = require('../config.js');
 // API logic
 var api_account = require('../api_logic/api_account');
 var api_groups = require('../api_logic/api_groups');
+var api_tasks = require('../api_logic/api_tasks');
 
 // Models
 var User = require('../models/user');
@@ -87,7 +88,7 @@ router.use((req, res, next) => {
  *  -Get all groups
  *  -Get all groups by current user
  *  -Get group by id
- * 
+ *
  */
 
 //Create a brand new group
@@ -110,6 +111,23 @@ router.route('/groups/:id').get((req, res) => {
     api_groups.get_group_by_id(req, res, req.params.id);
 });
 
-
+/*
+ * Tasks Api routes
+ *  -Create tasks
+ *  -Get all tasks in a group
+ *  -Get all tasks involving user
+ *  -Get tasks by id (todo)
+ *  -Get tasks by category (todo)
+ *  -Get tasks by complete status (todo)
+ */
+router.post('api/tasks/me', function (req, res, next) {
+    api_tasks.tasksByUser(req, res);
+});
+router.post('api/tasks/add', function (req, res, next) {
+    api_tasks.addTask(req, res);
+});
+router.post('api/tasks/all', function (req, res, next) {
+    api_tasks.tasksInGroup(req, res);
+});
 
 module.exports = router;
