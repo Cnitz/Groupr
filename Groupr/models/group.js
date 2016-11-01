@@ -4,9 +4,9 @@ var Schema = mongoose.Schema,
     
 var GroupSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    creator: { type: String, required: true},
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } ,
     description: { type: String},
-    users: [{type: String, required: true}],
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' } ],
     calendar: [ObjectId],
     isPublic: {type: Boolean, required: true},
     chat: [{ body: String, user: String, date: Date }],

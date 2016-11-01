@@ -111,6 +111,14 @@ router.route('/groups/:id').get((req, res) => {
     api_groups.get_group_by_id(req, res, req.params.id);
 });
 
+router.route('/groups/join/:id').put((req, res) => {
+    api_groups.join_group(req, res, req.params.id);
+});
+
+router.route('/groups/leave/:id').put((req, res) => {
+    api_groups.leave_group(req, res, req.params.id);
+});
+
 /*
  * Tasks Api routes
  *  -Create tasks
