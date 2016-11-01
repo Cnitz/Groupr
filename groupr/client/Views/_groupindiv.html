@@ -1,0 +1,19 @@
+<div id="body-div" layout="column">
+  <md-nav-bar md-selected-nav-item="currentNavItem">
+    <md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
+    <md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Groups</md-nav-item>
+    <span flex></span>
+    <md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
+  </md-nav-bar>
+  GROUP_NAME_HERE
+  <md-content layout="column" layout-align="center center" flex="">
+    <md-grid-list md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="4:3" md-gutter="8px" md-gutter-gt-sm="4px">
+      <md-grid-tile ng-repeat="task in vm.tasks">
+        {{task.title}}
+      </md-grid-tile>
+    </md-grid-list>
+    <md-button id="btnAddTask" ng-click="addTask($event)" class="md-primary" type="button" aria-label="Add Task">
+      ADD TASK
+    </md-button>
+  </md-content>
+</div> 

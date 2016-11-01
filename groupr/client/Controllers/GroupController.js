@@ -10,6 +10,7 @@ define([
             var vm = this;
             {
                 vm.groups =[];
+								vm.tasks =[];
             }
 			vm.goHome = goHome;
 			$scope.currentNavItem = "groups";
@@ -32,6 +33,7 @@ define([
 			$scope.joinGroup = function(ele) {
 
 			}
+			$scope.addTask = addTask;
 
             return this;
 
@@ -51,6 +53,23 @@ define([
                         $state.go('login');
                 });
             }
+
+						function addTask($event) { 
+        var confirm = $mdDialog.prompt()
+        .title('Task Info')
+        .textContent('Please name your task')
+        .placeholder('Task name')
+        .ariaLabel('Task name')
+        .initialValue('Hunt for juicy meese')
+        .targetEvent(ev)
+        .ok('Create Task')
+        .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function(result) {
+          var task = {title: result};
+          vm.tasks.push(task);
+        });
+      }
 
 			function goHome(){
 				$state.go('home');
