@@ -120,14 +120,17 @@ router.route('/groups/:id').get((req, res) => {
  *  -Get tasks by category (todo)
  *  -Get tasks by complete status (todo)
  */
-router.post('api/tasks/me', function (req, res, next) {
+router.post('/api/tasks/user', function (req, res, next) {
     api_tasks.tasksByUser(req, res);
 });
-router.post('api/tasks/add', function (req, res, next) {
+router.post('/api/tasks/add', function (req, res, next) {
     api_tasks.addTask(req, res);
 });
-router.post('api/tasks/all', function (req, res, next) {
+router.post('/api/tasks/group', function (req, res, next) {
     api_tasks.tasksInGroup(req, res);
+});
+router.post('/api/tasks/remove', function (req, res, next) {
+    api_tasks.removeTask(req, res);
 });
 
 module.exports = router;
