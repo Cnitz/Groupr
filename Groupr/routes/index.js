@@ -116,20 +116,20 @@ router.route('/groups/:id').get((req, res) => {
  *  -Create tasks
  *  -Get all tasks in a group
  *  -Get all tasks involving user
- *  -Get tasks by id (todo)
- *  -Get tasks by category (todo)
- *  -Get tasks by complete status (todo)
+ *  -Remove tasks
+ *  -Mark task completed/incomplete
  */
-router.post('/api/tasks/user', function (req, res, next) {
+router.route('/tasks/user').post((req, res) => {
     api_tasks.tasksByUser(req, res);
 });
-router.post('/api/tasks/add', function (req, res, next) {
+router.route('/tasks/add').post((req, res) => {
+    console.log(JSON.stringify(req.body));
     api_tasks.addTask(req, res);
 });
-router.post('/api/tasks/group', function (req, res, next) {
+router.route('/tasks/group').post((req, res) => {
     api_tasks.tasksInGroup(req, res);
 });
-router.post('/api/tasks/remove', function (req, res, next) {
+router.route('/tasks/remove').post((req, res) => {
     api_tasks.removeTask(req, res);
 });
 
