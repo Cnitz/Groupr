@@ -33,11 +33,27 @@ define([
 				});
 			}
 
-			service.getEvents = function(calendarId) {
+			service.getPersonalCalendar = function(userId) {
+				var data = {
+					userId: userId,
+					calendarType: 'personal'
+				}
 				return $http({
 					method: 'POST',
 					url: url + 'get_events',
-					data: calendarId
+					data: data
+				});
+			}
+
+			service.getGroupCalendar = function(groupId) {
+				var data = {
+					groupId: groupId,
+					calendarType: 'group'
+				}
+				return $http({
+					method: 'POST',
+					url: url + 'get_events',
+					data: data
 				});
 			}
 

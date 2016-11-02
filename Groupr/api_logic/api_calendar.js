@@ -46,25 +46,6 @@ calendar.event_action = function(calendars, event, action_type, callback) {
         })  
 }
 
-calendar.get_events = function(calendarId, callback) {
-    var reponseObj = {};
-    Calendar.findOne({ _id: calendarId}, (err, calendar) => {
-        if (err) {
-            reponseObj.status = 500;
-            reponseObj.data = {message: 'Error: Calendar does not exist'}
-        }
-        else if (calendar === null) {
-            reponseObj.status = 403;
-            reponseObj.data = {message: 'Error: Calendar does not exist'}
-        }
-        else {
-            reponseObj.status = 200;
-            reponseObj.data = calendar;
-        }
-        callback(reponseObj);
-    });
-}
-
 calendar.schedule_assistant = function(calendars, day, startTime, endTime, length, callback) {
     var reponseObj = {};
     
