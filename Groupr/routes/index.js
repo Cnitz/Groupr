@@ -244,7 +244,7 @@ router.route('/calendar/add_group_events').post((req, res) => {
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
-    .exec(function(err, group) => {
+    .exec(function(err, group) {
         if (err) {
             res.status(500).json({message: 'Error: Database access'});
         }
@@ -270,7 +270,7 @@ router.route('/calendar/delete_group_events').post((req, res) => {
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
-    .exec(function(err, group) => {
+    .exec(function(err, group) {
         if (err) {
             res.status(500).json({message: 'Error: Database access'});
         }
@@ -296,7 +296,7 @@ router.route('/calendar/edit_group_events').post((req, res) => {
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
-    .exec(function(err, group) => {
+    .exec(function(err, group) {
         if (err) {
             res.status(500).json({message: 'Error: Database access'});
         }
@@ -317,6 +317,32 @@ router.route('/calendar/edit_group_events').post((req, res) => {
         }
     })
 });
+
+route.route('/calendar/schedule_assistant').post((req, res) => {
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            var calendars = [];
+            calendars.push(group.calendar);
+            group.users.forEach(function(user) {
+                calendars.push(user.calendar);
+            })
+            api_calendar.schedule_assistant(calendars, req.body.day, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
+                if (obj.status != 500) {
+                    res.status(200).json({message: 'Success'})
+                }
+                else {
+                    res.status(obj.status).json(obj.message);    
+                }
+            })
+        }
+    })
+})
 /* End Calendar APIs */
 
 module.exports = router;

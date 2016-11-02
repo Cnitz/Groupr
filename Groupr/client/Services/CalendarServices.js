@@ -77,6 +77,21 @@ define([
 				});
 			}
 
+			service.scheduleAssistant = function(day, startTime, endTime, length, groupId) {
+				var data = {
+					day: day,
+					startTime: startTime,
+					endTime: endTime,
+					length: length,
+					groupId: groupId
+				}
+				return $http({
+					method: 'POST',
+					url: url + 'schedule_assistant',
+					data: data
+				});
+			}
+
 			return service;
 		}
 	]);

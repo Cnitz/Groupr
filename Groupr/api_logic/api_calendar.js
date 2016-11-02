@@ -65,4 +65,9 @@ calendar.get_events = function(calendarId, callback) {
     });
 }
 
+calendar.schedule_assistant = function(calendars, day, startTime, endTime, length, callback) {
+    var reponseObj = {};
+    
+}
+
 module.exports = calendar;
