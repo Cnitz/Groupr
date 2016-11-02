@@ -13,9 +13,10 @@ define([
 				user: {},
 			}
 
-			var url = 'http://localhost:3000/api/';
+			var url = 'http://localhost:3000/api/account/';
 			
 			service.login = function(credentials) {
+				console.log(url+'login');
 				return $http({
 					method: 'POST',
 					url: url + 'login',
@@ -41,6 +42,14 @@ define([
 					url: url + 'verify_token',
 				});
 			}
+
+			service.getUser = function() {
+				return $http({
+					method: 'GET',
+					url: url + 'get_user',
+				});
+			}
+
 			return service;
 		}
 	]);
