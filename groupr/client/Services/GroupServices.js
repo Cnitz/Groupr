@@ -7,9 +7,9 @@ define([
 			var service = {};
 
 			var url = 'http://localhost:3000/api/';
-			
+
 			service.createGroup = function(group) {
-				var data = { 
+				var data = {
 					name: group.name,
 					description: group.description,
 					isPublic: group.isPublic
@@ -22,13 +22,18 @@ define([
 				});
 			}
 
-            service.getGroups = function(data) {
+			service.getAllGroups = function(data) {
 				return $http({
 					method: 'GET',
 					url: url + 'groups/all',
 					data: data
 				});
 			}
+
+			service.joinGroup = function(group) {
+
+			}
+
 			return service;
 		}
 	]);
