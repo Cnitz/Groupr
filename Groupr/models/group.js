@@ -4,7 +4,7 @@ var Schema = mongoose.Schema,
     
 var GroupSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    creator: { type: String, required: true},
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } ,
     description: { type: String},
     users: [{type: ObjectId, ref: 'User'}],
     calendar: { type: ObjectId, ref: 'Calendar' },

@@ -1,0 +1,45 @@
+<div id="body-div" layout="column">
+  <md-nav-bar md-selected-nav-item="currentNavItem">
+    <md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
+    <md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Groups</md-nav-item>
+    <span flex></span>
+    <md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
+  </md-nav-bar>
+  <md-toolbar layout="row" class="md-hue-3">
+    <div class="md-toolbar-tools">
+      <span>Your Group</span>
+    </div>
+  </md-toolbar>
+  <md-content layout="column" layout-align="center center" flex="">
+    <md-card>
+      <md-list flex>
+        <md-subheader class="md-no-sticky">Group Tasks</md-subheader>
+        <md-list-item data-ng-if="vm.tasks.length == 0">You have no tasks! You may add one below.</md-list-item>
+        <md-list-item class="md-3-line" ng-repeat="task in vm.tasks" ng-click="null">
+          <img ng-src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSDFbhtwSvbMcMSVDMF42OmtGFa9OoI4Qy2hYBz_1S4_59bIjxtUA" class="md-avatar" alt="group icon" />
+          <div class="md-list-item-text" layout="column">
+            <h3 style="text-align:center;"><b>{{task.title}}</b></h3>
+            <h4>{{task.description}}</h4>
+            <p>{{task.users}}</p>
+          </div>
+          <md-button id="btnRemoveTask" ng-click="removeTask(task.title)" class="md-primary" type="button" aria-label="Delete Task">
+            DELETE TASK
+          </md-button>
+        </md-list-item>
+      </md-list>
+      <md-subheader class="md-no-sticky">Add a New Task:</md-subheader>
+      <md-input-container>
+        <label>Task Name</label>
+        <input ng-model="title" type="text" name="title">
+      </md-input-container>
+      <md-input-container>
+        <label>Description</label>
+        <input ng-model="description" type="text" name="description">
+      </md-input-container>
+      <md-button id="btnAddTask" ng-click="addTask()" class="md-primary" type="button" aria-label="Add Task">
+        ADD TASK
+      </md-button>
+
+    </md-card>
+  </md-content>
+</div>

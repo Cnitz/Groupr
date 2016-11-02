@@ -32,6 +32,13 @@ define([
 					controllerAs:  	'vm',
 					//resolve: { authenticate: authenticate }
 				})
+				.state('groupindiv', {
+					url:			'/groupindiv',
+					templateUrl:	'Views/_groupindiv.html',
+					controller:		'Groupr.Controllers.Group',
+					controllerAs:  	'vm',
+					//resolve: { authenticate: authenticate }
+				})
 				.state('groups', {
 					url:			'/groups',
 					templateUrl:	'Views/_group.html',

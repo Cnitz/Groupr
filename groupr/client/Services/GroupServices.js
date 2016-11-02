@@ -7,30 +7,33 @@ define([
 			var service = {};
 
 			var url = 'http://localhost:3000/api/';
-			
-			service.createGroup = function(group, credentials) {
-				var data = { 
+
+			service.createGroup = function(group) {
+				var data = {
 					name: group.name,
 					description: group.description,
-					isPublic: group.isPublic,
-					token: credentials.token,
-					username: credentials.username
+					isPublic: group.isPublic
 				}
 				console.log(data);
 				return $http({
 					method: 'POST',
-					url: url + 'create_group',
+					url: url + 'groups/create',
 					data: data
 				});
 			}
 
-            service.getGroups = function(data) {
+			service.getAllGroups = function(data) {
 				return $http({
-					method: 'POST',
-					url: url + 'get_groups',
+					method: 'GET',
+					url: url + 'groups/all',
 					data: data
 				});
 			}
+
+			service.joinGroup = function(group) {
+
+			}
+
 			return service;
 		}
 	]);
