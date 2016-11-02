@@ -10,6 +10,7 @@ var conf = require('../config.js');
 // API logic
 var api_account = require('../api_logic/api_account');
 var api_groups = require('../api_logic/api_groups');
+var api_tasks = require('../api_logic/api_tasks');
 
 // Models
 var User = require('../models/user');
@@ -87,7 +88,7 @@ router.use((req, res, next) => {
  *  -Get all groups
  *  -Get all groups by current user
  *  -Get group by id
- * 
+ *
  */
 
 //Create a brand new group
@@ -110,6 +111,34 @@ router.route('/groups/:id').get((req, res) => {
     api_groups.get_group_by_id(req, res, req.params.id);
 });
 
+router.route('/groups/join/:id').put((req, res) => {
+    api_groups.join_group(req, res, req.params.id);
+});
 
+router.route('/groups/leave/:id').put((req, res) => {
+    api_groups.leave_group(req, res, req.params.id);
+});
+
+/*
+ * Tasks Api routes
+ *  -Create tasks
+ *  -Get all tasks in a group
+ *  -Get all tasks involving user
+ *  -Remove tasks
+ *  -Mark task completed/incomplete
+ */
+router.route('/tasks/user').post((req, res) => {
+    api_tasks.tasksByUser(req, res);
+});
+router.route('/tasks/add').post((req, res) => {
+    console.log(JSON.stringify(req.body));
+    api_tasks.addTask(req, res);
+});
+router.route('/tasks/group').post((req, res) => {
+    api_tasks.tasksInGroup(req, res);
+});
+router.route('/tasks/remove').post((req, res) => {
+    api_tasks.removeTask(req, res);
+});
 
 module.exports = router;

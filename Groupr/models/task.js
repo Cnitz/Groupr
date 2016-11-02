@@ -3,7 +3,7 @@ var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
 var TaskSchema = new mongoose.Schema({
-    group: { type: ObjectId, required: true},
+    group: { type: mongoose.Schema.Types.ObjectId, required: true},
     title: { type: String, required: true },
     description: String,
     creator: { type: String, required: true},
