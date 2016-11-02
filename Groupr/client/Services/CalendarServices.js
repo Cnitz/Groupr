@@ -33,11 +33,47 @@ define([
 				});
 			}
 
-			service.getEvents = function(calendar) {
+			service.getEvents = function(calendarId) {
 				return $http({
 					method: 'POST',
 					url: url + 'get_events',
-					data: calendar
+					data: calendarId
+				});
+			}
+
+			service.addGroupEvent = function(calendarEvent, groupId) {
+				var data = {
+					event: calendarEvent,
+					groupId: groupId
+				}
+				return $http({
+					method: 'POST',
+					url: url + 'add_group_event',
+					data: data
+				});
+			}
+
+			service.deleteGroupEvent = function(calendarEvent, groupId) {
+				var data = {
+					event: calendarEvent,
+					groupId: groupId
+				}
+				return $http({
+					method: 'POST',
+					url: url + 'delete_group_event',
+					data: data
+				});
+			}
+
+			service.editGroupEvent = function(calendarEvent, groupId) {
+				var data = {
+					event: calendarEvent,
+					groupId: groupId
+				}
+				return $http({
+					method: 'POST',
+					url: url + 'edit_group_event',
+					data: data
 				});
 			}
 

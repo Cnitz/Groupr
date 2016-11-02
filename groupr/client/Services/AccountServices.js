@@ -16,6 +16,7 @@ define([
 			var url = 'http://localhost:3000/api/account/';
 			
 			service.login = function(credentials) {
+				console.log(url+'login');
 				return $http({
 					method: 'POST',
 					url: url + 'login',

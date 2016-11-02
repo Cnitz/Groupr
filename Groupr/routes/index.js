@@ -91,6 +91,7 @@ router.get('/auth/google/callback', passport.authenticate('google', { session: f
 
 // Route Protector
 router.use((req, res, next) => {
+    console.log(req);
     var token = req.cookies.grouprToken;
     if (token) {
         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
@@ -167,26 +168,154 @@ function groupApiModel(group){
 
 /* Calendar APIs */
 router.route('/calendar/add_event').post((req, res) => {
-    var eventConfig = req.body.config;
-    var eventData = req.body.event;
-    api_calendar.add_event(eventConfig, eventData, res);
+    User.findOne({token: req.cookies.grouprToken})
+    .populate('calendar')
+    .exec(function(err, user) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            var calendars = [];
+            calendars.push(user.calendar);
+            api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
+                if (obj.status != 500) {
+                    res.status(200).json({message: 'Success: The event has been added'})
+                }
+                else {
+                    res.status(obj.status).json(obj.message);    
+                }             
+            })
+        }
+    })    
 });
 
 router.route('/calendar/delete_event').post((req, res) => {
-    var eventConfig = req.body.config;
-    var eventData = req.body.event;
-    api_calendar.delete_event(eventConfig, eventData, res);
+    User.findOne({token: req.cookies.grouprToken})
+    .populate('calendar')
+    .exec(function(err, user) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            var calendars = [];
+            calendars.push(user.calendar);
+            api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
+                if (obj.status != 500) {
+                    res.status(200).json({message: 'Success: The event has been deleted'})
+                }
+                else {
+                    res.status(obj.status).json(obj.message);    
+                }              
+            })
+        }
+    })  
 });
 
 router.route('/calendar/edit_event').post((req, res) => {
-    var eventConfig = req.body.config;
-    var eventData = req.body.event;
-    api_calendar.edit_event(eventConfig, eventData, res);
+    User.findOne({token: req.cookies.grouprToken})
+    .populate('calendar')
+    .exec(function(err, user) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            var calendars = [];
+            calendars.push(user.calendar);
+            api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
+                if (obj.status != 500) {
+                    res.status(200).json({message: 'Success: The event has been edited'})
+                }
+                else {
+                    res.status(obj.status).json(obj.message);    
+                }             
+            })
+        }
+    })   
 });
 
 router.route('/calendar/get_events').post((req, res) => {
     var calendarId = req.body.calendarId;
-    api_calendar.get_events(calendarId, res);
+    api_calendar.get_events(calendarId, (obj) => {
+        res.status(obj.status).json(obj.data);
+    });
+});
+
+router.route('/calendar/add_group_events').post((req, res) => {
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) => {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            var calendars = [];
+            calendars.push(group.calendar);
+            group.users.forEach(function(user) {
+                calendars.push(user.calendar);
+            })
+            api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
+                if (obj.status != 500) {
+                    res.status(200).json({message: 'Success: The event has been added'})
+                }
+                else {
+                    res.status(obj.status).json(obj.message);    
+                }
+            })
+        }
+    })
+});
+
+router.route('/calendar/delete_group_events').post((req, res) => {
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) => {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            var calendars = [];
+            calendars.push(group.calendar);
+            group.users.forEach(function(user) {
+                calendars.push(user.calendar);
+            })
+            api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
+                if (obj.status != 500) {
+                    res.status(200).json({message: 'Success: The event has been deleted'})
+                }
+                else {
+                    res.status(obj.status).json(obj.message);    
+                }
+            })
+        }
+    })
+});
+
+router.route('/calendar/edit_group_events').post((req, res) => {
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) => {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            var calendars = [];
+            calendars.push(group.calendar);
+            group.users.forEach(function(user) {
+                calendars.push(user.calendar);
+            })
+            api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
+                if (obj.status != 500) {
+                    res.status(200).json({message: 'Success: The event has been edited'})
+                }
+                else {
+                    res.status(obj.status).json(obj.message);    
+                }
+            })
+        }
+    })
 });
 /* End Calendar APIs */
 

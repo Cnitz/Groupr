@@ -9,70 +9,94 @@ var account = new Object();
 
 // login
 account.login = function(username, password, TOKEN_SECRET, res) {
-	User.findOne({ 'username': username}, (err, user) => {
+    User.findOne({ 'username': username})
+    .populate('calendar')
+    .exec((err, user) => {
         if (err) {
-        	res.status(500).json({message: 'Error: Database access'});
+            res.status(500).json({message: 'Error: Database access'});
         }
         else if (user === null) {
-        	res.status(403).json({message: 'Error: Invalid login'});
+            res.status(403).json({message: 'Error: Invalid login'});
         }
         else if (user.password != password) {
-        	res.status(403).json({message: 'Error: Invalid login'});
+            res.status(403).json({message: 'Error: Invalid login'});
         }
         else {
-            var token = jwt.sign({ email: user.email }, TOKEN_SECRET, {
+            if (user.calender === undefined) {
+                console.log('calendar is undefined');
+                var newCalendar = Calendar();
+                newCalendar.events = [];
+                newCalendar.save((err, calendar) => {
+                    if (err) {
+                        res.status(500).json({message: 'Error: Cannot create Calendar'});
+                    }
+                    else {
+                        var token = jwt.sign({ email: user.email }, TOKEN_SECRET, {
+                        expiresIn: '12h'
+                        });
+                        user.token = token;
+                        user.calendar = calendar;
+                        user.save((err) => {
+                            if (err) {
+                                res.status(500).json({message: 'Error: Storing Token and Calendar failed'});
+                            }
+                            else {
+                                res.status(200).cookie('grouprToken', token).json({message: 'Successful account login'});
+                            }
+                        });
+                    }
+                })
+            }
+            else {
+                var token = jwt.sign({ email: user.email }, TOKEN_SECRET, {
                 expiresIn: '12h'
-            });
-            user.token = token;
-            user.save((err) => {
-		        if (err) {
-		        	res.status(500).json({message: 'Error: Storing Token Failed'});
-		        }
-		        else {
-		        	res.status(200).cookie('grouprToken', token).json({message: 'Successful account login'});
-		        }
-		    });
+                });
+                user.token = token;
+                user.save((err) => {
+                    if (err) {
+                        res.status(500).json({message: 'Error: Storing Token Failed'});
+                    }
+                    else {
+                        res.status(200).cookie('grouprToken', token).json({message: 'Successful account login'});
+                    }
+                });
+            }     
         }
     });
 }
 
 // signup
 account.signup = function(account_info, res) {
-	var newAccount = User();
-    newAccount.name = account_info.name;
-    newAccount.username = account_info.username;
-    newAccount.email = account_info.email;
-    newAccount.password = account_info.password;
-    newAccount.save((err, account) => {
+    User.findOne({ 'email': account_info.email}, (err, user) => {
         if (err) {
-        	res.status(500).json({message: 'Error: Account creation failed'});
+            res.status(500).json({message: 'Error: Database access'})
         }
-        else {
-            var newCalendar = Calendar();
-            newCalendar.events = [];
-            newCalendar.save((err, calendar) => {
+        else if (user === null) {
+            var newAccount = User();
+            newAccount.name = account_info.name;
+            newAccount.username = account_info.username;
+            newAccount.email = account_info.email;
+            newAccount.password = account_info.password;
+            newAccount.save((err) => {
                 if (err) {
-                    account.remove((err) => {
-                        res.status(500).json({message: 'Error: Account creation failed'});
-                    })
+                    res.status(403).json({
+                        message: 'Error: Account creation failed'
+                    });
                 }
                 else {
-                    account.calendar = calendar._id;
-                    account.save((err) => {
-                        if (err) {
-                            calendar.remove((err) => {})
-                            account.remove((err) => {
-                                res.status(500).json({message: 'Error: Account creation failed'});
-                            })
-                        }
-                        else {
-                            res.status(200).json({message: 'Successful account creation'});
-                        }
-                    })
+                    res.status(200).json({
+                        message: 'Successful account creation'
+                    });
                 }
             })
         }
-    });
+        else {
+            // Account already exists
+            res.status(403).json({
+                message: 'Error: Account already exists'
+            });
+        }
+    })
 }
 
 // get User Info
