@@ -242,10 +242,36 @@ router.route('/calendar/edit_event').post((req, res) => {
 });
 
 router.route('/calendar/get_events').post((req, res) => {
-    var calendarId = req.body.calendarId;
-    api_calendar.get_events(calendarId, (obj) => {
-        res.status(obj.status).json(obj.data);
-    });
+    if (req.body.calendarType == 'group') {
+        Group.findOne({_id: req.body.groupId})
+        .populate('calendar')
+        .exec(function(err, calendar) {
+            if (err) {
+                res.status(500).json({message: 'Error: Calendar does not exist'});
+            }
+            else if (calendar === null) {
+                res.status(403).json({message: 'Error: Calendar does not exist'});
+            }
+            else {
+                res.status(200).send(calendar);
+            }
+        });
+    }
+    else {
+        User.findOne({_id: req.body.userId})
+        .populate('calendar')
+        .exec(function(err, calendar) {
+            if (err) {
+                res.status(500).json({message: 'Error: Calendar does not exist'});
+            }
+            else if (calendar === null) {
+                res.status(403).json({message: 'Error: Calendar does not exist'});
+            }
+            else {
+                res.status(200).send(calendar);
+            }
+        });
+    }
 });
 
 router.route('/calendar/add_group_events').post((req, res) => {
@@ -259,17 +285,25 @@ router.route('/calendar/add_group_events').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(group.calendar);
+            userIds = [];
             group.users.forEach(function(user) {
-                calendars.push(user.calendar);
-            })
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
-                if (obj.status != 500) {
-                    res.status(200).json({message: 'Success: The event has been added'})
-                }
-                else {
-                    res.status(obj.status).json(obj.message);    
-                }
+                userIds.push(user._id);
             });
+            Users.find({'_id': { $in: userIds } })
+            .populate('calendar')
+            .exec(function(err, users) {
+                users.forEach(function(user) {
+                    calendars.push(user.calendar);
+                })
+                api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
+                    if (obj.status != 500) {
+                        res.status(200).json({message: 'Success: The event has been added'})
+                    }
+                    else {
+                        res.status(obj.status).json(obj.message);    
+                    }
+                });
+            })        
         }
     });
 });
@@ -285,17 +319,25 @@ router.route('/calendar/delete_group_events').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(group.calendar);
+            userIds = [];
             group.users.forEach(function(user) {
-                calendars.push(user.calendar);
-            })
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
-                if (obj.status != 500) {
-                    res.status(200).json({message: 'Success: The event has been deleted'})
-                }
-                else {
-                    res.status(obj.status).json(obj.message);    
-                }
+                userIds.push(user._id);
             });
+            Users.find({'_id': { $in: userIds } })
+            .populate('calendar')
+            .exec(function(err, users) {
+                users.forEach(function(user) {
+                    calendars.push(user.calendar);
+                })
+                api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
+                    if (obj.status != 500) {
+                        res.status(200).json({message: 'Success: The event has been added'})
+                    }
+                    else {
+                        res.status(obj.status).json(obj.message);    
+                    }
+                });
+            })        
         }
     });
 });
@@ -311,17 +353,25 @@ router.route('/calendar/edit_group_events').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(group.calendar);
+            userIds = [];
             group.users.forEach(function(user) {
-                calendars.push(user.calendar);
-            })
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
-                if (obj.status != 500) {
-                    res.status(200).json({message: 'Success: The event has been edited'})
-                }
-                else {
-                    res.status(obj.status).json(obj.message);    
-                }
+                userIds.push(user._id);
             });
+            Users.find({'_id': { $in: userIds } })
+            .populate('calendar')
+            .exec(function(err, users) {
+                users.forEach(function(user) {
+                    calendars.push(user.calendar);
+                })
+                api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
+                    if (obj.status != 500) {
+                        res.status(200).json({message: 'Success: The event has been added'})
+                    }
+                    else {
+                        res.status(obj.status).json(obj.message);    
+                    }
+                });
+            })        
         }
     });
 });

@@ -71,34 +71,6 @@ var passUser = function(token, cb){
     });
 }
 
-// Route Protector
-router.use((req, res, next) => {
-    var token = req.body.token;
-    console.log("hello");
-    if (!token) {
-        token = req.query.state;
-    }
-    if (token) {
-        jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
-            if (err) {
-                res.status(450).json({
-                    message: 'Error: Invalid token'
-                });
-            }
-            else {
-                req.decoded = decoded;
-                next();
-            }
-        });
-    }
-    else {
-        res.status(450).json({
-            message: 'Error: Invalid token'
-        });
-    }
-});
-
-
 router.post('/api/groups/all', function (req, res, next) {
     passUser(req.cookies.grouprToken, function (err, user) {
         var query = formGroupQuery({body: req.body, user: user});
