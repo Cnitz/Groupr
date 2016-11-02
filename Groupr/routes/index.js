@@ -29,11 +29,11 @@ router.route('/routes').get((req, res) => {
 
 
 /* Open Account APIs */
-router.route('account/login').post((req, res) => {
+router.route('/account/login').post((req, res) => {
     api_account.login(req.body.username, req.body.password, conf.TOKEN_SECRET, res);
 });
 
-router.route('account/signup').post((req, res) => {
+router.route('/account/signup').post((req, res) => {
     var account_info = {
         name: req.body.name,
         username: req.body.username,
@@ -45,10 +45,12 @@ router.route('account/signup').post((req, res) => {
 
 router.route('account/verify_token').get((req, res) => {
     var token = req.cookies.grouprToken;
+    
     if (token) {
         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
             if (err) {
                 res.status(403).json({
+                    error: err,
                     message: 'Error: Invalid token'
                 });
             }
@@ -94,28 +96,30 @@ router.get('/auth/google/callback', passport.authenticate('google', { session: f
 /*End of Google Auth */
 
 // Route Protector
-router.use((req, res, next) => {
-    console.log(req);
-    var token = req.cookies.grouprToken;
-    if (token) {
-        jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
-            if (err) {
-                res.status(403).json({
-                    message: 'Error: Invalid token'
-                });
-            }
-            else {
-                req.decoded = decoded;
-                next();
-            }
-        });
-    }
-    else {
-        res.status(403).json({
-            message: 'Error: Invalid token'
-        });
-    }
-});
+// router.use((req, res, next) => {
+//     //console.log(req);
+
+//     var token = req.cookies.grouprToken;
+//     if (token) {
+//         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
+//             if (err) {
+//                 res.status(403).json({
+//                     error: err,
+//                     message: 'Error: Invalid token'
+//                 });
+//             }
+//             else {
+//                 req.decoded = decoded;
+//                 next();
+//             }
+//         });
+//     }
+//     else {
+//         res.status(403).json({
+//             message: 'Error: Invalid token'
+//         });
+//     }
+// });
 
 /* Account APIs */
 router.route('account/get_user').get((req, res) => {
