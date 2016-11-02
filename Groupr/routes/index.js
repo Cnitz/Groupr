@@ -281,17 +281,25 @@ router.route('/calendar/add_group_events').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(group.calendar);
+            userIds = [];
             group.users.forEach(function(user) {
-                calendars.push(user.calendar);
-            })
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
-                if (obj.status != 500) {
-                    res.status(200).json({message: 'Success: The event has been added'})
-                }
-                else {
-                    res.status(obj.status).json(obj.message);    
-                }
+                userIds.push(user._id);
             });
+            Users.find({'_id': { $in: userIds } })
+            .populate('calendar')
+            .exec(function(err, users) {
+                users.forEach(function(user) {
+                    calendars.push(user.calendar);
+                })
+                api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
+                    if (obj.status != 500) {
+                        res.status(200).json({message: 'Success: The event has been added'})
+                    }
+                    else {
+                        res.status(obj.status).json(obj.message);    
+                    }
+                });
+            })        
         }
     });
 });
@@ -307,17 +315,25 @@ router.route('/calendar/delete_group_events').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(group.calendar);
+            userIds = [];
             group.users.forEach(function(user) {
-                calendars.push(user.calendar);
-            })
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
-                if (obj.status != 500) {
-                    res.status(200).json({message: 'Success: The event has been deleted'})
-                }
-                else {
-                    res.status(obj.status).json(obj.message);    
-                }
+                userIds.push(user._id);
             });
+            Users.find({'_id': { $in: userIds } })
+            .populate('calendar')
+            .exec(function(err, users) {
+                users.forEach(function(user) {
+                    calendars.push(user.calendar);
+                })
+                api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
+                    if (obj.status != 500) {
+                        res.status(200).json({message: 'Success: The event has been added'})
+                    }
+                    else {
+                        res.status(obj.status).json(obj.message);    
+                    }
+                });
+            })        
         }
     });
 });
@@ -333,17 +349,25 @@ router.route('/calendar/edit_group_events').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(group.calendar);
+            userIds = [];
             group.users.forEach(function(user) {
-                calendars.push(user.calendar);
-            })
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
-                if (obj.status != 500) {
-                    res.status(200).json({message: 'Success: The event has been edited'})
-                }
-                else {
-                    res.status(obj.status).json(obj.message);    
-                }
+                userIds.push(user._id);
             });
+            Users.find({'_id': { $in: userIds } })
+            .populate('calendar')
+            .exec(function(err, users) {
+                users.forEach(function(user) {
+                    calendars.push(user.calendar);
+                })
+                api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
+                    if (obj.status != 500) {
+                        res.status(200).json({message: 'Success: The event has been added'})
+                    }
+                    else {
+                        res.status(obj.status).json(obj.message);    
+                    }
+                });
+            })        
         }
     });
 });

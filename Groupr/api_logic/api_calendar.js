@@ -19,31 +19,32 @@ var search_event = function(eventList, key) {
 
 calendar.event_action = function(calendars, event, action_type, callback) {
     var reponseObj = {};
-        calendars.forEach(function(calendar) {
-            switch (action_type) {
-                case 'add':
-                    calendar.events.push(event);
-                break;
-                case 'delete':
-                    var index = search_event(calendar.events, event);
-                    calendar.events.splice(index, 1);
-                break;
-                case 'edit':
-                    var index = search_event(calendar.events, event);
-                    calendar.events[index] = event;
+    var counter = 0;
+    calendars.forEach(function(calendar) {
+        switch (action_type) {
+            case 'add':
+                calendar.events.push(event);
+            break;
+            case 'delete':
+                var index = search_event(calendar.events, event);
+                calendar.events.splice(index, 1);
+            break;
+            case 'edit':
+                var index = search_event(calendar.events, event);
+                calendar.events[index] = event;
+        }
+        calendar.save((err) => {
+            counter++;
+            if (err) {
+                reponseObj.status = 500;
+                reponseObj.message = 'Error: Database access';
             }
-            calendar.save((err) => {
-                counter++;
-                if (err) {
-                    reponseObj.status = 500;
-                    reponseObj.message = 'Error: Database access';
-                }
-                else if (counter === calendars.length) {
-                    callback(reponseObj);
-                }
-                else {}
-            })
-        })  
+            else if (counter === calendars.length) {
+                callback(reponseObj);
+            }
+            else {}
+        })
+    })          
 }
 
 calendar.schedule_assistant = function(calendars, day, startTime, endTime, length, callback) {
