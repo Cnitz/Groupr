@@ -8,7 +8,7 @@ var UserSchema = new mongoose.Schema({
     email: { type: String, required: true, index: { unique: true } },
     password : { type: String, required: true },
     token: { type: String, index : { unique: true } },
-    calendar: { type: ObjectId, ref: 'Calendar' }
+    calendar: { type: ObjectId, ref: 'Calendar' },
     groups : [{ type: ObjectId, ref: 'Group' } ],
 });
 

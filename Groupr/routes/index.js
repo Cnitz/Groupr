@@ -125,31 +125,6 @@ router.route('account/get_user').get((req, res) => {
 
 /* End Account APIs */
 
-/* Group APIs */
-router.route('/create_group').post((req, res) => {
-    console.log(req.body);
-    var newGroup = Group();
-    newGroup.name = req.body.name;
-    newGroup.description = req.body.description;
-    newGroup.creator = req.body.username;
-    newGroup.users = [req.body.username];
-    newGroup.isPublic = req.body.isPublic;
-    newGroup.save((err) => {
-        if (err) {
-
-            res.status(500).json({
-                error: err,
-                message: 'Error: Group creation failed'
-            });
-        }
-        else {
-            console.log('Successful');
-            res.status(200).json({
-                message: 'Successful group creation'
-            });
-        }
-});
-
 /*
  * Group Api routes
  *  -Create Group
@@ -213,9 +188,9 @@ router.route('/calendar/add_event').post((req, res) => {
                 else {
                     res.status(obj.status).json(obj.message);    
                 }             
-            })
+            });
         }
-    })    
+    });    
 });
 
 router.route('/calendar/delete_event').post((req, res) => {
@@ -235,9 +210,9 @@ router.route('/calendar/delete_event').post((req, res) => {
                 else {
                     res.status(obj.status).json(obj.message);    
                 }              
-            })
+            });
         }
-    })  
+    });
 });
 
 router.route('/calendar/edit_event').post((req, res) => {
@@ -257,9 +232,9 @@ router.route('/calendar/edit_event').post((req, res) => {
                 else {
                     res.status(obj.status).json(obj.message);    
                 }             
-            })
+            });
         }
-    })   
+    });
 });
 
 router.route('/calendar/get_events').post((req, res) => {
@@ -290,9 +265,9 @@ router.route('/calendar/add_group_events').post((req, res) => {
                 else {
                     res.status(obj.status).json(obj.message);    
                 }
-            })
+            });
         }
-    })
+    });
 });
 
 router.route('/calendar/delete_group_events').post((req, res) => {
@@ -316,9 +291,9 @@ router.route('/calendar/delete_group_events').post((req, res) => {
                 else {
                     res.status(obj.status).json(obj.message);    
                 }
-            })
+            });
         }
-    })
+    });
 });
 
 router.route('/calendar/edit_group_events').post((req, res) => {
@@ -342,12 +317,12 @@ router.route('/calendar/edit_group_events').post((req, res) => {
                 else {
                     res.status(obj.status).json(obj.message);    
                 }
-            })
+            });
         }
-    })
+    });
 });
 
-route.route('/calendar/schedule_assistant').post((req, res) => {
+router.route('/calendar/schedule_assistant').post((req, res) => {
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -368,10 +343,10 @@ route.route('/calendar/schedule_assistant').post((req, res) => {
                 else {
                     res.status(obj.status).json(obj.message);    
                 }
-            })
+            });
         }
-    })
-})
+    });
+});
 /* End Calendar APIs */
 
 /*
@@ -397,3 +372,4 @@ router.route('/tasks/remove').post((req, res) => {
 });
 
 module.exports = router;
+
