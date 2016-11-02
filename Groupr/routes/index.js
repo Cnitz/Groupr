@@ -148,8 +148,8 @@ router.route('/create_group').post((req, res) => {
                 message: 'Successful group creation'
             });
         }
-    });
-}
+});
+
 /*
  * Group Api routes
  *  -Create Group
