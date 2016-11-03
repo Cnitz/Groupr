@@ -45,15 +45,22 @@ define([
 				.then(function(res){
 					console.log(res.data);
 					vm.tasks.push(task);
+
+					var g = {group: vm.currGroup._id};
+					GroupServices.getTasks(g)
+					.then(function(res){
+						vm.tasks = res.data;
+					}, function(res) {
+						console.log("failure");
+						console.log(res.data.message);
+					});
 				})
 			};
 			$scope.removeTask = function(data) {
-
-
-
 				for(var i = 0; i < vm.tasks.length; i++){
 					if(vm.tasks[i].title == data){
 						var task = {taskId: vm.tasks[i]._id};
+						console.log(task);
 						GroupServices.removeTask(task)
 						.then(function(res) {
 							console.log("Success!");
@@ -64,7 +71,7 @@ define([
 							console.log(res.data);
 						});
 
-						return;
+						break;
 					}
 				}
 			};
