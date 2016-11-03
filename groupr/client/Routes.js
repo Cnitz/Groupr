@@ -34,7 +34,7 @@ define([
 				.state('groupindiv', {
 					url:			'/groupindiv/:groupID',
 					templateUrl:	'Views/_groupindiv.html',
-					controller:		'Groupr.Controllers.Group',
+					controller:		'Groupr.Controllers.IndividualGroup',
 					controllerAs:  	'vm',
 					params: {
 						groupID: ""

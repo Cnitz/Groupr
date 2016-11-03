@@ -15,7 +15,6 @@ define([
 			}
 			vm.goHome = goHome;
 			vm.logout = logout;
-			vm.joinGroup = joinGroup;
 			$scope.currentNavItem = "groups";
 			$scope.customFullscreen = false;
 			$scope.title= "";
@@ -25,9 +24,6 @@ define([
 			$scope.users = [];
 			vm.currGroup = "";
 
-
-
-			activate();
 			$scope.addTask = function(data) {
 				if($scope.title == "" || $scope.description == "")
 				return;
@@ -68,15 +64,6 @@ define([
 			};
 
 			function activate(){
-				GroupServices.getAllGroups()
-				.then(function(res){
-					vm.groups = res.data.data;
-				}, function(res){
-					console.log(res.data);
-					if (res.status == 450)
-					$state.go('login');
-				});
-
 				if($stateParams.groupID != null){
 					GroupServices.getGroupInfo($stateParams.groupID)
 					.then(function(res) {
@@ -106,10 +93,9 @@ define([
 						console.log(res.data);
 					});
 				}
-
-
-
 			}
+
+			activate();
 
 			function goHome(){
 				$state.go('home');
