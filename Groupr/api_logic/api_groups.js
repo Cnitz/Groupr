@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 // Models
 var User = require('../models/user');
 var Group = require('../models/group');
+var Calendar = require('../models/calendar');
 
 var group = new Object();
 
@@ -47,50 +48,62 @@ group.get_all_groups = function(req, res) {
   });
 }
 
-group.create_group = function(req, res){
+group.create_group = function(req, res) {
     var username = '';
-if(req.cookies.grouprToken){
-    var cursor = User.findOne({token: req.cookies.grouprToken},function(err, user){
+    if (req.cookies.grouprToken) {
+        var cursor = User.findOne({token: req.cookies.grouprToken}, function(err, user) {
 
-    var newGroup = Group();
-    newGroup.name = req.body.name;
-    newGroup.description = req.body.description;
-    newGroup.creator = user._id;
-    newGroup.users.push(user._id);
-    newGroup.isPublic = req.body.isPublic;
+            var newGroup = Group();
+            newGroup.name = req.body.name;
+            newGroup.description = req.body.description;
+            newGroup.creator = user._id;
+            newGroup.users.push(user._id);
+            newGroup.isPublic = req.body.isPublic;
 
-    newGroup.save((err) => {
-        if (err) {
-
-            res.status(500).json({
-                error: err,
-                message: 'Error: Group creation failed'
-            });
-        }
-        else {
-
-            user.groups.push(newGroup._id);
-            user.save((err) => {
-                if(err){
-
-            res.status(500).json({
-                error: err,
-                message: 'Error: Group creation failed'
-            });
+            newGroup.save((err, group) => {
+                if (err) {
+                    res.status(500).json({
+                        error: err,
+                        message: 'Error: Group creation failed'
+                    });
                 }
                 else {
-                    res.status(200).json({
-                    message: 'Successful group creation',
-                    groupID: newGroup._id
-            });
+                    var newCalendar = Calendar();
+                    newCalendar.events = [];
+                    newCalendar.save((err, calendar) => {
+                        if (err) {
+                            res.status(500).json({message: 'Error: Cannot create Calendar'});
+                        }
+                        else {
+                            group.calendar = calendar;
+                            group.save((err) => {
+                                if (err) {
+                                    res.status(500).json({message: 'Error: Storing Token and Calendar failed'});
+                                }
+                                else {
+                                    user.groups.push(newGroup._id);
+                                    user.save((err) => {
+                                        if(err){
+                                            res.status(500).json({
+                                                error: err,
+                                                message: 'Error: Group creation failed'
+                                            });
+                                        }
+                                        else {
+                                            res.status(200).json({
+                                                message: 'Successful group creation',
+                                                groupID: newGroup._id
+                                            });
+                                        }
+                                    });    
+                                }
+                            });
+                        }
+                    });
                 }
-            })
-
-        }
-    });
-    });
-
-}
+            });
+        });
+    }
 }
 
 

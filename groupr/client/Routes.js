@@ -39,7 +39,6 @@ define([
 					params: {
 						groupID: ""
 					}
-					//resolve: { authenticate: authenticate }
 				})
 				.state('groups', {
 					url:			'/groups',

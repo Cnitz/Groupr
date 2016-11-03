@@ -267,15 +267,16 @@ router.route('/calendar/get_events').post((req, res) => {
     if (req.body.calendarType == 'group') {
         Group.findOne({_id: req.body.groupId})
         .populate('calendar')
-        .exec(function(err, user) {
+        .exec(function(err, group) {
             if (err) {
                 res.status(500).json({message: 'Error: Calendar does not exist'});
             }
-            else if (user === undefined) {
+            else if (group === undefined) {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                res.status(200).send(user.calendar);
+                console.log(group.calendar);
+                res.status(200).send(group.calendar);
             }
         });
     }
@@ -437,7 +438,6 @@ router.route('/tasks/user').post((req, res) => {
     api_tasks.tasksByUser(req, res);
 });
 router.route('/tasks/add').post((req, res) => {
-    console.log(JSON.stringify(req.body));
     api_tasks.addTask(req, res);
 });
 router.route('/tasks/group').post((req, res) => {

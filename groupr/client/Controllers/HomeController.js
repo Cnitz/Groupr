@@ -55,7 +55,6 @@ define([
 				CalendarServices.addEvent(event)
 				.then(
 					function(result) {
-						console.log('success adding event');
 						refresh();
 					},
 					function(result) {
@@ -68,7 +67,6 @@ define([
 				CalendarServices.deleteEvent(event)
 				.then(
 					function(result) {
-						console.log('success deleting event');
 						refresh();
 					},
 					function(result) {
@@ -78,7 +76,15 @@ define([
 			}
 
 			function editEvent() {
-
+				CalendarServices.editEvent(event)
+				.then(
+					function(result) {
+						refresh();
+					},
+					function(result) {
+						console.log(result.data);
+					}
+				)
 			}
 
 			function refresh() {
@@ -103,9 +109,7 @@ define([
 						CalendarServices.getPersonalCalendar(vm.user._id)
 						.then(
 							function(resultTwo) {
-								console.log(resultTwo.data);
 								vm.events = resultTwo.data.events;
-								console.log(vm.events);
 						},
 							function(resultTwo) {
 								console.log(resultTwo);
@@ -114,7 +118,6 @@ define([
 						GroupServices.getGroupByUser()
 						.then(function(res) {
 							vm.groups = res.data.data;
-							console.log(res.data.data);
 						}, function(res) {
 							console.log(res.data);
 							if (res.status == 450)

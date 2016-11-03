@@ -47,7 +47,6 @@ var formTaskObject = function(param) {
 };
 
 var passUser = function(token, cb){
-    console.log("Finding user with token " + token);
     User.findOne({token : token}, function(err, user) {
         cb(err, user);
     });
@@ -63,7 +62,6 @@ tasks.tasksInGroup = function (req, res) {
             //console.log(JSON.stringify(query));
             //query.group = mongoose.Types.ObjectId(req.body.group);
             Task.find({group : mongoose.Types.ObjectId(req.body.group)}).exec(function (error, docs) {
-                console.log(JSON.stringify(docs));
                 if (error)
                     res.status(500).json({ message: 'Error: Database access' });
                 else
@@ -83,7 +81,6 @@ tasks.tasksByUser = function (req, res) {
         }
         else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
             var query = formTaskQuery({body: req.body, user: user}, true);
-            console.log(JSON.stringify(query));
             Task.find({group : mongoose.Types.ObjectId(req.body.group), us}, function (error, docs) {
                 console.log(JSON.stringify(docs));
                 if (error)
@@ -100,7 +97,6 @@ tasks.tasksByUser = function (req, res) {
 
 tasks.addTask = function (req, res) {
     passUser(req.cookies.grouprToken, function (err, user) {
-        console.log(user.username + ", " + JSON.stringify(user.groups) + ", must be in " +  req.body.group);
         if (err || user == null) {
             res.status(500).json({ message: 'Error: invalid user' });
         }
