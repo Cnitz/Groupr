@@ -137,19 +137,19 @@ tasks.getById = function (req, res) {
 };
 
 tasks.removeTask = function (req, res) {
-    passUser(req.cookies.grouprToken, req.body.group, function(err, user) {
+    passUser(req.cookies.grouprToken, function(err, user) {
         if (err || user == null) {
             res.status(500).json({ message: 'Error: invalid user' });
         }
-        else if (req.body.group != undefined && user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
-            Task.remove({_id: mongoose.Types.ObjectId(req.body.taskId), creator: user.username}, function (err) {
+        else {
+            Task.findOne({_id: mongoose.Types.ObjectId(req.body.taskId), creator: user.username}).remove(function (err) {
                 if (err) {
                     res.status(500).json({ message: 'Error: Task not found or user does not own task' });
                 }
+                else {
+                    res.status(200).json({ message: 'Successfully removed entry' });
+                }
             });
-        }
-        else {
-            res.status(500).json({ message: 'Error: Access denied, user is not a part of this group' });
         }
     });
 };
