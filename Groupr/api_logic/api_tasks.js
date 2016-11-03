@@ -107,6 +107,7 @@ tasks.addTask = function (req, res) {
             var taskdoc = Task();
             taskdoc.group = (req.body.group == undefined) ? null : mongoose.Types.ObjectId(req.body.group);
             taskdoc.title = (req.body.title == undefined) ? "untitled" : req.body.title;
+            taskdoc.description = (req.body.description == undefined) ? "untitled" : req.body.description;
             taskdoc.creator = user.username;
             taskdoc.dateCreated = new Date();
             taskdoc.dueDate = (req.body.dueDate == undefined) ? undefined : req.body.dueDate;

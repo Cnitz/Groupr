@@ -6,18 +6,23 @@ define([
 		'$state',
 		'Groupr.Services.GroupServices',
 		'Groupr.Services.AccountServices',
-		function GroupController($scope, $state, GroupServices, AccountServices) {
+		'$stateParams',
+		function GroupController($scope, $state, GroupServices, AccountServices, $stateParams) {
 			var vm = this;
 			{
 				vm.groups =[];
 				vm.tasks =[];
 			}
 			vm.goHome = goHome;
+			vm.logout = logout;
+			vm.joinGroup = joinGroup;
 			$scope.currentNavItem = "groups";
 			$scope.customFullscreen = false;
 			$scope.title= "";
 			$scope.description= "";
 			$scope.users = [];
+
+
 
 
 			activate();
@@ -35,15 +40,15 @@ define([
 					vm.groups.push(group);
 				})
 			}
-			$scope.joinGroup = function(ele) {
-
-			}
 			$scope.addTask = function(data) {
 				if($scope.title == "" || $scope.description == "")
-					return;
-				var task = {title: $scope.title, description: $scope.description, dateCreated: Date.now(), completed: false };
-				console.log(task);
-				vm.tasks.push(task);
+				return;
+				var task = {group: vm.currGroup._id, title: $scope.title, description: $scope.description};
+				GroupServices.addTask(task)
+				.then(function(res){
+					console.log(res.data)
+					vm.tasks.push(task);
+				})
 			};
 			$scope.removeTask = function(data) {
 				for(var i = 0; i < vm.tasks.length; i++){
@@ -61,7 +66,6 @@ define([
 					token: AccountServices.userAccount.token,
 					username: AccountServices.userAccount.user.username
 				}
-				console.log(data);
 				GroupServices.getAllGroups(data)
 				.then(function(res){
 					vm.groups = res.data;
@@ -71,10 +75,33 @@ define([
 					if (res.status == 450)
 					$state.go('login');
 				});
+
+				if($stateParams.groupID != null){
+					GroupServices.getGroupInfo($stateParams.groupID)
+					.then(function(res) {
+						vm.currGroup = res.data;
+						console.log(res.data);
+					})
+				}
+
 			}
 
 			function goHome(){
 				$state.go('home');
+			}
+
+			function logout(){
+				AccountServices.logout();
+				$state.go('main');
+			}
+			function joinGroup(group) {
+				console.log("hello");
+				GroupServices.joinGroup(group._id)
+				.then(function(res){
+					console.log(res);
+				}, function(res) {
+					console.log(res);
+				});
 			}
 
 

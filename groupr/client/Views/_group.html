@@ -1,31 +1,28 @@
 <div id="body-div" layout="column">
 	<md-nav-bar md-selected-nav-item="currentNavItem">
 		<md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
-		<md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Groups</md-nav-item>
+		<md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Find Groups</md-nav-item>
 		<span flex></span>
 		<md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
 	</md-nav-bar>
-	<md-content layout="column" layout-align="center" flex="">
-		<md-card style="max-width:100%;">
-			<p data-ng-cloak data-ng-if="vm.groups.length == 0">You are not a member of any groups.</p>
-			<table class="table-striped" data-ng-if="vm.groups.length > 0">
-				<thead></thead>
-					<tr>
-						<th>Group Name</th>
-						<th>Description</th>
-					</tr>
-					<tbody>
-						<tr data-ng-repeat="group in vm.groups ">
-							<td>{{group.name}}</td>
-							<td>{{group.description}}</td>
-							<td><md-button id="joingroup-button" ng-click="joinGroup(this)" onclick="disabled='true';" class="md-primary" type="button" aria-label="Join Group">JOIN GROUP</md-button></td>
-						</tr>
-					</tbody>
-				</table>
+	<md-content layout="column" layout-align="center center" flex="">
+		<md-card style="overflow:auto;">
+			<md-list flex>
+				<md-subheader class="md-no-sticky">All Groups</md-subheader>
+				<md-list-item data-ng-cloak data-ng-if="vm.groups.length == 0">No groups have been created! Click below to create one.</md-list-item>
+				<md-list-item class="md-3-line" ng-repeat="group in vm.groups" ng-click="null">
+					<img ng-src="https://epics.ecn.purdue.edu/disc/members/mitchellholt.png" class="md-avatar" alt="group icon" />
+					<div class="md-list-item-text" layout="column">
+						<h3 style="text-align:center;"><b>{{group.name}}</b></h3>
+						<h4>{{group.description}}</h4>
+					</div>
+					<md-button id="btnJoinGroup" ng-click="joinGroup(group)" class="md-primary" type="button" aria-label="Join Group">JOIN GROUP</md-button>
+				</md-list-item>
+			</md-list>
 
-				<md-button id="creategroup-button" style="margin-right:40%; margin-left:40%;" layout-align="center center" ng-click="createGroup()" class="md-primary" type="button" aria-label="Create Group">
-					CREATE GROUP
-				</md-button>
-			</md-card>
-		</md-content>
-	</div>
+			<md-button id="creategroup-button" style="margin-right:40%; margin-left:40%;" layout-align="center center" ng-click="createGroup()" class="md-primary" type="button" aria-label="Create Group">
+				CREATE GROUP
+			</md-button>
+		</md-card>
+	</md-content>
+</div>
