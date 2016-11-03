@@ -432,7 +432,6 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
  *  -Get all tasks in a group
  *  -Get all tasks involving user
  *  -Remove tasks
- *  -Mark task completed/incomplete
  */
 router.route('/tasks/user').post((req, res) => {
     api_tasks.tasksByUser(req, res);
@@ -446,6 +445,18 @@ router.route('/tasks/group').post((req, res) => {
 });
 router.route('/tasks/remove').post((req, res) => {
     api_tasks.removeTask(req, res);
+});
+
+/*
+ * Chat Api routes
+ *  -Create chat messages
+ *  -Get all chat messages in a group
+ */
+router.route('/chat/:group/send').put((req, res) => {
+    api_chat.sendMessage(req, res);
+});
+router.route('/chat/:group').get((req, res) => {
+    api_chat.getMessages(req, res);
 });
 
 module.exports = router;
