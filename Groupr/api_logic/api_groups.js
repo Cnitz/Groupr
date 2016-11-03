@@ -73,7 +73,8 @@ if(req.cookies.grouprToken){
                 }
                 else { 
                     res.status(200).json({
-                    message: 'Successful group creation'
+                    message: 'Successful group creation',
+                    groupID: newGroup._id
             });
                 }
             })
