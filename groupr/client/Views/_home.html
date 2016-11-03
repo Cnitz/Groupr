@@ -5,7 +5,7 @@
 		<span flex></span>
 		<md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
 	</md-nav-bar>
-	<md-content class="md-padding" layout="column" layout-align="space-around center" flex="">
+	<md-content class="md-padding" layout="row" layout-align="space-around center" flex="">
 		<p data-ng-if="vm.groups.length == 0">You're not a part of any groups! Click on the "Groups" tab above to find some to join!</p>
 		<div data-ng-cloak data-ng-if="vm.groups.length > 0">
 			<md-card style="overflow:auto;">
