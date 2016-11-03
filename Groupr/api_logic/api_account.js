@@ -100,7 +100,7 @@ account.signup = function(account_info, res) {
 
 // get User Info
 account.get_user = function(token, res) {
-    User.findOne({ 'token': token}, (err) => {
+    User.findOne({ 'token': token}, (err, user) => {
         if (err) {
             res.status(500).json({message: 'Error: Database access'});
         }
