@@ -16,16 +16,26 @@ Group.findOne({_id: id}, function(err, groups) {
 
 
 group.get_user_groups = function(req, res) {
-var groups = [];
+
 if(req.cookies.grouprToken){
     User.findOne({token: req.cookies.grouprToken}).populate('groups').exec(function(err,user){
-        if(err)
+        if(err){
             res.status(500).json({
                 error: err,
                 message: 'Error: Invalid Access'
             });
-        console.log("HERE: " + user.groups);
-        res.status(200).json({data: user.groups, message: "Group fetch successful."});
+        }
+            else{
+
+                
+                    res.status(200).json({
+                        data: user.groups, 
+                        message: "User groups fetch successful."
+                    });
+                    
+              
+
+            }
     });
     }
 }
@@ -116,7 +126,7 @@ group.join_group = function(req, res, group_id){
                     else{
 
                         user.groups.push(group._id);
-                        group.save((err) => {
+                        user.save((err) => {
                             if (err) {
                                 res.status(500).json({
                                     error: err,
