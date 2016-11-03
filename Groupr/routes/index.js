@@ -111,7 +111,6 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['openid', '
 router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/#/home' }), //Set to groups for testing
   function(req, res) {
 
-    AccountServices.goHome();
   }
 );
 
