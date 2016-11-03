@@ -20,6 +20,8 @@ define([
 			$scope.customFullscreen = false;
 			$scope.title= "";
 			$scope.description= "";
+			$scope.groupName = "";
+			$scope.groupDescription = "";
 			$scope.users = [];
 
 

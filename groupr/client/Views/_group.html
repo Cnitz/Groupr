@@ -19,7 +19,15 @@
 					<md-button id="btnJoinGroup" ng-click="vm.joinGroup(group)" class="md-primary" type="button" aria-label="Join Group">JOIN GROUP</md-button>
 				</md-list-item>
 			</md-list>
-
+			<md-subheader class="md-no-sticky">Create a New Group:</md-subheader>
+			<md-input-container>
+				<label>Group Name</label>
+				<input ng-model="groupName" type="text" name="groupName">
+			</md-input-container>
+			<md-input-container>
+				<label>Group Description</label>
+				<input ng-model="groupDescription" type="text" name="groupDescription">
+			</md-input-container>
 			<md-button id="creategroup-button" style="margin-right:40%; margin-left:40%;" layout-align="center center" ng-click="createGroup()" class="md-primary" type="button" aria-label="Create Group">
 				CREATE GROUP
 			</md-button>

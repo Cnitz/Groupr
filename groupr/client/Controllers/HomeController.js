@@ -23,17 +23,6 @@ define([
 			vm.user = {};
 			vm.events = [];
 
-			/*GroupServices.getGroupByUser()
-			.then(function(res) {
-				vm.groups = res.data.data;
-				console.log(res.data.data);
-			}, function(res) {
-				console.log(res.data);
-				if (res.status == 450)
-					$state.go('login');
-			});*/
-
-			return vm;
 			function goHome(){
 				$state.go('home');
 			}
@@ -114,11 +103,21 @@ define([
 								console.log(result.data);
 								vm.events = result.data.events;
 								console.log(vm.events);
-						}, 
+						},
 							function(result) {
 								console.log('failed to get personal calendar events');
 							}
 						)
+
+						GroupServices.getGroupByUser()
+						.then(function(res) {
+							vm.groups = res.data.data;
+							console.log(res.data.data);
+						}, function(res) {
+							console.log(res.data);
+							if (res.status == 450)
+								$state.go('login');
+						});
 					},
 					function(result) {
 						console.log('failed to get user object');
@@ -128,6 +127,7 @@ define([
 
 			activate();
 
+			return vm;
 		}
 	]);
 });
