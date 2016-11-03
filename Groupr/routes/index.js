@@ -79,17 +79,39 @@ passport.use(new GoogleStrategy({
   },
   function(request, accessToken, refreshToken, profile, done) {
     //Should be retrieving cal events here?
+    console.log("Penis");
 
+    var googleCal = new gcal.GoogleCalendar(accessToken);
 
-    return done(null, profile);
-  }
+    googleCal.calendarList.list(function(err, data) {
+      if(err) {
+        console.log("error");
+      } else {
+        console.log(data.items[0].id);
+        googleCal.events.list(data.items[0].id, function(err, calendarList) {
+          console.log(calendarList.items.length);
+          var i = 0;
+          while (i < calendarList.items.length){
+            console.log(calendarList.items[i].summary);
+            console.log(calendarList.items[i].start);
+            console.log(calendarList.items[i]);
+            console.log("-----------")
+            i++;
+          }
+        });
+      }
+      });
+
+      return done(null, googleCal);
+    }
 ));
 
-router.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar'], accessType: 'offline'}));
+router.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar']}));
 
-router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/groups' }), //Set to groups for testing
+router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/#/home' }), //Set to groups for testing
   function(req, res) {
-    console.log(req);
+
+    AccountServices.goHome();
   }
 );
 
