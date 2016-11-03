@@ -7,7 +7,8 @@ define([
 		'Groupr.Services.AccountServices',
 		'Groupr.Services.GroupServices',
 		'Groupr.Services.CalendarServices',
-		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices) {
+		'Groupr.Services.GoogleServices',
+		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices) {
 			var vm = this;
 			vm.goHome = goHome;
 			vm.navigateToGroups = navigateToGroups;
@@ -25,6 +26,9 @@ define([
 
 			function goHome(){
 				$state.go('home');
+			}
+			function getGoogleCalEvents(){
+				GoogleServices.login();
 			}
 
 			function navigateToGroups(){

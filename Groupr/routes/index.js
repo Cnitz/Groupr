@@ -45,7 +45,7 @@ router.route('/account/signup').post((req, res) => {
 
 router.route('account/verify_token').get((req, res) => {
     var token = req.cookies.grouprToken;
-    
+
     if (token) {
         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
             if (err) {
@@ -89,7 +89,7 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['openid', '
 
 router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/groups' }), //Set to groups for testing
   function(req, res) {
-    res.redirect('/groups'); // Need to Change this some how to be defined by spot taken from
+    console.log(req);
   }
 );
 
@@ -191,11 +191,11 @@ router.route('/calendar/add_event').post((req, res) => {
                     res.status(200).json({message: 'Success: The event has been added'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);    
-                }             
+                    res.status(obj.status).json(obj.message);
+                }
             });
         }
-    });    
+    });
 });
 
 router.route('/calendar/delete_event').post((req, res) => {
@@ -213,8 +213,8 @@ router.route('/calendar/delete_event').post((req, res) => {
                     res.status(200).json({message: 'Success: The event has been deleted'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);    
-                }              
+                    res.status(obj.status).json(obj.message);
+                }
             });
         }
     });
@@ -235,8 +235,8 @@ router.route('/calendar/edit_event').post((req, res) => {
                     res.status(200).json({message: 'Success: The event has been edited'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);    
-                }             
+                    res.status(obj.status).json(obj.message);
+                }
             });
         }
     });
@@ -304,10 +304,10 @@ router.route('/calendar/add_group_events').post((req, res) => {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);    
+                        res.status(obj.status).json(obj.message);
                     }
                 });
-            })        
+            })
         }
     });
 });
@@ -338,10 +338,10 @@ router.route('/calendar/delete_group_events').post((req, res) => {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);    
+                        res.status(obj.status).json(obj.message);
                     }
                 });
-            })        
+            })
         }
     });
 });
@@ -372,10 +372,10 @@ router.route('/calendar/edit_group_events').post((req, res) => {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);    
+                        res.status(obj.status).json(obj.message);
                     }
                 });
-            })        
+            })
         }
     });
 });
@@ -399,7 +399,7 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
                     res.status(200).json({message: 'Success'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);    
+                    res.status(obj.status).json(obj.message);
                 }
             });
         }
@@ -430,4 +430,3 @@ router.route('/tasks/remove').post((req, res) => {
 });
 
 module.exports = router;
-
