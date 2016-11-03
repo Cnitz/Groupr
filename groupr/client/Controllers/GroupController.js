@@ -61,7 +61,7 @@ define([
 				}
 			};
 
-			return this;
+			return vm;
 
 			function activate(){
 				GroupServices.getAllGroups()
