@@ -19,8 +19,8 @@
           <img ng-src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSDFbhtwSvbMcMSVDMF42OmtGFa9OoI4Qy2hYBz_1S4_59bIjxtUA" class="md-avatar" alt="group icon" />
           <div class="md-list-item-text" layout="column">
             <h3 style="text-align:center;"><b>{{task.title}}</b></h3>
-            <h4>{{task.description}}</h4>
-            <p>{{task.users}}</p>
+            <h4 style="text-align:center;">{{task.description}}</h4>
+            <!--<p><label ng-repeat="user in task.users">{{user}}</label></p>-->
           </div>
           <md-button id="btnRemoveTask" ng-click="removeTask(task.title)" class="md-primary" type="button" aria-label="Delete Task">
             DELETE TASK

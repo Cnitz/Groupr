@@ -14,7 +14,7 @@
 					<img ng-src="https://i.reddituploads.com/4c36016368384d0ea62e67774fa0078c?fit=max&h=1536&w=1536&s=7dbe924a2338d63fca38f782e7121131" class="md-avatar" alt="group icon" />
 					<div class="md-list-item-text" layout="column">
 						<h3 style="text-align:center;"><b>{{group.name}}</b></h3>
-						<h4>{{group.description}}</h4>
+						<h4 style="text-align:center;">{{group.description}}</h4>
 					</div>
 					<md-button id="btnJoinGroup" ng-click="vm.joinGroup(group)" class="md-primary" type="button" aria-label="Join Group">JOIN GROUP</md-button>
 				</md-list-item>
@@ -28,7 +28,7 @@
 				<label>Group Description</label>
 				<input ng-model="groupDescription" type="text" name="groupDescription">
 			</md-input-container>
-			<md-button id="creategroup-button" style="margin-right:40%; margin-left:40%;" layout-align="center center" ng-click="createGroup()" class="md-primary" type="button" aria-label="Create Group">
+			<md-button id="creategroup-button" ng-click="createGroup()" class="md-primary" type="button" aria-label="Create Group">
 				CREATE GROUP
 			</md-button>
 		</md-card>
