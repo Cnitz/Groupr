@@ -7,7 +7,8 @@ define([
 		'Groupr.Services.AccountServices',
 		'Groupr.Services.GroupServices',
 		'Groupr.Services.CalendarServices',
-		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices) {
+		'Groupr.Services.GoogleServices',
+		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices) {
 			var vm = this;
 			vm.goHome = goHome;
 			vm.navigateToGroups = navigateToGroups;
@@ -25,6 +26,9 @@ define([
 
 			function goHome(){
 				$state.go('home');
+			}
+			function getGoogleCalEvents(){
+				GoogleServices.login();
 			}
 
 			function navigateToGroups(){
@@ -81,12 +85,11 @@ define([
 				CalendarServices.getPersonalCalendar(vm.user._id)
 					.then(
 						function(result) {
-							console.log(result.data);
 							vm.events = result.data.events;
 							console.log(vm.events);
 					},
 						function(result) {
-							console.log('failed to get personal calendar events');
+							console.log(result.data);
 						}
 					)
 			}
@@ -99,13 +102,13 @@ define([
 						console.log(vm.user);
 						CalendarServices.getPersonalCalendar(vm.user._id)
 						.then(
-							function(result) {
-								console.log(result.data);
-								vm.events = result.data.events;
+							function(resultTwo) {
+								console.log(resultTwo.data);
+								vm.events = resultTwo.data.events;
 								console.log(vm.events);
 						},
-							function(result) {
-								console.log('failed to get personal calendar events');
+							function(resultTwo) {
+								console.log(resultTwo);
 							}
 						)
 						GroupServices.getGroupByUser()

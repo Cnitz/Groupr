@@ -15,8 +15,8 @@ define([
 
 			service.login = function(credentials) {
 				return $http({
-					method: 'POST',
-					url: url + 'login',
+					method: 'GET',
+					url: url + 'auth/google',
 					data: credentials
 				});
 			}

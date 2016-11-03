@@ -10,6 +10,7 @@ define([
 
 
 			service.addEvent = function(calendarEvent) {
+				console.log(calendarEvent);
 				return $http({
 					method: 'POST',
 					url: url + 'add_event',
@@ -105,6 +106,13 @@ define([
 					method: 'POST',
 					url: url + 'schedule_assistant',
 					data: data
+				});
+			}
+			service.authenticateUser = function(){
+				console.log("testing");
+				return $http({
+					method: 'get',
+					url: "http://localhost:3000/api/auth/google",
 				});
 			}
 

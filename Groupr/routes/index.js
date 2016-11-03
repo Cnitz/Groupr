@@ -45,7 +45,7 @@ router.route('/account/signup').post((req, res) => {
 
 router.route('account/verify_token').get((req, res) => {
     var token = req.cookies.grouprToken;
-    
+
     if (token) {
         jwt.verify(token, conf.TOKEN_SECRET, function(err, decoded) {
             if (err) {
@@ -79,17 +79,39 @@ passport.use(new GoogleStrategy({
   },
   function(request, accessToken, refreshToken, profile, done) {
     //Should be retrieving cal events here?
+    console.log("Penis");
 
+    var googleCal = new gcal.GoogleCalendar(accessToken);
 
-    return done(null, profile);
-  }
+    googleCal.calendarList.list(function(err, data) {
+      if(err) {
+        console.log("error");
+      } else {
+        console.log(data.items[0].id);
+        googleCal.events.list(data.items[0].id, function(err, calendarList) {
+          console.log(calendarList.items.length);
+          var i = 0;
+          while (i < calendarList.items.length){
+            console.log(calendarList.items[i].summary);
+            console.log(calendarList.items[i].start);
+            console.log(calendarList.items[i]);
+            console.log("-----------")
+            i++;
+          }
+        });
+      }
+      });
+
+      return done(null, googleCal);
+    }
 ));
 
-router.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar'], accessType: 'offline'}));
+router.get('/auth/google', passport.authenticate('google', { scope: ['openid', 'email', 'https://www.googleapis.com/auth/calendar']}));
 
-router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/groups' }), //Set to groups for testing
+router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/#/home' }), //Set to groups for testing
   function(req, res) {
-    res.redirect('/groups'); // Need to Change this some how to be defined by spot taken from
+
+    AccountServices.goHome();
   }
 );
 
@@ -176,6 +198,7 @@ function groupApiModel(group){
 
 /* Calendar APIs */
 router.route('/calendar/add_event').post((req, res) => {
+    console.log(req.body);
     User.findOne({token: req.cookies.grouprToken})
     .populate('calendar')
     .exec(function(err, user) {
@@ -185,16 +208,16 @@ router.route('/calendar/add_event').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
+            api_calendar.event_action(calendars, req.body, 'add', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been added'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);    
-                }             
+                    res.status(obj.status).json(obj.message);
+                }
             });
         }
-    });    
+    });
 });
 
 router.route('/calendar/delete_event').post((req, res) => {
@@ -207,13 +230,13 @@ router.route('/calendar/delete_event').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
+            api_calendar.event_action(calendars, req.body, 'delete', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been deleted'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);    
-                }              
+                    res.status(obj.status).json(obj.message);
+                }
             });
         }
     });
@@ -229,13 +252,13 @@ router.route('/calendar/edit_event').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
+            api_calendar.event_action(calendars, req.body, 'edit', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been edited'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);    
-                }             
+                    res.status(obj.status).json(obj.message);
+                }
             });
         }
     });
@@ -243,32 +266,35 @@ router.route('/calendar/edit_event').post((req, res) => {
 
 router.route('/calendar/get_events').post((req, res) => {
     if (req.body.calendarType == 'group') {
+        console.log('group');
         Group.findOne({_id: req.body.groupId})
         .populate('calendar')
-        .exec(function(err, calendar) {
+        .exec(function(err, user) {
             if (err) {
                 res.status(500).json({message: 'Error: Calendar does not exist'});
             }
-            else if (calendar === null) {
+            else if (user === undefined) {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                res.status(200).send(calendar);
+                res.status(200).send(user.calendar);
             }
         });
     }
     else {
+        console.log('user');
         User.findOne({_id: req.body.userId})
         .populate('calendar')
-        .exec(function(err, calendar) {
+        .exec(function(err, user) {
             if (err) {
                 res.status(500).json({message: 'Error: Calendar does not exist'});
             }
-            else if (calendar === null) {
+            else if (user === undefined) {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                res.status(200).send(calendar);
+                console.log(user.calendar);
+                res.status(200).json(user.calendar);
             }
         });
     }
@@ -295,15 +321,15 @@ router.route('/calendar/add_group_events').post((req, res) => {
                 users.forEach(function(user) {
                     calendars.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
+                api_calendar.event_action(calendars, req.body, 'add', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);    
+                        res.status(obj.status).json(obj.message);
                     }
                 });
-            })        
+            })
         }
     });
 });
@@ -329,15 +355,15 @@ router.route('/calendar/delete_group_events').post((req, res) => {
                 users.forEach(function(user) {
                     calendars.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
+                api_calendar.event_action(calendars, req.body, 'delete', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);    
+                        res.status(obj.status).json(obj.message);
                     }
                 });
-            })        
+            })
         }
     });
 });
@@ -363,15 +389,15 @@ router.route('/calendar/edit_group_events').post((req, res) => {
                 users.forEach(function(user) {
                     calendars.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
+                api_calendar.event_action(calendars, req.body, 'edit', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);    
+                        res.status(obj.status).json(obj.message);
                     }
                 });
-            })        
+            })
         }
     });
 });
@@ -395,7 +421,7 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
                     res.status(200).json({message: 'Success'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);    
+                    res.status(obj.status).json(obj.message);
                 }
             });
         }
@@ -426,4 +452,3 @@ router.route('/tasks/remove').post((req, res) => {
 });
 
 module.exports = router;
-
