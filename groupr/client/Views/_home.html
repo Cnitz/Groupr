@@ -1,25 +1,58 @@
 <div id="body-div" layout="column">
-	<md-nav-bar md-selected-nav-item="currentNavItem">
-		<md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
-		<md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Find Groups</md-nav-item>
-		<span flex></span>
-		<md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
-	</md-nav-bar>
-	<md-content class="md-padding" layout="column" layout-align="center center" flex="">
-		<p data-ng-if="vm.groups.length == 0">You're not a part of any groups! Click on the "Groups" tab above to find some to join!</p>
-		<div data-ng-cloak data-ng-if="vm.groups.length > 0">
-			<md-card style="overflow:auto;">
-				<md-list flex>
-					<md-subheader class="md-no-sticky">Your Groups:</md-subheader>
-					<md-list-item class="md-3-line" ng-click="vm.goToGroup(group)" data-ng-repeat="group in vm.groups">
-						<img ng-src="https://static1.squarespace.com/static/50146ef684aea6ed68d3267c/t/53ec3e70e4b085b1e2a01333/1407991419928/" class="md-avatar" alt="A Group Image" />
-						<div class="md-list-item-text" layout="column">
-							<h3 style="text-align:center;"><b>{{ group.name }}</b></h3>
-							<h4>{{ group.description }}</h4>
-						</div>
-					</md-list-item>
-				</md-list>
-			</md-card>
-		</div>
-	</md-content>
+<md-nav-bar md-selected-nav-item="currentNavItem">
+<md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
+<md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Find Groups</md-nav-item>
+<span flex></span>
+<md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
+</md-nav-bar>
+<md-content class="md-padding" layout="row" layout-align="space-between center" flex="">
+<p data-ng-if="vm.groups.length == 0">You're not a part of any groups! Click on the "Groups" tab above to find some to join!</p>
+<div data-ng-cloak data-ng-if="vm.groups.length > 0">
+<md-card style="overflow:auto;">
+<md-list flex>
+<md-subheader class="md-no-sticky">Your Groups:</md-subheader>
+<md-list-item class="md-3-line" ng-click="vm.goToGroup(group)" data-ng-repeat="group in vm.groups">
+<img ng-src="https://static1.squarespace.com/static/50146ef684aea6ed68d3267c/t/53ec3e70e4b085b1e2a01333/1407991419928/" class="md-avatar" alt="A Group Image" />
+<div class="md-list-item-text" layout="column">
+<h3 style="text-align:center;"><b>{{ group.name }}</b></h3>
+<h4>{{ group.description }}</h4>
+</div>
+</md-list-item>
+</md-list>
+</md-card>
+</div>
+<div>
+
+
+<md-card style="overflow:auto;" layout="row" layout-align="space-around center">
+<h2> Personal Calendar </h2>
+
+<md-card-actions layout="row" layout-align="end center">
+<md-button ng-click="vm.googleAuth()" onclick="disabled='true';" class="md-primary" type="button" >Google Calendar</md-button>
+<md-button ng-click="vm.googleAuth()" onclick="disabled='true';" class="md-primary" type="button" >Add Event</md-button>
+</md-card-actions>
+</md-card>
+
+
+<div ng-repeat="event in vm.events">
+<md-card layout="row">
+<md-card-content layout="column" layout-align="center center">
+<md-card-content> <h2> NOV. 21 </h2> </md-card-content>
+<div> 12:00AM-12:00PM </div>
+<div> Lawson </div>
+</md-card-content>
+<md-card-content  layout="column" layout-align="center center" flex="">
+<div><h2>Event Name  </h2></div>
+<div> Event Description will go here. This is the description of the event. The event description will be displayed in this area. </div>
+</md-card-content>
+<md-card-actions layout="column" layout-align="center center">
+<md-button onclick="disabled='false';" class="md-primary" type="button" >Edit Event</md-button>
+<md-button onclick="disabled='false';" class="md-primary" type="button" >Delete Event</md-button>
+</md-card-actions>
+</md-card>
+
+</div>
+
+</div>
+</md-content>
 </div>
