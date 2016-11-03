@@ -58,6 +58,22 @@ define([
 				});
 			}
 
+			service.getTasks = function(data) {
+				return $http({
+					method: 'POST',
+					url: url + 'tasks/group',
+					data: data
+				});
+			}
+
+			service.removeTask = function(data) {
+				return $http({
+					method: 'POST',
+					url: url + 'tasks/remove',
+					data: data
+				});
+			}
+
 			return service;
 		}
 	]);
