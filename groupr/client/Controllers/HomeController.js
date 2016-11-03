@@ -84,12 +84,12 @@ define([
 							console.log(result.data);
 							vm.events = result.data.events;
 							console.log(vm.events);
-					}, 
+					},
 						function(result) {
 							console.log('failed to get personal calendar events');
 						}
 					)
-			}	
+			}
 
 			function activate(){
 				AccountServices.getUser()
@@ -108,7 +108,6 @@ define([
 								console.log('failed to get personal calendar events');
 							}
 						)
-
 						GroupServices.getGroupByUser()
 						.then(function(res) {
 							vm.groups = res.data.data;
