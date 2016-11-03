@@ -39,10 +39,10 @@ define([
     ]).config([
         '$mdThemingProvider',
         function($mdThemingProvider) {
-            $mdThemingProvider.theme('CloudViewTheme')
+            $mdThemingProvider.theme('GrouprTheme')
                 .primaryPalette('teal')
                 .accentPalette('amber');
-            $mdThemingProvider.theme('CloudViewTheme-Dark')
+            $mdThemingProvider.theme('GrouprTheme-Dark')
                 .primaryPalette('teal')
                 .accentPalette('amber')
                 .dark();
@@ -50,9 +50,9 @@ define([
                 .primaryPalette('blue-grey')
 				.accentPalette('grey');
             $mdThemingProvider.enableBrowserColor({
-                theme: 'CloudViewTheme'
+                theme: 'GrouprTheme'
             });
-            $mdThemingProvider.setDefaultTheme('CloudViewTheme');
+            $mdThemingProvider.setDefaultTheme('GrouprTheme');
         }
     ]).config([
         '$translateProvider',

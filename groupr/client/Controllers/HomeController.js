@@ -6,7 +6,7 @@ define([
 		'$state',
 		'Groupr.Services.AccountServices',
 		'Groupr.Services.GroupServices',
-		'Groupr.Services.CalendarServices'
+		'Groupr.Services.CalendarServices',
 		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices) {
 			var vm = this;
 			vm.goHome = goHome;
@@ -14,9 +14,6 @@ define([
 			vm.logout = logout;
 			vm.goToGroup = goToGroup;
 			vm.activate = activate;
-			vm.addEvent = addEvent;
-			vm.editEvent = editEvent;
-			vm.deleteEvent = deleteEvent;
 			$scope.currentNavItem = "home";
 
 			vm.user = {};
@@ -49,18 +46,6 @@ define([
 				$state.go('groupindiv', {groupID: g._id});
 			}
 
-			function addEvent() {
-				
-			}
-
-			function deleteEvent() {
-				
-			}
-
-			function editEvent() {
-				
-			}
-
 			function activate(){
 				AccountServices.getUser()
 				.then(
@@ -86,10 +71,6 @@ define([
 			}
 
 			activate();
-
-			function formatDate(date) {
-				var date = date.startTime.getMonth() + '/' + date.startTime.getDate();
-			}
 
 		}
 	]);

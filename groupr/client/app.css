@@ -33,13 +33,13 @@ md-checkbox#account-check-2 .md-icon {
 	border-color: #FF7777;
 }
 .account-3 {
-	background-color: #EEEE77;
+	background-color: #6100ff;
 }
 md-checkbox.md-checked#account-check-3 .md-icon {
-	background-color: #EEEE77;
+	background-color: #6100ff;
 }
 md-checkbox#account-check-3 .md-icon {
-	border-color: #EEEE77;
+	border-color: #6100ff;
 }
 /* fixes folder items being too long for their box */
 .folder_item {
@@ -83,15 +83,15 @@ md-checkbox#account-check-3 .md-icon {
 }
 
 .side-panel-container{
-	float: left; 
-	position: fixed; 
-	width: 200px; 
+	float: left;
+	position: fixed;
+	width: 200px;
 	height: 100%;
-	background: black; 
+	background: black;
 	margin-top:64px;
 	z-index:1;
 }
 
 .clickable:hover{
-	cursor: pointer; 
+	cursor: pointer;
 }
