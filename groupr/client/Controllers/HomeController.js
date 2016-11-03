@@ -29,6 +29,8 @@ define([
 					$state.go('login');
 			});
 
+			activate();
+
 			return vm;
 			function goHome(){
 				$state.go('home');
@@ -58,7 +60,7 @@ define([
 								console.log(result.data);
 								vm.events = result.data.events;
 								console.log(vm.events);
-						}, 
+						},
 							function(result) {
 								console.log('failed to get personal calendar events');
 							}
@@ -70,7 +72,7 @@ define([
 				)
 			}
 
-			activate();
+
 
 		}
 	]);
