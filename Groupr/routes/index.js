@@ -265,7 +265,6 @@ router.route('/calendar/edit_event').post((req, res) => {
 
 router.route('/calendar/get_events').post((req, res) => {
     if (req.body.calendarType == 'group') {
-        console.log('group');
         Group.findOne({_id: req.body.groupId})
         .populate('calendar')
         .exec(function(err, user) {
@@ -281,7 +280,6 @@ router.route('/calendar/get_events').post((req, res) => {
         });
     }
     else {
-        console.log('user');
         User.findOne({_id: req.body.userId})
         .populate('calendar')
         .exec(function(err, user) {

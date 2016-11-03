@@ -22,6 +22,7 @@ calendar.event_action = function(calendars, event, action_type, callback) {
     var counter = 0;
     console.log(calendars);
     console.log(event);
+    console.log(action type);
     calendars.forEach(function(calendar) {
         switch (action_type) {
             case 'add':
@@ -30,6 +31,7 @@ calendar.event_action = function(calendars, event, action_type, callback) {
                 console.log(calendar.events);
             break;
             case 'delete':
+
                 var index = search_event(calendar.events, event);
                 calendar.events.splice(index, 1);
             break;
