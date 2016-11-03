@@ -30,7 +30,6 @@ define([
 					templateUrl:	'Views/_home.html',
 					controller:		'Groupr.Controllers.Home',
 					controllerAs:  	'vm',
-					//resolve: { authenticate: authenticate }
 				})
 				.state('groupindiv', {
 					url:			'/groupindiv/:groupID',
@@ -47,25 +46,8 @@ define([
 					templateUrl:	'Views/_group.html',
 					controller:		'Groupr.Controllers.Group',
 					controllerAs:   'vm',
-					//resolve: { authenticate: authenticate }
 				});
 			$urlRouterProvider.otherwise('main');
-
-			/*function authenticate($q, AccountServices, $state, $timeout) {
-				if (AccountServices.checkToken()) {
-					AccountServices.verifyToken()
-						.then(
-							function(result) {
-								return $q.when();
-							},
-							function(result) {
-								$timeout(function() {
-									$state.go('main');
-								})
-							}
-						)
-				}
-			}*/
 		}
 	]);
 });

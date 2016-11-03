@@ -7,8 +7,9 @@ var UserSchema = new mongoose.Schema({
     username: { type: String, required: true, index: { unique: true } },
     email: { type: String, required: true, index: { unique: true } },
     password : { type: String, required: true },
-    groups : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' } ],
-    token: { type: String, index : { unique: true } }
+    token: { type: String, index : { unique: true } },
+    calendar: { type: ObjectId, ref: 'Calendar' },
+    groups : [{ type: ObjectId, ref: 'Group' } ],
 });
 
 module.exports = mongoose.model('User', UserSchema);
