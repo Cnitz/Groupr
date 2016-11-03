@@ -18,13 +18,14 @@ Group.findOne({_id: id}, function(err, groups) {
 group.get_user_groups = function(req, res) {
 var groups = [];
 if(req.cookies.grouprToken){
-    User.findOne({token: req.cookies.grouprToken}).populate('groups', 'name description').exec(function(err,user){
+    User.findOne({token: req.cookies.grouprToken}).populate('groups').exec(function(err,user){
         if(err)
             res.status(500).json({
                 error: err,
                 message: 'Error: Invalid Access'
-            });     
-        res.status(200).json(user.groups);
+            });
+        console.log("HERE: " + user.groups);
+        res.status(200).json({data: user.groups, message: "Group fetch successful."});
     });
     }
 }
@@ -32,11 +33,7 @@ if(req.cookies.grouprToken){
 
 group.get_all_groups = function(req, res) {
   Group.find({}, function(err, groups) {
-    var groupApiModelList = [];
-    groups.forEach(function(group) {
-      groupApiModelList.push(groupApiModel(group));
-    });
-    res.send(groupApiModelList);
+    res.status(200).json({data: groups, message: "Group fetch successful."});
   });
 }
 
@@ -61,7 +58,7 @@ if(req.cookies.grouprToken){
             });
         }
         else {
-            
+
             user.groups.push(newGroup._id);
             user.save((err) => {
                 if(err){
@@ -71,7 +68,7 @@ if(req.cookies.grouprToken){
                 message: 'Error: Group creation failed'
             });
                 }
-                else { 
+                else {
                     res.status(200).json({
                     message: 'Successful group creation'
             });
@@ -81,7 +78,7 @@ if(req.cookies.grouprToken){
         }
     });
     });
-   
+
 }
 }
 
@@ -150,7 +147,7 @@ group.join_group = function(req, res, group_id){
             }
 
     });
-   
+
 }
 }
 
@@ -161,8 +158,8 @@ group.leave_group = function(req, res, group_id){
             res.status(500).json({
                 error: err,
                 message: 'Error: Invalid Access'
-            });  
-              
+            });
+
         if(user.groups.indexOf(group_id) != -1){
            user.groups.splice(user.groups.indexOf(group_id), 1);
            user.save((err) => {
@@ -185,7 +182,7 @@ group.leave_group = function(req, res, group_id){
                                 }
                                 else{
                                     res.status(200).json({
-                                        message: 'User succesfully removed' 
+                                        message: 'User succesfully removed'
                                     });
                                 }
                            });
@@ -198,7 +195,7 @@ group.leave_group = function(req, res, group_id){
             res.status(500).json({
                 error: err,
                 message: 'Error: User is not a member of the group'
-            });   
+            });
         }
     });
     }

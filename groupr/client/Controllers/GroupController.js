@@ -36,7 +36,7 @@ define([
 				var group = {name: groupName, description: groupDescription, isPublic: true}
 
 				GroupServices.createGroup(group)
-				.then(function(){
+				.then(function(res){
 					vm.groups.push(group);
 				})
 			}
@@ -62,18 +62,14 @@ define([
 			return this;
 
 			function activate(){
-				var data = {
-					token: AccountServices.userAccount.token,
-					username: AccountServices.userAccount.user.username
-				}
-				GroupServices.getAllGroups(data)
+				GroupServices.getAllGroups()
 				.then(function(res){
-					vm.groups = res.data;
+					vm.groups = res.data.data;
 
 				}, function(res){
 					console.log(res.data);
 					if (res.status == 450)
-					$state.go('login');
+						$state.go('login');
 				});
 
 				if($stateParams.groupID != null){
@@ -95,12 +91,16 @@ define([
 				$state.go('main');
 			}
 			function joinGroup(group) {
-				console.log("hello");
-				GroupServices.joinGroup(group._id)
+				var id = 0;
+				for(var i = 0; i < vm.groups.length; i++){
+					if(vm.groups[i].name == group.name)
+						var id = vm.groups[i]._id;
+				}
+				GroupServices.joinGroup(id)
 				.then(function(res){
-					console.log(res);
+					console.log(res.data);
 				}, function(res) {
-					console.log(res);
+					console.log(res.data);
 				});
 			}
 

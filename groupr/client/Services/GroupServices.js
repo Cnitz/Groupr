@@ -55,7 +55,7 @@ define([
 				return $http({
 					method: 'PUT',
 					url: url + 'groups/join/' + gid
-				})
+				});
 			}
 
 			return service;

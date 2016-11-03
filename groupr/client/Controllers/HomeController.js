@@ -16,8 +16,8 @@ define([
 
 			GroupServices.getGroupByUser()
 			.then(function(res) {
-				vm.groups = res.data;
-				console.log(res.data);
+				vm.groups = res.data.data;
+				console.log(res.data.data);
 			}, function(res) {
 				console.log(res.data);
 				if (res.status == 450)
