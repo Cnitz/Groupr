@@ -33,11 +33,25 @@
 </md-card-actions>
 </md-card>
 
+<md-card layout="row" layout-align="space-around center">
+	      <md-subheader class="md-no-sticky">Add a New Task:</md-subheader>
+      <md-input-container>
+        <label>Event Name</label>
+        <input ng-model="title" type="text" name="title">
+      </md-input-container>
+      <md-input-container>
+        <label>Description</label>
+        <input ng-model="description" type="text" name="description">
+      </md-input-container>
+      <md-button ng-click="addTask()" class="md-primary" type="button">
+        Add Event
+      </md-button>
+</md-card>
 
-<div ng-repeat="event in vm.events">
+<div >
 <md-card layout="row">
 <md-card-content layout="column" layout-align="center center">
-<md-card-content> <h2> NOV. 21 </h2> </md-card-content>
+<md-card-content> <h2> Test </h2> </md-card-content>
 <div> 12:00AM-12:00PM </div>
 <div> Lawson </div>
 </md-card-content>
