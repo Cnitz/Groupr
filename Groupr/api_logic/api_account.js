@@ -22,8 +22,7 @@ account.login = function(username, password, TOKEN_SECRET, res) {
             res.status(403).json({message: 'Error: Invalid login'});
         }
         else {
-            if (user.calender === undefined) {
-                console.log('calendar is undefined');
+            if (user.calendar === undefined) {
                 var newCalendar = Calendar();
                 newCalendar.events = [];
                 newCalendar.save((err, calendar) => {
