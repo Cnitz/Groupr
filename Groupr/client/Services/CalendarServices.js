@@ -10,6 +10,7 @@ define([
 
 
 			service.addEvent = function(calendarEvent) {
+				console.log(calendarEvent);
 				return $http({
 					method: 'POST',
 					url: url + 'add_event',

@@ -81,12 +81,11 @@ define([
 				CalendarServices.getPersonalCalendar(vm.user._id)
 					.then(
 						function(result) {
-							console.log(result.data);
 							vm.events = result.data.events;
 							console.log(vm.events);
 					},
 						function(result) {
-							console.log('failed to get personal calendar events');
+							console.log(result.data);
 						}
 					)
 			}

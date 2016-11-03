@@ -176,6 +176,7 @@ function groupApiModel(group){
 
 /* Calendar APIs */
 router.route('/calendar/add_event').post((req, res) => {
+    console.log(req.body);
     User.findOne({token: req.cookies.grouprToken})
     .populate('calendar')
     .exec(function(err, user) {
@@ -185,7 +186,7 @@ router.route('/calendar/add_event').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
+            api_calendar.event_action(calendars, req.body, 'add', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been added'})
                 }
@@ -207,7 +208,7 @@ router.route('/calendar/delete_event').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
+            api_calendar.event_action(calendars, req.body, 'delete', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been deleted'})
                 }
@@ -229,7 +230,7 @@ router.route('/calendar/edit_event').post((req, res) => {
         else {
             var calendars = [];
             calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
+            api_calendar.event_action(calendars, req.body, 'edit', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been edited'})
                 }
@@ -243,32 +244,35 @@ router.route('/calendar/edit_event').post((req, res) => {
 
 router.route('/calendar/get_events').post((req, res) => {
     if (req.body.calendarType == 'group') {
+        console.log('group');
         Group.findOne({_id: req.body.groupId})
         .populate('calendar')
-        .exec(function(err, calendar) {
+        .exec(function(err, user) {
             if (err) {
                 res.status(500).json({message: 'Error: Calendar does not exist'});
             }
-            else if (calendar === null) {
+            else if (user === undefined) {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                res.status(200).send(calendar);
+                res.status(200).send(user.calendar);
             }
         });
     }
     else {
+        console.log('user');
         User.findOne({_id: req.body.userId})
         .populate('calendar')
-        .exec(function(err, calendar) {
+        .exec(function(err, user) {
             if (err) {
                 res.status(500).json({message: 'Error: Calendar does not exist'});
             }
-            else if (calendar === null) {
+            else if (user === undefined) {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                res.status(200).send(calendar);
+                console.log(user.calendar);
+                res.status(200).json(user.calendar);
             }
         });
     }
@@ -295,7 +299,7 @@ router.route('/calendar/add_group_events').post((req, res) => {
                 users.forEach(function(user) {
                     calendars.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body.calendarEvent, 'add', (obj) => {
+                api_calendar.event_action(calendars, req.body, 'add', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
@@ -329,7 +333,7 @@ router.route('/calendar/delete_group_events').post((req, res) => {
                 users.forEach(function(user) {
                     calendars.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body.calendarEvent, 'delete', (obj) => {
+                api_calendar.event_action(calendars, req.body, 'delete', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
@@ -363,7 +367,7 @@ router.route('/calendar/edit_group_events').post((req, res) => {
                 users.forEach(function(user) {
                     calendars.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body.calendarEvent, 'edit', (obj) => {
+                api_calendar.event_action(calendars, req.body, 'edit', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }

@@ -20,10 +20,14 @@ var search_event = function(eventList, key) {
 calendar.event_action = function(calendars, event, action_type, callback) {
     var reponseObj = {};
     var counter = 0;
+    console.log(calendars);
+    console.log(event);
     calendars.forEach(function(calendar) {
         switch (action_type) {
             case 'add':
+                console.log('adding an event');
                 calendar.events.push(event);
+                console.log(calendar.events);
             break;
             case 'delete':
                 var index = search_event(calendar.events, event);
@@ -40,6 +44,7 @@ calendar.event_action = function(calendars, event, action_type, callback) {
                 reponseObj.message = 'Error: Database access';
             }
             else if (counter === calendars.length) {
+                console.log(counter);
                 callback(reponseObj);
             }
             else {}
