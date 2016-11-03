@@ -18,7 +18,7 @@ Group.findOne({_id: id}, function(err, groups) {
 group.get_user_groups = function(req, res) {
 
 if(req.cookies.grouprToken){
-    User.findOne({token: req.cookies.grouprToken}).exec(function(err,user){
+    User.findOne({token: req.cookies.grouprToken}).populate('groups').exec(function(err,user){
         if(err){
             res.status(500).json({
                 error: err,
@@ -27,13 +27,13 @@ if(req.cookies.grouprToken){
         }
             else{
 
-                Group.find({_id: { $in: user.groups }}).exec(function(err, groups){
+                
                     res.status(200).json({
-                        data: groups, 
+                        data: user.groups, 
                         message: "User groups fetch successful."
                     });
                     
-                });
+              
 
             }
     });
