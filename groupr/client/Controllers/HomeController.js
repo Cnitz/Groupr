@@ -119,7 +119,6 @@ define([
 						});
 					},
 					function(result) {
-						console.log('failed to get user object');
 						console.log(result.data);
 					}
 				)
