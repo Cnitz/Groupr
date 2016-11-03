@@ -122,7 +122,7 @@ router.get('/auth/google/callback', passport.authenticate('google', { session: f
 // });
 
 /* Account APIs */
-router.route('account/get_user').get((req, res) => {
+router.route('/account/get_user').get((req, res) => {
     var token = req.cookies.grouprToken;
     api_account.get_user(token, res);
 });
