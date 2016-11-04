@@ -74,6 +74,14 @@ define([
 				});
 			}
 
+			service.updateStatus = function(data) {
+				return $http({
+					method:  'POST',
+					url: url + 'tasks/updateStatus',
+					data: data
+				});
+			}
+
 			return service;
 		}
 	]);

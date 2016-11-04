@@ -27,7 +27,9 @@ define([
 			$scope.users = [];
 			vm.currGroup = "";
 			vm.events = [];
-			vm.currentTaskValue = "";
+			$scope.checkBoxData = [];
+
+
 
 			$scope.addTask = function(data) {
 				if($scope.title == "" || $scope.description == "")
@@ -67,8 +69,19 @@ define([
 					}
 				}
 			};
-			$scope.statusChanged = function(task, status) {
+			$scope.statusChanged = function(task) {
 				console.log(task);
+
+				GroupServices.updateStatus(task._id)
+				.then(function(res) {
+					console.log("update status success!");
+					console.log(res);
+				}, function(res) {
+					console.log("update status failure!");
+					console.log(res);
+				});
+
+
 			};
 
 			function activate(){
@@ -99,10 +112,18 @@ define([
 					}, function(resOne) {
 						console.log(res.data);
 					});
+
+
+
 				}
 			}
 
 			activate();
+
+			for(var i = 0; i < vm.tasks.length; i++) {
+				$scope.checkBoxData[i] = vm.tasks[i].status;
+			}
+			console.log($scope.checkBoxData);
 
 			function goHome(){
 				$state.go('home');

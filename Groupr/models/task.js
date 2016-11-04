@@ -12,6 +12,7 @@ var TaskSchema = new mongoose.Schema({
     dueDate: Date,
     category: String,
     status: { type: String, required: true }
+
 });
 
 module.exports = mongoose.model('Task', TaskSchema);

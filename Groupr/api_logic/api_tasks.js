@@ -161,6 +161,8 @@ tasks.updateStatus = function (req, res) {
                     res.status(500).json({ message: 'Error: Task not found' });
                 }
                 else {
+                  console.log("HERE: ");
+                  console.log(req.body);
                     task.status = req.body.status;
                     task.save(function (err, updatedTask){
                         if (err)
