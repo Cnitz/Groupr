@@ -29,6 +29,7 @@ define([
 			$scope.users = [];
 			vm.currGroup = "";
 			vm.events = [];
+			vm.currentTaskValue = "";
 
 			$scope.addTask = function(data) {
 				if($scope.title == "" || $scope.description == "")

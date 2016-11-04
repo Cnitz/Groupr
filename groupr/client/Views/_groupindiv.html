@@ -20,7 +20,13 @@
           <div class="md-list-item-text" layout="column">
             <h3 style="text-align:center;"><b>{{task.title}}</b></h3>
             <h4 style="text-align:center;">{{task.description}}</h4>
-            <!--<p><label ng-repeat="user in task.users">{{user}}</label></p>-->
+            <md-input-container>
+              <label>Status</label>
+              <md-select ng-value="task.completed" ng-change="vm.currentTaskValue">
+                <md-option>Incomplete</md-option>
+                <md-option>Complete</md-option>
+              </md-select>
+            </md-input-container>
           </div>
           <md-button id="btnRemoveTask" ng-click="removeTask(task.title)" class="md-primary" type="button" aria-label="Delete Task">
             DELETE TASK
