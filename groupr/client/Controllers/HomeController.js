@@ -20,7 +20,10 @@ define([
 			vm.editEvent = editEvent;
 			vm.refresh = refresh;
 			vm.googleAuth = googleAuth;
+			vm.printDate = printDate;
+			vm.printTimes = printTimes;
 			$scope.currentNavItem = "home";
+			$scope.myDate = new Date();
 
 			vm.user = {};
 			vm.events = [];
@@ -28,6 +31,18 @@ define([
 			function goHome(){
 				$state.go('home');
 			}
+			function printDate(event){
+				var newDate = new Date(event.startTime);
+				return (newDate.getMonth()+1)+'/'+newDate.getDate();
+			}
+
+			function printTimes(event){
+				var newStartTime = new Date(event.startTime);
+				var newEndTime   = new Date(event.endTime);
+
+				return newStartTime.getHours()+':'+newStartTime.getMinutes()+' - '+newEndTime.getHours()+':'+newEndTime.getMinutes()
+			}
+
 			function getGoogleCalEvents(){
 				GoogleServices.login();
 			}
@@ -45,13 +60,32 @@ define([
 			}
 
 			function addEvent() {
+				console.log($scope.myDate);
 				var event = {
-					name: $scope.title,
-					description: $scope.description,
-					location: $scope.location,
-					startTime: Date.now(),
-					endTime: Date.now()
+					name: $scope.eventName,
+					description: $scope.eventDescription,
+					location: $scope.eventLocation,
+					startTime: $scope.myDate,
+					endTime: $scope.myDate,
 				}
+
+				//Now reading in the time strings and setting times. Remove when better time picker is made
+				var newStartDate = new Date($scope.myDate);
+				var newEndDate = new Date($scope.myDate);
+
+				var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+				newStartDate.setHours( parseInt(time[1]) + (time[3] ? 12 : 0) );
+				newStartDate.setMinutes( parseInt(time[2]) || 0 );
+
+				var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+				newEndDate.setHours( parseInt(time2[1]) + (time2[3] ? 12 : 0) );
+				newEndDate.setMinutes( parseInt(time2[2]) || 0 );
+
+				event.startTime = newStartDate;
+				event.endTime = newEndDate;
+				//End Time Reading Hack
+
+
 				console.log(event);
 				CalendarServices.addEvent(event)
 				.then(
@@ -77,13 +111,6 @@ define([
 			}
 
 			function editEvent() {
-				var event = {
-					name: $scope.title,
-					description: $scope.description,
-					location: $scope.location,
-					startTime: Date.now(),
-					endTime: Date.now()
-				}
 				CalendarServices.editEvent(event)
 				.then(
 					function(result) {

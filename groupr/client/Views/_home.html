@@ -70,7 +70,7 @@
 		-->
 
 
-		
+
 		<div>
 			<md-card style="overflow:auto;" layout="row" layout-align="space-around center">
 				<h2> Personal Calendar </h2>
@@ -82,19 +82,42 @@
 			</md-card>
 
 <md-card layout="row" layout-align="space-around center">
+
 	      <md-subheader class="md-no-sticky">Add a New Event:</md-subheader>
+
+<div layout="column" layout-align="center center">
+<div layout="row" layout-align="space-around center">
+
       <md-input-container>
         <label>Event Name</label>
-        <input ng-model="title" type="text" name="title">
+        <input ng-model="eventName" type="text" name="eventName">
       </md-input-container>
       <md-input-container>
         <label>Description</label>
-        <input ng-model="description" type="text" name="description">
+        <input ng-model="eventDescription" type="text" name="eventDescription">
       </md-input-container>
       <md-input-container>
         <label>Location</label>
-        <input ng-model="location" type="text" name="location">
+        <input ng-model="eventLocation" type="text" name="eventLocation">
       </md-input-container>
+
+		</div>
+
+			<div layout="row" layout-align="space-around center">
+			<md-input-container>
+				<md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
+			</md-input-container>
+			<md-input-container>
+				<label>StartTime</label>
+				<input ng-model="startTime" type="text" name="startTime">
+			</md-input-container>
+			<md-input-container>
+        <label>EndTime</label>
+        <input ng-model="endTime" type="text" name="endTime">
+      </md-input-container>
+		</div>
+	</div>
+
       <md-button ng-click="vm.addEvent()" class="md-primary" type="button">
         Add Event
       </md-button>
@@ -103,9 +126,9 @@
 <div ng-repeat="event in vm.events">
 <md-card layout="row">
 <md-card-content layout="column" layout-align="center center">
-<md-card-content> <h2> Date </h2> </md-card-content>
-<div> 12:00AM-12:00PM </div>
-<div> {{ location }} </div>
+<md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
+<div> {{vm.printTimes(event)}}</div>
+<div> {{ event.location }} </div>
 </md-card-content>
 <md-card-content  layout="column" layout-align="center center" flex="">
 <div><h2> {{ event.name }}  </h2></div>
