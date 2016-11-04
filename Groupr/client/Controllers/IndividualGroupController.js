@@ -32,6 +32,9 @@ define([
 			vm.events = [];
 			$scope.checkBoxData = [];
 
+			vm.leaveGroup = leaveGroup;
+			vm.groupID = $stateParams.groupID;
+
 
 
 			$scope.addTask = function(data) {
@@ -86,6 +89,11 @@ define([
 
 
 			};
+
+			function leaveGroup(){
+				GroupServices.leaveGroup(vm.groupID);
+				$state.go('home');
+			}
 
 			function activate(){
 				if($stateParams.groupID != null){

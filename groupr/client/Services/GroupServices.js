@@ -58,6 +58,13 @@ define([
 				});
 			}
 
+			service.leaveGroup = function(gid){
+				return $http({
+					method: 'PUT',
+					url: url + 'groups/leave/' + gid
+				});
+			}
+
 			service.getTasks = function(data) {
 				return $http({
 					method: 'POST',

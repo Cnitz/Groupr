@@ -136,20 +136,30 @@ define([
 					if(vm.groups[i].name == group.name)
 					var id = vm.groups[i]._id;
 				}
+				
+
 				GroupServices.joinGroup(id)
 				.then(function(res){
 					console.log("success:");
 					console.log(res.data);
+					console.log(group);
+					
 				}, function(res) {
 					console.log("failed: ");
 					console.log(res.data);
 				});
+
+				
 			}
 
 
 		}
 
 	]);
+
+			function goToGroup(g) {
+				$state.go('groupindiv', {groupID: g._id});
+			}
 
 	function DialogController($scope, $mdDialog) {
 		$scope.hide = function() {
