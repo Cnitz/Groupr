@@ -327,7 +327,7 @@ router.route('/calendar/get_events').post((req, res) => {
     }
 });
 
-router.route('/calendar/add_group_events').post((req, res) => {
+router.route('/calendar/add_group_event').post((req, res) => {
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -342,7 +342,9 @@ router.route('/calendar/add_group_events').post((req, res) => {
             group.users.forEach(function(user) {
                 userIds.push(user._id);
             });
-            Users.find({'_id': { $in: userIds } })
+            console.log(calendarList);
+            console.log(userIds);
+            User.find({'_id': { $in: userIds } })
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
@@ -350,6 +352,8 @@ router.route('/calendar/add_group_events').post((req, res) => {
                 })
                 var eventList = [];
                 eventList.push(req.body);
+                console.log(eventList);
+                console.log(calendarList);
                 api_calendar.event_action(calendarList, eventList, 'add', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
@@ -363,7 +367,7 @@ router.route('/calendar/add_group_events').post((req, res) => {
     });
 });
 
-router.route('/calendar/delete_group_events').post((req, res) => {
+router.route('/calendar/delete_group_event').post((req, res) => {
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -378,7 +382,7 @@ router.route('/calendar/delete_group_events').post((req, res) => {
             group.users.forEach(function(user) {
                 userIds.push(user._id);
             });
-            Users.find({'_id': { $in: userIds } })
+            User.find({'_id': { $in: userIds } })
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
@@ -399,7 +403,7 @@ router.route('/calendar/delete_group_events').post((req, res) => {
     });
 });
 
-router.route('/calendar/edit_group_events').post((req, res) => {
+router.route('/calendar/edit_group_event').post((req, res) => {
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
