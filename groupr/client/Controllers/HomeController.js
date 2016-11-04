@@ -77,6 +77,13 @@ define([
 			}
 
 			function editEvent() {
+				var event = {
+					name: $scope.title,
+					description: $scope.description,
+					location: $scope.location,
+					startTime: Date.now(),
+					endTime: Date.now()
+				}
 				CalendarServices.editEvent(event)
 				.then(
 					function(result) {
