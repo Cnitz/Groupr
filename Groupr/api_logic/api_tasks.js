@@ -177,4 +177,59 @@ tasks.updateStatus = function (req, res) {
     });
 };
 
+tasks.updateInfo = function (req, res) {
+    passUser(req.cookies.grouprToken, function(err, user) {
+        if (err || user == null) {
+            res.status(500).json({ message: 'Error: invalid user' });
+        }
+        else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
+            Task.findOne({_id: mongoose.Types.ObjectId(req.body.taskId)}, function (err, task) {
+                if (err) {
+                    res.status(500).json({ message: 'Error: Task not found' });
+                }
+                else {
+                    task.title = (req.body.title != undefined) ? req.body.title : task.title;
+                    task.description = (req.body.description != undefined) ? req.body.description : task.description;
+                    task.save(function (err, updatedTask){
+                        if (err)
+                            res.status(500).json({ message: 'Error: could not update task' });
+                        else
+                            res.status(200).json({ message: 'Successfully updated task' });
+                    });
+                }
+            });
+        }
+        else {
+            res.status(500).json({ message: 'Error: Access denied, user is not a part of this group' });
+        }
+    });
+};
+
+tasks.addUser = function (req, res) {
+    passUser(req.cookies.grouprToken, function(err, user) {
+        if (err || user == null) {
+            res.status(500).json({ message: 'Error: invalid user' });
+        }
+        else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
+            Task.findOne({_id: mongoose.Types.ObjectId(req.body.taskId)}, function (err, task) {
+                if (err) {
+                    res.status(500).json({ message: 'Error: Task not found' });
+                }
+                else {
+                    if (req.body.user != undefined)
+                        task.users.push(req.body.user);
+
+                    task.save(function (err, updatedTask){
+                        if (err) res.status(500).json({ message: 'Error: could not update task' });
+                        else res.status(200).json({ message: 'Successfully updated task' });
+                    });
+                }
+            });
+        }
+        else {
+            res.status(500).json({ message: 'Error: Access denied, user is not a part of this group' });
+        }
+    });
+};
+
 module.exports = tasks;

@@ -454,6 +454,12 @@ router.route('/tasks/markComplete').post((req, res) => {
 router.route('/tasks/updateStatus').post((req, res) => {
     api_tasks.updateStatus(req, res);
 });
+router.route('/tasks/updateInfo').post((req, res) => {
+    api_tasks.updateInfo(req, res);
+});
+router.route('/tasks/addUser').post((req, res) => {
+    api_tasks.addUser(req, res);
+});
 
 /*
  * Chat Api routes
