@@ -418,7 +418,7 @@ router.route('/calendar/edit_group_event').post((req, res) => {
             group.users.forEach(function(user) {
                 userIds.push(user._id);
             });
-            Users.find({'_id': { $in: userIds } })
+            User.find({'_id': { $in: userIds } })
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
