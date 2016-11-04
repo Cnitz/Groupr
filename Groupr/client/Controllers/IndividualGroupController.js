@@ -20,11 +20,14 @@ define([
 			vm.deleteEvent = deleteEvent;
 			vm.editEvent = editEvent;
 			vm.refresh = refresh;
+			vm.printDate = printDate;
+			vm.printTimes = printTimes;
 			$scope.currentNavItem = "groups";
 			$scope.customFullscreen = false;
 			$scope.title= "";
 			$scope.description= "";
 			$scope.users = [];
+			$scope.myDate = new Date();
 			vm.currGroup = "";
 			vm.events = [];
 			$scope.checkBoxData = [];
@@ -134,14 +137,44 @@ define([
 				$state.go('main');
 			}
 
+			function printDate(event){
+				var newDate = new Date(event.startTime);
+				return (newDate.getMonth()+1)+'/'+newDate.getDate();
+			}
+
+			function printTimes(event){
+				var newStartTime = new Date(event.startTime);
+				var newEndTime   = new Date(event.endTime);
+
+				return newStartTime.getHours()+':'+newStartTime.getMinutes()+' - '+newEndTime.getHours()+':'+newEndTime.getMinutes()
+			}
+
 			function addEvent() {
 				var event = {
 					name: $scope.eventName,
 					description: $scope.eventDescription,
 					location: $scope.eventLocation,
-					startTime: Date.now(),
-					endTime: Date.now()
+					startTime: $scope.myDate,
+					endTime: $scope.myDate
 				}
+
+				//Now reading in the time strings and setting times. Remove when better time picker is made
+				var newStartDate = new Date($scope.myDate);
+				var newEndDate = new Date($scope.myDate);
+
+				var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+				newStartDate.setHours( parseInt(time[1]) + (time[3] ? 12 : 0) );
+				newStartDate.setMinutes( parseInt(time[2]) || 0 );
+
+				var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+				newEndDate.setHours( parseInt(time2[1]) + (time2[3] ? 12 : 0) );
+				newEndDate.setMinutes( parseInt(time2[2]) || 0 );
+
+				event.startTime = newStartDate;
+				event.endTime = newEndDate;
+				//End Time Reading Hack
+
+
 				console.log(event);
 				CalendarServices.addGroupEvent(event, $stateParams.groupID)
 				.then(

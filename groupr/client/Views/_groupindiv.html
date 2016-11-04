@@ -94,44 +94,66 @@
       </div>-->
 
 
+      <md-card layout="row" layout-align="space-around center">
 
-<md-card layout="row" layout-align="space-around center">
-	      <md-subheader class="md-no-sticky">Add a New Event:</md-subheader>
-      <md-input-container>
-        <label>Event Name</label>
-        <input ng-model="eventName" type="text" name="eventName">
-      </md-input-container>
-      <md-input-container>
-        <label>Description</label>
-        <input ng-model="eventDescription" type="text" name="eventDescription">
-      </md-input-container>
-      <md-input-container>
-        <label>Location</label>
-        <input ng-model="eventLocation" type="text" name="eventLocation">
-      </md-input-container>
-      <md-button ng-click="vm.addEvent()" class="md-primary" type="button">
-        Add Event
-      </md-button>
-</md-card>
+      	      <md-subheader class="md-no-sticky">Add a New Event:</md-subheader>
 
-<div ng-repeat="event in vm.events">
-<md-card layout="row">
-<md-card-content layout="column" layout-align="center center">
-<md-card-content> <h2> Date </h2> </md-card-content>
-<div> 12:00AM-12:00PM </div>
-<div> {{ location }} </div>
-</md-card-content>
-<md-card-content  layout="column" layout-align="center center" flex="">
-<div><h2> {{ event.name }}  </h2></div>
-<div> {{ event.description }} </div>
-</md-card-content>
-<md-card-actions layout="column" layout-align="center center">
-<md-button ng-click="vm.editEvent() "onclick="disabled='false';" class="md-primary" type="button" >Edit Event</md-button>
-<md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-primary" type="button" >Delete Event</md-button>
-</md-card-actions>
-</md-card>
+      <div layout="column" layout-align="center center">
+      <div layout="row" layout-align="space-around center">
 
-			</div>
+            <md-input-container>
+              <label>Event Name</label>
+              <input ng-model="eventName" type="text" name="eventName">
+            </md-input-container>
+            <md-input-container>
+              <label>Description</label>
+              <input ng-model="eventDescription" type="text" name="eventDescription">
+            </md-input-container>
+            <md-input-container>
+              <label>Location</label>
+              <input ng-model="eventLocation" type="text" name="eventLocation">
+            </md-input-container>
+
+      		</div>
+
+      			<div layout="row" layout-align="space-around center">
+      			<md-input-container>
+      				<md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
+      			</md-input-container>
+      			<md-input-container>
+      				<label>StartTime</label>
+      				<input ng-model="startTime" type="text" name="startTime">
+      			</md-input-container>
+      			<md-input-container>
+              <label>EndTime</label>
+              <input ng-model="endTime" type="text" name="endTime">
+            </md-input-container>
+      		</div>
+      	</div>
+
+            <md-button ng-click="vm.addEvent()" class="md-primary" type="button">
+              Add Event
+            </md-button>
+      </md-card>
+
+      <div ng-repeat="event in vm.events">
+      <md-card layout="row">
+      <md-card-content layout="column" layout-align="center center">
+      <md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
+      <div> {{vm.printTimes(event)}}</div>
+      <div> {{ event.location }} </div>
+      </md-card-content>
+      <md-card-content  layout="column" layout-align="center center" flex="">
+      <div><h2> {{ event.name }}  </h2></div>
+      <div> {{ event.description }} </div>
+      </md-card-content>
+      <md-card-actions layout="column" layout-align="center center">
+      <md-button ng-click="vm.editEvent() "onclick="disabled='false';" class="md-primary" type="button" >Edit Event</md-button>
+      <md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-primary" type="button" >Delete Event</md-button>
+      </md-card-actions>
+      </md-card>
+
+      			</div>
 		</div>
   </md-content>
 

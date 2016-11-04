@@ -28,7 +28,7 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
         index = 0;
         switch (action_type) {
             case 'add':
-                console.log('add');
+                console.log('31 add');
                 eventList.forEach(function(event) {
                     console.log(event);
                     calendar.events.push(event);
@@ -53,7 +53,7 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
     })
     calendarList.forEach(function(calendar) {
         calendar.save((err) => {
-            counter++; 
+            counter++;
             if (err) {
                 reponseObj.status = 500;
                 reponseObj.message = 'Error: Database access';
