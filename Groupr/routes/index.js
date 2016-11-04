@@ -76,7 +76,7 @@ router.route('account/verify_token').get((req, res) => {
 passport.use(new GoogleStrategy({
     clientID:     "721031064145-8eec4v9olvj7o0808i56m2osjlk2ebte.apps.googleusercontent.com",
     clientSecret: "U1gDlLfab-oeclNN6xQ2wAir",
-    callbackURL: "http://127.0.0.1:3000/api/auth/google/callback",
+    callbackURL: "http://localhost:3000/api/auth/google/callback",
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
@@ -90,21 +90,41 @@ passport.use(new GoogleStrategy({
         console.log("error");
       } else {
         console.log(data.items[0].id);
+        console.log(data.items);
         googleCal.events.list(data.items[0].id, function(err, calendarList) {
+          if (err) {
+            console.log("error: " + err);
+          } else {
+
+
           console.log(calendarList.items.length);
           var i = 0;
+
+          //Getting user token: req.cookies.grouprToken
+
           while (i < calendarList.items.length){
-            console.log(calendarList.items[i].summary);
-            console.log(calendarList.items[i].start);
-            console.log(calendarList.items[i]);
-            console.log("-----------")
+            var newEvent = {
+              name: calendarList.items[i].summary,
+            	location: calendarList.items[i].location,
+            	startTime: new Date(calendarList.items[i].start.dateTime),
+            	endTime: new Date(calendarList.items[i].end.dateTime),
+            	description: calendarList.items[i].description,
+            };
+            console.log(request.cookies.grouprToken);
+            User.findOne({token:request.cookies.grouprToken}).populate('calendar').exec(function(err,user){
+
+              
+
+            });
+
             i++;
           }
+        }
         });
       }
       });
 
-      return done(null, googleCal);
+      return done(null, profile);
     }
 ));
 
@@ -112,7 +132,8 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['openid', '
 
 router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/#/home' }), //Set to groups for testing
   function(req, res) {
-
+    console.log(res);
+    redirect('/groups');
   }
 );
 

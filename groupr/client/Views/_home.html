@@ -26,8 +26,8 @@
 				<h2> Personal Calendar </h2>
 
 				<md-card-actions layout="row" layout-align="end center">
-				<md-button  onclick="disabled='true';" class="md-primary" type="button" href="http://localhost:3000/api/auth/google">Google Calendar</md-button>
-					<md-button ng-click="vm.googleAuth()" onclick="disabled='true';" class="md-primary" type="button" >Add Event</md-button>
+				<md-button  href="/api/auth/google" onclick="disabled='true';" class="md-primary" type="button" >Google Calendar</md-button>
+					<md-button ng-click="vm.addEvent()" onclick="disabled='true';" class="md-primary" type="button" >Add Event</md-button>
 				</md-card-actions>
 			</md-card>
 

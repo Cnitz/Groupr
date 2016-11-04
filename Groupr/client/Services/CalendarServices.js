@@ -113,7 +113,18 @@ define([
 				console.log("testing");
 				return $http({
 					method: 'get',
-					url: "http://localhost:3000/api/auth/google",
+					url: "http://localhost:3000/api/calendar/auth/google",
+				});
+			}
+
+			service.googleAuth = function(){
+				console.log("googleAuth");
+				return $http({
+					method: 'get',
+					url: url + 'auth/google',
+					headers: {
+						'Content-Type': 'application/json, text/plain, */*'
+					},
 				});
 			}
 

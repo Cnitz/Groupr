@@ -41,6 +41,18 @@ define([
 				AccountServices.userAccount.token = '';
 			}
 
+
+			service.googleAuth = function(){
+				console.log("googleAuth");
+				return $http({
+					method: 'get',
+					url: url + 'auth/google',
+					headers: {
+						'Content-Type': 'application/json, text/plain, */*'
+					},
+				});
+			}
+
 			return service;
 		}
 	]);
