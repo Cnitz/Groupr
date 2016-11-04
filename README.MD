@@ -6,9 +6,12 @@ Features include:
   - Login
   - Create Group
   - View Calendar
-
-Future Features:
+  - Calendar Syncs
   - Join Group
   - Tasks
-  - Calendar Syncs
+
+
+Future Features:
+  - Chat
   - Complaint Box
+  - Schedule Assistant

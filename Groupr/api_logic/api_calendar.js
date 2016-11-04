@@ -9,12 +9,12 @@ var calendar = new Object();
 
 var search_event = function(eventList, key) {
     eventList.forEach(function(event, index) {
-        if ( (event.name == key.name) &&
-             (event.startTime == key.startTime) &&
-             (event.endTime == key.endTime) ) {
+        if (event.name == key.name) {
+            console.log('15 '+index);
             return index;
         }
     })
+    return -1;
 }
 
 calendar.event_action = function(calendarList, eventList, action_type, callback) {
@@ -24,23 +24,27 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
     console.log(eventList);
     console.log(action_type);
     calendarList.forEach(function(calendar) {
+        var index = 0;
         switch (action_type) {
             case 'add':
-                console.log('adding an event');
                 eventList.forEach(function(event) {
                     calendar.events.push(event);
                 })
             break;
             case 'delete':
                 eventList.forEach(function(event) {
-                    var index = search_event(calendar.events, event);
+                    index = search_event(calendar.events, event);
                     calendar.events.splice(index, 1);
                 });
             break;
             case 'edit':
                 eventList.forEach(function(event) {
-                    var index = search_event(calendar.events, event);
-                    calendar.events[index] = event;
+                    index = search_event(calendar.events, event);
+                    console.log("42 " + index);
+                    if (index != -1) {
+                        calendar.events[index] = event;
+                        console.log('46 ' + calendar.events[index]);
+                    }
                 });
         }
         calendar.save((err) => {
