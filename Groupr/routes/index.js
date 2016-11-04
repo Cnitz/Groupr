@@ -446,13 +446,19 @@ router.route('/tasks/group').post((req, res) => {
 router.route('/tasks/remove').post((req, res) => {
     api_tasks.removeTask(req, res);
 });
+router.route('/tasks/markComplete').post((req, res) => {
+    api_tasks.removeTask(req, res);
+});
+router.route('/tasks/updateStatus').post((req, res) => {
+    api_tasks.updateStatus(req, res);
+});
 
 /*
  * Chat Api routes
  *  -Create chat messages
  *  -Get all chat messages in a group
  */
-router.route('/chat/:group/send').put((req, res) => {
+router.route('/chat/:group/send').post((req, res) => {
     api_chat.sendMessage(req, res);
 });
 router.route('/chat/:group').get((req, res) => {
