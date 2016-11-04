@@ -112,9 +112,19 @@ passport.use(new GoogleStrategy({
               	description: calendarList.items[i].description,
               };
               eventList.push(newEvent);
-            i++;
-          }
-          
+              i++;
+            }
+            var userCal = [];
+            userCal.push(user.calendar);
+            console.log(user.calendar);
+            api_calendar.event_action(userCal, eventList, 'add', (obj) => {
+                if (obj.status != 500) {
+
+                }
+                else {
+
+                }
+            });
           });
         }
         });
@@ -225,9 +235,11 @@ router.route('/calendar/add_event').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body, 'add', (obj) => {
+            var calendarList = [];
+            calendarList.push(user.calendar);
+            var eventList = [];
+            eventList.push(req.body);
+            api_calendar.event_action(calendarList, eventList, 'add', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been added'})
                 }
@@ -247,9 +259,11 @@ router.route('/calendar/delete_event').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body, 'delete', (obj) => {
+            var calendarList = [];
+            calendarList.push(user.calendar);
+            var eventList = [];
+            eventList.push(req.body);
+            api_calendar.event_action(calendarList, eventList, 'delete', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been deleted'})
                 }
@@ -269,9 +283,11 @@ router.route('/calendar/edit_event').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body, 'edit', (obj) => {
+            var calendarList = [];
+            calendarList.push(user.calendar);
+            var eventList = [];
+            eventList.push(req.body);
+            api_calendar.event_action(calendarList, eventList, 'edit', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been edited'})
                 }
@@ -327,8 +343,8 @@ router.route('/calendar/add_group_events').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(group.calendar);
+            var calendarList = [];
+            calendarList.push(group.calendar);
             userIds = [];
             group.users.forEach(function(user) {
                 userIds.push(user._id);
@@ -337,9 +353,11 @@ router.route('/calendar/add_group_events').post((req, res) => {
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
-                    calendars.push(user.calendar);
+                    calendarList.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body, 'add', (obj) => {
+                var eventList = [];
+                eventList.push(req.body);
+                api_calendar.event_action(calendarList, eventList, 'add', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
@@ -361,8 +379,8 @@ router.route('/calendar/delete_group_events').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(group.calendar);
+            var calendarList = [];
+            calendarList.push(group.calendar);
             userIds = [];
             group.users.forEach(function(user) {
                 userIds.push(user._id);
@@ -371,9 +389,11 @@ router.route('/calendar/delete_group_events').post((req, res) => {
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
-                    calendars.push(user.calendar);
+                    calendarList.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body, 'delete', (obj) => {
+                var eventList = [];
+                eventList.push(req.body);
+                api_calendar.event_action(calendarList, eventList, 'delete', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
@@ -395,8 +415,8 @@ router.route('/calendar/edit_group_events').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(group.calendar);
+            var calendarList = [];
+            calendarList.push(group.calendar);
             userIds = [];
             group.users.forEach(function(user) {
                 userIds.push(user._id);
@@ -405,9 +425,11 @@ router.route('/calendar/edit_group_events').post((req, res) => {
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
-                    calendars.push(user.calendar);
+                    calendarList.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body, 'edit', (obj) => {
+                var eventList = [];
+                eventList.push(req.body);
+                api_calendar.event_action(calendarList, eventList, 'edit', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
@@ -429,12 +451,12 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(group.calendar);
+            var calendarList = [];
+            calendarList.push(group.calendar);
             group.users.forEach(function(user) {
-                calendars.push(user.calendar);
+                calendarList.push(user.calendar);
             })
-            api_calendar.schedule_assistant(calendars, req.body.day, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
+            api_calendar.schedule_assistant(calendarList, req.body.day, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success'})
                 }
@@ -471,12 +493,6 @@ router.route('/tasks/markComplete').post((req, res) => {
 });
 router.route('/tasks/updateStatus').post((req, res) => {
     api_tasks.updateStatus(req, res);
-});
-router.route('/tasks/updateInfo').post((req, res) => {
-    api_tasks.updateInfo(req, res);
-});
-router.route('/tasks/addUser').post((req, res) => {
-    api_tasks.addUser(req, res);
 });
 
 /*

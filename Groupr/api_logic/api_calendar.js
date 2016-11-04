@@ -17,35 +17,39 @@ var search_event = function(eventList, key) {
     })
 }
 
-calendar.event_action = function(calendars, event, action_type, callback) {
+calendar.event_action = function(calendarList, eventList, action_type, callback) {
     var reponseObj = {};
     var counter = 0;
-    console.log(calendars);
-    console.log(event);
+    console.log(calendarList);
+    console.log(eventList);
     console.log(action_type);
-    calendars.forEach(function(calendar) {
+    calendarList.forEach(function(calendar) {
         switch (action_type) {
             case 'add':
                 console.log('adding an event');
-                calendar.events.push(event);
-                console.log(calendar.events);
+                eventList.forEach(function(event) {
+                    calendar.events.push(event);
+                })
             break;
             case 'delete':
-
-                var index = search_event(calendar.events, event);
-                calendar.events.splice(index, 1);
+                eventList.forEach(function(event) {
+                    var index = search_event(calendar.events, event);
+                    calendar.events.splice(index, 1);
+                });
             break;
             case 'edit':
-                var index = search_event(calendar.events, event);
-                calendar.events[index] = event;
+                eventList.forEach(function(event) {
+                    var index = search_event(calendar.events, event);
+                    calendar.events[index] = event;
+                });
         }
         calendar.save((err) => {
-            counter++;
+            counter++; 
             if (err) {
                 reponseObj.status = 500;
                 reponseObj.message = 'Error: Database access';
             }
-            else if (counter === calendars.length) {
+            else if (counter === calendarList.length) {
                 console.log(counter);
                 callback(reponseObj);
             }
