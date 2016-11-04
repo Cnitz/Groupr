@@ -16,6 +16,8 @@ var api_account = require('../api_logic/api_account');
 var api_calendar = require('../api_logic/api_calendar');
 var api_groups = require('../api_logic/api_groups');
 var api_tasks = require('../api_logic/api_tasks');
+var api_chat = require('../api_logic/api_chat');
+
 
 // Models
 var User = require('../models/user');

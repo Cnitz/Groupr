@@ -68,4 +68,6 @@ chat.sendMessage = function(req, res) {
         else
             res.status(500).json({message : "Error: User does not have permission to access this chat, not apart of group"});
     });
-} 
+}
+
+module.exports = chat;
