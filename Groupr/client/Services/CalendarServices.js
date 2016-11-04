@@ -64,6 +64,7 @@ define([
 					event: calendarEvent,
 					groupId: groupId
 				}
+				console.log(data);
 				return $http({
 					method: 'POST',
 					url: url + 'add_group_event',

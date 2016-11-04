@@ -121,7 +121,8 @@ define([
 					startTime: Date.now(),
 					endTime: Date.now()
 				}
-				CalendarServices.addGroupEvent(event)
+				console.log(event);
+				CalendarServices.addGroupEvent(event, $stateParams.groupID)
 				.then(
 					function(result) {
 						console.log('success adding event');
@@ -134,7 +135,7 @@ define([
 			}
 
 			function deleteEvent(event) {
-				CalendarServices.deleteGroupEvent(event)
+				CalendarServices.deleteGroupEvent(event, $stateParams.groupID)
 				.then(
 					function(result) {
 						console.log('success deleting event');
@@ -147,7 +148,7 @@ define([
 			}
 
 			function editEvent() {
-				CalendarServices.editGroupEvent(event)
+				CalendarServices.editGroupEvent(event, $stateParams.groupID)
 				.then(
 					function(result) {
 						refresh();
