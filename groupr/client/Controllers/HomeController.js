@@ -19,6 +19,7 @@ define([
 			vm.deleteEvent = deleteEvent;
 			vm.editEvent = editEvent;
 			vm.refresh = refresh;
+			vm.googleAuth = googleAuth;
 			$scope.currentNavItem = "home";
 
 			vm.user = {};
@@ -128,6 +129,10 @@ define([
 						console.log(result.data);
 					}
 				)
+			}
+
+			function googleAuth(){
+				GoogleServices.googleAuth();
 			}
 
 			activate();

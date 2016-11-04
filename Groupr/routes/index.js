@@ -16,6 +16,8 @@ var api_account = require('../api_logic/api_account');
 var api_calendar = require('../api_logic/api_calendar');
 var api_groups = require('../api_logic/api_groups');
 var api_tasks = require('../api_logic/api_tasks');
+var api_chat = require('../api_logic/api_chat');
+
 
 // Models
 var User = require('../models/user');
@@ -74,35 +76,54 @@ router.route('account/verify_token').get((req, res) => {
 passport.use(new GoogleStrategy({
     clientID:     "721031064145-8eec4v9olvj7o0808i56m2osjlk2ebte.apps.googleusercontent.com",
     clientSecret: "U1gDlLfab-oeclNN6xQ2wAir",
-    callbackURL: "http://127.0.0.1:3000/api/auth/google/callback",
+    callbackURL: "http://localhost:3000/api/auth/google/callback",
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
     //Should be retrieving cal events here?
-    console.log("Penis");
-
     var googleCal = new gcal.GoogleCalendar(accessToken);
 
     googleCal.calendarList.list(function(err, data) {
       if(err) {
         console.log("error");
       } else {
-        console.log(data.items[0].id);
         googleCal.events.list(data.items[0].id, function(err, calendarList) {
-          console.log(calendarList.items.length);
+          if (err) {
+            console.log("error: " + err);
+          } else {
           var i = 0;
-          while (i < calendarList.items.length){
-            console.log(calendarList.items[i].summary);
-            console.log(calendarList.items[i].start);
-            console.log(calendarList.items[i]);
-            console.log("-----------")
-            i++;
-          }
+
+          //Getting user token: req.cookies.grouprToken
+          User.findOne({token:request.cookies.grouprToken}).populate('calendar').exec(function(err,user){
+            var eventList = [];
+            while (i < calendarList.items.length){
+              var newEvent = {
+                name: calendarList.items[i].summary,
+              	location: calendarList.items[i].location,
+              	startTime: new Date(calendarList.items[i].start.dateTime),
+              	endTime: new Date(calendarList.items[i].end.dateTime),
+              	description: calendarList.items[i].description,
+              };
+              eventList.push(newEvent);
+              i++;
+            }
+            var userCal = [];
+            userCal.push(user.calendar);
+            api_calendar.event_action(userCal, eventList, 'add', (obj) => {
+                if (obj.status != 500) {
+
+                }
+                else {
+
+                }
+            });
+          });
+        }
         });
       }
       });
 
-      return done(null, googleCal);
+      return done(null, profile);
     }
 ));
 
@@ -110,7 +131,9 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['openid', '
 
 router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/#/home' }), //Set to groups for testing
   function(req, res) {
-
+      res.statusCode = 302;
+      res.setHeader("Location", "/#/home");
+      res.end();
   }
 );
 
@@ -205,9 +228,11 @@ router.route('/calendar/add_event').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body, 'add', (obj) => {
+            var calendarList = [];
+            calendarList.push(user.calendar);
+            var eventList = [];
+            eventList.push(req.body);
+            api_calendar.event_action(calendarList, eventList, 'add', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been added'})
                 }
@@ -227,9 +252,11 @@ router.route('/calendar/delete_event').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body, 'delete', (obj) => {
+            var calendarList = [];
+            calendarList.push(user.calendar);
+            var eventList = [];
+            eventList.push(req.body);
+            api_calendar.event_action(calendarList, eventList, 'delete', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been deleted'})
                 }
@@ -249,9 +276,11 @@ router.route('/calendar/edit_event').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(user.calendar);
-            api_calendar.event_action(calendars, req.body, 'edit', (obj) => {
+            var calendarList = [];
+            calendarList.push(user.calendar);
+            var eventList = [];
+            eventList.push(req.body);
+            api_calendar.event_action(calendarList, eventList, 'edit', (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success: The event has been edited'})
                 }
@@ -307,8 +336,8 @@ router.route('/calendar/add_group_events').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(group.calendar);
+            var calendarList = [];
+            calendarList.push(group.calendar);
             userIds = [];
             group.users.forEach(function(user) {
                 userIds.push(user._id);
@@ -317,9 +346,11 @@ router.route('/calendar/add_group_events').post((req, res) => {
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
-                    calendars.push(user.calendar);
+                    calendarList.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body, 'add', (obj) => {
+                var eventList = [];
+                eventList.push(req.body);
+                api_calendar.event_action(calendarList, eventList, 'add', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
@@ -341,8 +372,8 @@ router.route('/calendar/delete_group_events').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(group.calendar);
+            var calendarList = [];
+            calendarList.push(group.calendar);
             userIds = [];
             group.users.forEach(function(user) {
                 userIds.push(user._id);
@@ -351,9 +382,11 @@ router.route('/calendar/delete_group_events').post((req, res) => {
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
-                    calendars.push(user.calendar);
+                    calendarList.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body, 'delete', (obj) => {
+                var eventList = [];
+                eventList.push(req.body);
+                api_calendar.event_action(calendarList, eventList, 'delete', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
@@ -375,8 +408,8 @@ router.route('/calendar/edit_group_events').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(group.calendar);
+            var calendarList = [];
+            calendarList.push(group.calendar);
             userIds = [];
             group.users.forEach(function(user) {
                 userIds.push(user._id);
@@ -385,9 +418,11 @@ router.route('/calendar/edit_group_events').post((req, res) => {
             .populate('calendar')
             .exec(function(err, users) {
                 users.forEach(function(user) {
-                    calendars.push(user.calendar);
+                    calendarList.push(user.calendar);
                 })
-                api_calendar.event_action(calendars, req.body, 'edit', (obj) => {
+                var eventList = [];
+                eventList.push(req.body);
+                api_calendar.event_action(calendarList, eventList, 'edit', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
@@ -409,12 +444,12 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendars = [];
-            calendars.push(group.calendar);
+            var calendarList = [];
+            calendarList.push(group.calendar);
             group.users.forEach(function(user) {
-                calendars.push(user.calendar);
+                calendarList.push(user.calendar);
             })
-            api_calendar.schedule_assistant(calendars, req.body.day, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
+            api_calendar.schedule_assistant(calendarList, req.body.day, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
                 if (obj.status != 500) {
                     res.status(200).json({message: 'Success'})
                 }
@@ -446,13 +481,19 @@ router.route('/tasks/group').post((req, res) => {
 router.route('/tasks/remove').post((req, res) => {
     api_tasks.removeTask(req, res);
 });
+router.route('/tasks/markComplete').post((req, res) => {
+    api_tasks.removeTask(req, res);
+});
+router.route('/tasks/updateStatus').post((req, res) => {
+    api_tasks.updateStatus(req, res);
+});
 
 /*
  * Chat Api routes
  *  -Create chat messages
  *  -Get all chat messages in a group
  */
-router.route('/chat/:group/send').put((req, res) => {
+router.route('/chat/:group/send').post((req, res) => {
     api_chat.sendMessage(req, res);
 });
 router.route('/chat/:group').get((req, res) => {

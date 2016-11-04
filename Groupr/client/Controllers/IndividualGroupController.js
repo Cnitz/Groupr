@@ -24,8 +24,6 @@ define([
 			$scope.customFullscreen = false;
 			$scope.title= "";
 			$scope.description= "";
-			$scope.groupName = "";
-			$scope.groupDescription = "";
 			$scope.users = [];
 			vm.currGroup = "";
 			vm.events = [];
@@ -114,9 +112,9 @@ define([
 
 			function addEvent() {
 				var event = {
-					name: $scope.title,
-					description: $scope.description,
-					location: $scope.location,
+					name: $scope.eventName,
+					description: $scope.eventDescription,
+					location: $scope.eventLocation,
 					startTime: Date.now(),
 					endTime: Date.now()
 				}

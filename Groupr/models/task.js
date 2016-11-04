@@ -11,7 +11,7 @@ var TaskSchema = new mongoose.Schema({
     dateCreated: { type: Date, required: true },
     dueDate: Date,
     category: String,
-    completed: { type: Boolean, required: true }
+    status: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Task', TaskSchema);

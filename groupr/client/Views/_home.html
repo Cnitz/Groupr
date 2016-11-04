@@ -21,13 +21,63 @@
 				</md-list>
 			</md-card>
 		</div>
+			<!--
+		  <div>
+			<md-card style="overflow:auto;" layout="row" layout-align="start center">
+				<h2> Group Calendar </h2>
+
+				<md-card-actions layout="row" layout-align="end center">
+				<md-button  onclick="disabled='true';" class="md-primary" type="button" href="http://localhost:3000/api/auth/google">Import Google Calendar</md-button>
+				</md-card-actions>
+			</md-card>
+      <md-card style="overflow:auto;">
+       <md-list flex>
+        <md-list-item class="md-3-line" ng-repeat="event in vm.events" ng-click="null" layout-align="center center" layout="row">
+          <md-contnet layout="column">
+            <h3>NOV. 21</h3>
+            <h4>12:00 - 12:00</h4>
+            <h4>Lawson</h4>
+          </md-contnet>
+           <md-contnet layout="column">
+            <h3 style="text-align:center;"><b>{{ event.name }} </b></h3>
+            <h4 style="text-align:center;">{{event.description}}</h4>
+          </md-contnet>
+          <md-button id="btnRemoveEvent" ng-click="vm.deleteEvent(event)" class="md-primary" type="button" aria-label="Delete Event">
+            DELETE EVENT
+          </md-button>
+        </md-list-item>
+      </md-list>
+
+<md-subheader class="md-no-sticky">Add a New Event:</md-subheader>
+      <md-input-container>
+        <label>Event Name</label>
+        <input ng-model="name" type="text" name="title">
+      </md-input-container>
+      <md-input-container>
+        <label>Description</label>
+        <input ng-model="EventDescription" type="text" name="description">
+      </md-input-container>
+      <md-input-container>
+        <label>Location</label>
+        <input ng-model="Location" type="text" name="location">
+      </md-input-container>
+      <md-button id="btnAddEvent" ng-click="addEvent()" class="md-primary" type="button" aria-label="Add Event">
+        ADD EVENT
+      </md-button>
+
+      </md-card>
+      </div>
+		-->
+
+
+		
 		<div>
 			<md-card style="overflow:auto;" layout="row" layout-align="space-around center">
 				<h2> Personal Calendar </h2>
 
 				<md-card-actions layout="row" layout-align="end center">
-				<md-button  onclick="disabled='true';" class="md-primary" type="button" href="http://localhost:3000/api/auth/google">Google Calendar</md-button>
-					<md-button ng-click="vm.googleAuth()" onclick="disabled='true';" class="md-primary" type="button" >Add Event</md-button>
+				<md-button  href="/api/auth/google" onclick="disabled='true';" class="md-primary" type="button" >Google Calendar</md-button>
+					<md-button ng-click="vm.addEvent()" onclick="disabled='true';" class="md-primary" type="button" >Add Event</md-button>
 				</md-card-actions>
 			</md-card>
 
