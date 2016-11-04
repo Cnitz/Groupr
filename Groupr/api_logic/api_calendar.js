@@ -20,16 +20,19 @@ var search_event = function(eventList, key) {
 calendar.event_action = function(calendarList, eventList, action_type, callback) {
     var reponseObj = {};
     var counter = 0;
+    var index = 0;
     console.log(calendarList);
     console.log(eventList);
     console.log(action_type);
     calendarList.forEach(function(calendar) {
-        var index = 0;
+        index = 0;
         switch (action_type) {
             case 'add':
+                console.log('add');
                 eventList.forEach(function(event) {
+                    console.log(event);
                     calendar.events.push(event);
-                })
+                });
             break;
             case 'delete':
                 eventList.forEach(function(event) {
@@ -47,6 +50,8 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
                     }
                 });
         }
+    })
+    calendarList.forEach(function(calendar) {
         calendar.save((err) => {
             counter++; 
             if (err) {

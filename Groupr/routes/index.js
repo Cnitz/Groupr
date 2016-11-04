@@ -351,7 +351,7 @@ router.route('/calendar/add_group_event').post((req, res) => {
                     calendarList.push(user.calendar);
                 })
                 var eventList = [];
-                eventList.push(req.body);
+                eventList.push(req.body.event);
                 console.log(eventList);
                 console.log(calendarList);
                 api_calendar.event_action(calendarList, eventList, 'add', (obj) => {
@@ -389,7 +389,7 @@ router.route('/calendar/delete_group_event').post((req, res) => {
                     calendarList.push(user.calendar);
                 })
                 var eventList = [];
-                eventList.push(req.body);
+                eventList.push(req.body.event);
                 api_calendar.event_action(calendarList, eventList, 'delete', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
@@ -425,7 +425,7 @@ router.route('/calendar/edit_group_event').post((req, res) => {
                     calendarList.push(user.calendar);
                 })
                 var eventList = [];
-                eventList.push(req.body);
+                eventList.push(req.body.event);
                 api_calendar.event_action(calendarList, eventList, 'edit', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
