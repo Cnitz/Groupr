@@ -67,6 +67,9 @@ define([
 					}
 				}
 			};
+			$scope.statusChanged = function(task, status) {
+				console.log(task);
+			};
 
 			function activate(){
 				if($stateParams.groupID != null){

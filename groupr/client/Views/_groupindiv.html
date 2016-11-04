@@ -24,7 +24,7 @@
             <h4 style="text-align:center;">{{task.description}}</h4>
             <md-input-container>
               <label>Status</label>
-              <md-select ng-value="task.completed" ng-change="vm.currentTaskValue">
+              <md-select ng-value="task.status" ng-change="statusChanged(task, task.status)">
                 <md-option>Incomplete</md-option>
                 <md-option>Complete</md-option>
               </md-select>
@@ -50,7 +50,7 @@
 
     </md-card>
 
-    
+
     <div>
 			<md-card style="overflow:auto;" layout="row" layout-align="space-around center">
 				<h2> Group Calendar </h2>
