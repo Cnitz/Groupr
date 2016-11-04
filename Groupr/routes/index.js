@@ -101,24 +101,21 @@ passport.use(new GoogleStrategy({
           var i = 0;
 
           //Getting user token: req.cookies.grouprToken
-
-          while (i < calendarList.items.length){
-            var newEvent = {
-              name: calendarList.items[i].summary,
-            	location: calendarList.items[i].location,
-            	startTime: new Date(calendarList.items[i].start.dateTime),
-            	endTime: new Date(calendarList.items[i].end.dateTime),
-            	description: calendarList.items[i].description,
-            };
-            console.log(request.cookies.grouprToken);
-            User.findOne({token:request.cookies.grouprToken}).populate('calendar').exec(function(err,user){
-
-              
-
-            });
-
+          User.findOne({token:request.cookies.grouprToken}).populate('calendar').exec(function(err,user){
+            var eventList = [];
+            while (i < calendarList.items.length){
+              var newEvent = {
+                name: calendarList.items[i].summary,
+              	location: calendarList.items[i].location,
+              	startTime: new Date(calendarList.items[i].start.dateTime),
+              	endTime: new Date(calendarList.items[i].end.dateTime),
+              	description: calendarList.items[i].description,
+              };
+              eventList.push(newEvent);
             i++;
           }
+          
+          });
         }
         });
       }
