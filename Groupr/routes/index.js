@@ -81,23 +81,16 @@ passport.use(new GoogleStrategy({
   },
   function(request, accessToken, refreshToken, profile, done) {
     //Should be retrieving cal events here?
-    console.log("Penis");
-
     var googleCal = new gcal.GoogleCalendar(accessToken);
 
     googleCal.calendarList.list(function(err, data) {
       if(err) {
         console.log("error");
       } else {
-        console.log(data.items[0].id);
-        console.log(data.items);
         googleCal.events.list(data.items[0].id, function(err, calendarList) {
           if (err) {
             console.log("error: " + err);
           } else {
-
-
-          console.log(calendarList.items.length);
           var i = 0;
 
           //Getting user token: req.cookies.grouprToken
@@ -116,7 +109,6 @@ passport.use(new GoogleStrategy({
             }
             var userCal = [];
             userCal.push(user.calendar);
-            console.log(user.calendar);
             api_calendar.event_action(userCal, eventList, 'add', (obj) => {
                 if (obj.status != 500) {
 
@@ -139,8 +131,9 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['openid', '
 
 router.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/#/home' }), //Set to groups for testing
   function(req, res) {
-    console.log(res);
-    redirect('/groups');
+      res.statusCode = 302;
+      res.setHeader("Location", "/#/home");
+      res.end();
   }
 );
 
