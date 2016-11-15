@@ -102,7 +102,8 @@ define([
 				CalendarServices.deleteEvent(event)
 				.then(
 					function(result) {
-						
+						var index = CalendarServices.searchEvent(events, event);
+						events.splice(index, 1);
 					},
 					function(result) {
 						console.log(result.data);
@@ -114,7 +115,8 @@ define([
 				CalendarServices.editEvent(event)
 				.then(
 					function(result) {
-						
+						var index = CalendarServices.searchEvent(events, event);
+						events[index] = event;
 					},
 					function(result) {
 						console.log(result.data);

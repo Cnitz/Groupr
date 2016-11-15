@@ -8,12 +8,13 @@ var Group = require('../models/group');
 var calendar = new Object();
 
 var search_event = function(eventList, key) {
+    var idx = 0;
     eventList.forEach(function(event, index) {
         if (event.name == key.name) {
-            return index;
+            idx = index;
         }
     })
-    return -1;
+    return idx;
 }
 
 calendar.event_action = function(calendarList, eventList, action_type, callback) {

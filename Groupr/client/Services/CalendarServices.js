@@ -110,7 +110,7 @@ define([
 					data: data
 				});
 			}
-			service.authenticateUser = function(){
+			service.authenticateUser = function() {
 				console.log("testing");
 				return $http({
 					method: 'get',
@@ -118,7 +118,7 @@ define([
 				});
 			}
 
-			service.googleAuth = function(){
+			service.googleAuth = function() {
 				console.log("googleAuth");
 				return $http({
 					method: 'get',
@@ -130,15 +130,13 @@ define([
 			}
 
 			service.searchEvents = function(eventList, key) {
-				var index = 0;
+				var idx = -1;
     			eventList.forEach(function(event, index) {
-		        if (event.name == key.name) {
-		            console.log('15 '+index);
-		            return index;
-		        }
-    })
-    return -1;
-}
+			        if (event.name == key.name) {
+			        	ind = index;
+			        }
+			    })
+			    return idx;
 			}
 
 			return service;
