@@ -310,7 +310,7 @@ router.route('/calendar/get_events').post((req, res) => {
         });
     }
     else {
-        User.findOne({_id: req.body.userId})
+        User.findOne({token: req.cookies.grouprToken})
         .populate('calendar')
         .exec(function(err, user) {
             if (err) {
