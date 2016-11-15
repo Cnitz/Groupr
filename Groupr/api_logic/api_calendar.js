@@ -10,7 +10,6 @@ var calendar = new Object();
 var search_event = function(eventList, key) {
     eventList.forEach(function(event, index) {
         if (event.name == key.name) {
-            console.log('15 '+index);
             return index;
         }
     })
@@ -21,14 +20,10 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
     var reponseObj = {};
     var counter = 0;
     var index = 0;
-    console.log(calendarList);
-    console.log(eventList);
-    console.log(action_type);
     calendarList.forEach(function(calendar) {
         index = 0;
         switch (action_type) {
             case 'add':
-                console.log('31 add');
                 eventList.forEach(function(event) {
                     console.log(event);
                     calendar.events.push(event);
@@ -36,8 +31,14 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
             break;
             case 'delete':
                 eventList.forEach(function(event) {
-                    index = search_event(calendar.events, event);
-                    calendar.events.splice(index, 1);
+                    if (index != -1) {
+                        index = search_event(calendar.events, event);
+                        calendar.events.splice(index, 1);
+                    }
+                    else {
+                        reponseObj.status == 500;
+                        reponseObj.message = 'Error: Event not found';
+                    }
                 });
             break;
             case 'edit':
@@ -47,6 +48,10 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
                     if (index != -1) {
                         calendar.events[index] = event;
                         console.log('46 ' + calendar.events[index]);
+                    }
+                    else {
+                        reponseObj.status == 500;
+                        reponseObj.message = 'Error: Event not found';
                     }
                 });
         }

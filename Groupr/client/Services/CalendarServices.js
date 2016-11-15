@@ -34,7 +34,7 @@ define([
 				});
 			}
 
-			service.getPersonalCalendar = function(userId) {
+			service.getPersonalCalendar = function() {
 				var data = {
 					userId: userId,
 					calendarType: 'personal'
@@ -127,6 +127,18 @@ define([
 						'Content-Type': 'application/json, text/plain, */*'
 					},
 				});
+			}
+
+			service.searchEvents = function(eventList, key) {
+				var index = 0;
+    			eventList.forEach(function(event, index) {
+		        if (event.name == key.name) {
+		            console.log('15 '+index);
+		            return index;
+		        }
+    })
+    return -1;
+}
 			}
 
 			return service;
