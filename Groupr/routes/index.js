@@ -464,6 +464,14 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
         }
     });
 });
+
+router.route('/calendar/propose_meeting').post((req, res) => {
+    
+});
+
+router.route('/calendar/vote_for_meeting').post((req, res) => {
+
+});
 /* End Calendar APIs */
 
 /*
