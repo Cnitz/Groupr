@@ -20,7 +20,7 @@ var CalendarSchema = new mongoose.Schema({
 	    	description: String,
 	    	votes: Number
     	}]
-    }
+    },
 });
 
 module.exports = mongoose.model('Calendar', CalendarSchema);

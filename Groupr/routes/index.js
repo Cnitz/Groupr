@@ -17,11 +17,13 @@ var api_calendar = require('../api_logic/api_calendar');
 var api_groups = require('../api_logic/api_groups');
 var api_tasks = require('../api_logic/api_tasks');
 var api_chat = require('../api_logic/api_chat');
+var api_complaint = require('../api_logic/api_complaint');
 
 
 // Models
 var User = require('../models/user');
 var Group = require('../models/group');
+var Complaint = require('../models/complaint');
 
 
 
@@ -173,6 +175,8 @@ router.route('/account/get_user').get((req, res) => {
 
 /* End Account APIs */
 
+
+/* Group APIs */
 /*
  * Group Api routes
  *  -Create Group                   ('/groups/create')
@@ -182,6 +186,8 @@ router.route('/account/get_user').get((req, res) => {
  *  -Join group                     ('/groups/join/:id')
  *  -Leave group                    ('/groups/leave/:id')
  */
+
+
 
 /*
  * POST
@@ -545,5 +551,36 @@ router.route('/chat/:group/send').post((req, res) => {
 router.route('/chat/:group').get((req, res) => {
     api_chat.getMessages(req, res);
 });
+
+/* Complaint APIs */
+
+/*
+ * Complaint api routes
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */ 
+
+/*
+ * POST
+ * Creates a new complaint
+ * Call: api/complaints/create
+ * Params:
+ *      req.body.title (String)
+ *      req.body.message (String)
+ *      req.body.group (ObjectID)
+ *      req.body.urgency (String) "High", "Medium", "Low"
+ */
+router.route('/complaints/create').post((req, res) =>{
+    api_complaint.createComplaint(req, res);
+});
+
+
+
+
+
 
 module.exports = router;
