@@ -17,7 +17,23 @@ var Complaint = require('../models/complaint');
 var complaint = new Object();
 
 complaint.createComplaint = function(req, res) {
-     console.log('here\nhere\nhere\nhere\n');
+     
+    User.findOne({token: req.cookies.grouprToken}).exec(function(err, user){
+        if(err){
+            res.status(500).json({
+                    error: err,
+                    message: 'Error: User cannot create comlpaints'
+                });
+        }
+        else if(user.groups.indexOf(req.body.group) == -1){
+            res.status(500).json({
+                    error: err,
+                    message: 'Error: User not in group'
+                });
+        }
+
+    else {
+
     var newComplaint = new Complaint();
         newComplaint.group = req.body.group;
         newComplaint.title = req.body.title;
@@ -25,7 +41,7 @@ complaint.createComplaint = function(req, res) {
         newComplaint.dateCreated = new Date();
         newComplaint.urgency = req.body.urgency;
 
-        console.log(req.body);
+       
 
         newComplaint.save((err, complaint) => {
             if (err) {
@@ -55,6 +71,10 @@ complaint.createComplaint = function(req, res) {
                  });
             }
 
+
+        });
+
+    }
 
         });
 }
