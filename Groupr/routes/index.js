@@ -573,6 +573,7 @@ router.route('/chat/:group').get((req, res) => {
  *      req.body.group (ObjectID)
  *      req.body.urgency (String) "High", "Medium", "Low"
  */
+
 router.route('/complaints/create').post((req, res) =>{
     api_complaint.createComplaint(req, res);
 });

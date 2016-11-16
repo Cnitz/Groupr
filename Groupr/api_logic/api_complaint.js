@@ -17,12 +17,15 @@ var Complaint = require('../models/complaint');
 var complaint = new Object();
 
 complaint.createComplaint = function(req, res) {
+     console.log('here\nhere\nhere\nhere\n');
     var newComplaint = new Complaint();
         newComplaint.group = req.body.group;
         newComplaint.title = req.body.title;
         newComplaint.message = req.body.message;
-        newComplaint.dateCreated = Date();
+        newComplaint.dateCreated = new Date();
         newComplaint.urgency = req.body.urgency;
+
+        console.log(req.body);
 
         newComplaint.save((err, complaint) => {
             if (err) {
