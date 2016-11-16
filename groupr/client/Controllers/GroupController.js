@@ -131,18 +131,15 @@ define([
 				$state.go('main');
 			}
 			function joinGroup(group) {
-				var id = 0;
-				for(var i = 0; i < vm.groups.length; i++){
-					if(vm.groups[i].name == group.name)
-					var id = vm.groups[i]._id;
-				}
+		
 				
 
-				GroupServices.joinGroup(id)
+				GroupServices.joinGroup(group._id)
 				.then(function(res){
 					console.log("success:");
 					console.log(res.data);
 					console.log(group);
+					goToGroup(group);
 					
 				}, function(res) {
 					console.log("failed: ");
@@ -151,11 +148,6 @@ define([
 
 				
 			}
-
-
-		}
-
-	]);
 
 			function goToGroup(g) {
 				$state.go('groupindiv', {groupID: g._id});
@@ -174,5 +166,12 @@ define([
 			$mdDialog.hide(answer);
 		};
 	}
+
+
+		}
+
+	]);
+
+
 
 });
