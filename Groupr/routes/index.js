@@ -175,37 +175,69 @@ router.route('/account/get_user').get((req, res) => {
 
 /*
  * Group Api routes
- *  -Create Group
- *  -Get all groups
- *  -Get all groups by current user
- *  -Get group by id
- *
+ *  -Create Group                   ('/groups/create')
+ *  -Get all groups                 ('/groups/all')
+ *  -Get all groups by user         ('/groups')
+ *  -Get group by id                (/groups/:id)
+ *  -Join group                     ('/groups/join/:id')
+ *  -Leave group                    ('/groups/leave/:id')
  */
 
-//Create a brand new group
+/*
+ * POST
+ * Creates a new group
+ * Call: api/groups/create
+ * Params:
+ *      req.body.name (String)
+ *      req.body.description (String)
+ *      req.body.isPublic (Boolean)
+ */
 router.route('/groups/create').post((req, res) => {
     api_groups.create_group(req, res);
 });
 
-//Get all groups
+
+/*
+ * GET
+ * Get a list of all groups
+ * Call: api/groups
+ */
 router.route('/groups/all').get((req, res) => {
     api_groups.get_all_groups(req, res);
 });
 
-//Get groups by current user
+/*
+ * GET
+ * Get a list of groups in which the current user is a member
+ * Call: api/groups
+ */
 router.route('/groups').get((req, res) => {
     api_groups.get_user_groups(req, res);
 });
 
-//Get information pertaining to a specific Group
+/*
+ * GET
+ * Gets group information by groupid
+ * Call: api/groups/(groupid)
+ */
 router.route('/groups/:id').get((req, res) => {
     api_groups.get_group_by_id(req, res, req.params.id);
 });
 
+/*
+ * PUT
+ * Lets user join a group specified by groupid
+ * Call: api/groups/join/(groupid)
+ */
 router.route('/groups/join/:id').put((req, res) => {
     api_groups.join_group(req, res, req.params.id);
 });
 
+/*
+ * PUT
+ * Lets user leave a group specified by groupid
+ * Call: api/groups/leave/(groupid)
+ */
 router.route('/groups/leave/:id').put((req, res) => {
     api_groups.leave_group(req, res, req.params.id);
 });

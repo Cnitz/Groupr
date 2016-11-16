@@ -4,9 +4,11 @@ var Schema = mongoose.Schema,
 
 var ComplaintSchema = new mongoose.Schema({
     group: { type: mongoose.Schema.Types.ObjectId, required: true},
-    complaint: { type: String, required: true},
+    title: { type: String, required: true},    
+    message: { type: String, required: true},
     dateCreated: { type: Date, required: true },
-
+    urgency: {type: String, required: true},
+    
 });
 
 module.exports = mongoose.model('Complaint', ComplaintSchema);
