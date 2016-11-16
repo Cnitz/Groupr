@@ -252,7 +252,6 @@ function groupApiModel(group){
 
 /* Calendar APIs */
 router.route('/calendar/add_event').post((req, res) => {
-    console.log(req.body);
     User.findOne({token: req.cookies.grouprToken})
     .populate('calendar')
     .exec(function(err, user) {

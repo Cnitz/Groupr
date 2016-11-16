@@ -18,7 +18,6 @@ define([
 			vm.addEvent = addEvent;
 			vm.deleteEvent = deleteEvent;
 			vm.editEvent = editEvent;
-			vm.refresh = refresh;
 			vm.googleAuth = googleAuth;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
@@ -69,6 +68,10 @@ define([
 					location: $scope.eventLocation,
 					startTime: $scope.myDate,
 					endTime: $scope.myDate,
+				}
+
+				if (event.name === '') {
+					return;
 				}
 
 				//Now reading in the time strings and setting times. Remove when better time picker is made

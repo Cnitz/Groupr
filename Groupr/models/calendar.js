@@ -12,7 +12,7 @@ var CalendarSchema = new mongoose.Schema({
     }],
     pending_events: {
     	threshold: Number,
-    	[{ 
+    	events: [{ 
     		name: String,
 	    	location: String,
 	    	startTime: Date,
