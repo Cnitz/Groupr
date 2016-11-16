@@ -22,11 +22,13 @@ define([
 			vm.googleAuth = googleAuth;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
+			vm.user = user;
+			vm.events = events;
 			$scope.currentNavItem = "home";
 			$scope.myDate = new Date();
 
-			vm.user = {};
-			vm.events = [];
+			var user = {};
+			var events = [];
 
 			function goHome(){
 				$state.go('home');
@@ -85,12 +87,10 @@ define([
 				event.endTime = newEndDate;
 				//End Time Reading Hack
 
-
-				console.log(event);
 				CalendarServices.addEvent(event)
 				.then(
 					function(result) {
-						refresh();
+						events.push(event);
 					},
 					function(result) {
 						console.log(result.data);
@@ -102,7 +102,8 @@ define([
 				CalendarServices.deleteEvent(event)
 				.then(
 					function(result) {
-						refresh();
+						var index = CalendarServices.searchEvent(events, event);
+						events.splice(index, 1);
 					},
 					function(result) {
 						console.log(result.data);
@@ -114,7 +115,8 @@ define([
 				CalendarServices.editEvent(event)
 				.then(
 					function(result) {
-						refresh();
+						var index = CalendarServices.searchEvent(events, event);
+						events[index] = event;
 					},
 					function(result) {
 						console.log(result.data);
@@ -122,42 +124,33 @@ define([
 				)
 			}
 
-			function refresh() {
-				CalendarServices.getPersonalCalendar(vm.user._id)
-					.then(
-						function(result) {
-							vm.events = result.data.events;
-							console.log(vm.events);
-					},
-						function(result) {
-							console.log(result.data);
-						}
-					)
-			}
-
 			function activate(){
 				AccountServices.getUser()
 				.then(
 					function(result) {
 						vm.user = result.data;
-						console.log(vm.user);
-						CalendarServices.getPersonalCalendar(vm.user._id)
+						// get the users calendar
+						CalendarServices.getPersonalCalendar()
 						.then(
 							function(resultTwo) {
 								vm.events = resultTwo.data.events;
-						},
+							},
 							function(resultTwo) {
 								console.log(resultTwo);
 							}
-						)
+						);
+
+						// get the users groups
 						GroupServices.getGroupByUser()
 						.then(function(res) {
 							vm.groups = res.data.data;
-						}, function(res) {
-							console.log(res.data);
-							if (res.status == 450)
-								$state.go('login');
-						});
+							}, 
+							function(res) {
+								console.log(res.data);
+								if (res.status == 450)
+									$state.go('login');
+							}
+						);
 					},
 					function(result) {
 						console.log(result.data);

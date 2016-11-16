@@ -34,7 +34,7 @@ define([
 				});
 			}
 
-			service.getPersonalCalendar = function(userId) {
+			service.getPersonalCalendar = function() {
 				var data = {
 					userId: userId,
 					calendarType: 'personal'
@@ -110,7 +110,7 @@ define([
 					data: data
 				});
 			}
-			service.authenticateUser = function(){
+			service.authenticateUser = function() {
 				console.log("testing");
 				return $http({
 					method: 'get',
@@ -118,7 +118,7 @@ define([
 				});
 			}
 
-			service.googleAuth = function(){
+			service.googleAuth = function() {
 				console.log("googleAuth");
 				return $http({
 					method: 'get',
@@ -127,6 +127,16 @@ define([
 						'Content-Type': 'application/json, text/plain, */*'
 					},
 				});
+			}
+
+			service.searchEvents = function(eventList, key) {
+				var idx = -1;
+    			eventList.forEach(function(event, index) {
+			        if (event.name == key.name) {
+			        	ind = index;
+			        }
+			    })
+			    return idx;
 			}
 
 			return service;

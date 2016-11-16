@@ -269,7 +269,7 @@ router.route('/calendar/add_event').post((req, res) => {
                     res.status(200).json({message: 'Success: The event has been added'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);
+                    res.status(obj.status).send(obj.message);
                 }
             });
         }
@@ -293,7 +293,7 @@ router.route('/calendar/delete_event').post((req, res) => {
                     res.status(200).json({message: 'Success: The event has been deleted'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);
+                    res.status(obj.status).send(obj.message);
                 }
             });
         }
@@ -317,7 +317,7 @@ router.route('/calendar/edit_event').post((req, res) => {
                     res.status(200).json({message: 'Success: The event has been edited'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);
+                    res.status(obj.status).send(obj.message);
                 }
             });
         }
@@ -353,7 +353,7 @@ router.route('/calendar/get_events').post((req, res) => {
             }
             else {
                 console.log(user.calendar);
-                res.status(200).json(user.calendar);
+                res.status(200).send(user.calendar);
             }
         });
     }
@@ -384,14 +384,12 @@ router.route('/calendar/add_group_event').post((req, res) => {
                 })
                 var eventList = [];
                 eventList.push(req.body.event);
-                console.log(eventList);
-                console.log(calendarList);
                 api_calendar.event_action(calendarList, eventList, 'add', (obj) => {
                     if (obj.status != 500) {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);
+                        res.status(obj.status).send(obj.message);
                     }
                 });
             })
@@ -427,7 +425,7 @@ router.route('/calendar/delete_group_event').post((req, res) => {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);
+                        res.status(obj.status).send(obj.message);
                     }
                 });
             })
@@ -463,7 +461,7 @@ router.route('/calendar/edit_group_event').post((req, res) => {
                         res.status(200).json({message: 'Success: The event has been added'})
                     }
                     else {
-                        res.status(obj.status).json(obj.message);
+                        res.status(obj.status).send(obj.message);
                     }
                 });
             })
@@ -490,11 +488,23 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
                     res.status(200).json({message: 'Success'})
                 }
                 else {
-                    res.status(obj.status).json(obj.message);
+                    res.status(obj.status).send(obj.message);
                 }
             });
         }
     });
+});
+
+router.route('/calendar/propose_meeting').post((req, res) => {
+    
+});
+
+router.route('/calendar/vote_for_meeting').post((req, res) => {
+
+});
+
+router.route('/calendar/end_voting').post((req, res) => {
+
 });
 /* End Calendar APIs */
 

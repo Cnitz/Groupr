@@ -9,7 +9,18 @@ var CalendarSchema = new mongoose.Schema({
     	startTime: Date,
     	endTime: Date,
     	description: String
-    }]
+    }],
+    pending_events: {
+    	threshold: Number,
+    	[{ 
+    		name: String,
+	    	location: String,
+	    	startTime: Date,
+	    	endTime: Date,
+	    	description: String,
+	    	votes: Number
+    	}]
+    }
 });
 
 module.exports = mongoose.model('Calendar', CalendarSchema);
