@@ -7,7 +7,8 @@ define([
 		'Groupr.Services.GroupServices',
 		'Groupr.Services.AccountServices',
 		'$stateParams',
-		function GroupController($scope, $state, GroupServices, AccountServices, $stateParams) {
+		'ngToast',
+		function GroupController($scope, $state, GroupServices, AccountServices, $stateParams, ngToast) {
 			var vm = this;
 			{
 				vm.groups =[];
@@ -131,8 +132,6 @@ define([
 				$state.go('main');
 			}
 			function joinGroup(group) {
-		
-				
 
 				GroupServices.joinGroup(group._id)
 				.then(function(res){
@@ -144,6 +143,7 @@ define([
 				}, function(res) {
 					console.log("failed: ");
 					console.log(res.data);
+					ngToast.danger('User is all ready a memeber of group');
 				});
 
 				
