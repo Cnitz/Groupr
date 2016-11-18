@@ -495,7 +495,7 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
 });
 
 router.route('/calendar/propose_meeting').post((req, res) => {
-    
+
 });
 
 router.route('/calendar/vote_for_meeting').post((req, res) => {
@@ -531,6 +531,9 @@ router.route('/tasks/markComplete').post((req, res) => {
 });
 router.route('/tasks/updateStatus').post((req, res) => {
     api_tasks.updateStatus(req, res);
+});
+router.route('/tasks/addUser').post((req, res) => {
+    api_tasks.addUser(req, res);
 });
 
 /*
