@@ -94,6 +94,7 @@ define([
 				.then(
 					function(result) {
 						events.push(event);
+						console.log(events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -106,7 +107,8 @@ define([
 				.then(
 					function(result) {
 						var index = CalendarServices.searchEvent(events, event);
-						events.splice(index, 1);
+						vm.events.splice(index, 1);
+						console.log(events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -119,7 +121,8 @@ define([
 				.then(
 					function(result) {
 						var index = CalendarServices.searchEvent(events, event);
-						events[index] = event;
+						vm.events[index] = event;
+						console.log(events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -136,7 +139,9 @@ define([
 						CalendarServices.getPersonalCalendar()
 						.then(
 							function(resultTwo) {
-								vm.events = resultTwo.data.events;
+								console.log(resultTwo);
+								vm.events = resultTwo.data;
+								console.log(vm.events);
 							},
 							function(resultTwo) {
 								console.log(resultTwo);

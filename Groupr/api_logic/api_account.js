@@ -23,6 +23,7 @@ account.login = function(username, password, TOKEN_SECRET, res) {
         }
         else {
             if (user.calendar === undefined) {
+                console.log('no calendar');
                 var newCalendar = Calendar();
                 newCalendar.events = [];
                 newCalendar.save((err, calendar) => {
@@ -47,6 +48,7 @@ account.login = function(username, password, TOKEN_SECRET, res) {
                 })
             }
             else {
+                console.log(user.calendar);
                 var token = jwt.sign({ email: user.email }, TOKEN_SECRET, {
                 expiresIn: '12h'
                 });

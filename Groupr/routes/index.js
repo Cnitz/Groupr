@@ -336,7 +336,7 @@ router.route('/calendar/get_events').post((req, res) => {
             }
             else {
                 console.log(group.calendar);
-                res.status(200).send(group.calendar);
+                res.status(200).send(group.calendar.events);
             }
         });
     }
@@ -351,8 +351,8 @@ router.route('/calendar/get_events').post((req, res) => {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                console.log(user.calendar);
-                res.status(200).send(user.calendar);
+                console.log(user.calendar.events);
+                res.status(200).send(user.calendar.events);
             }
         });
     }
