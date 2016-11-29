@@ -10,7 +10,7 @@ var GroupSchema = new mongoose.Schema({
     calendar: { type: ObjectId, ref: 'Calendar' },
     isPublic: {type: Boolean, required: true},
     chat: [{ body: String, user: String, date: Date }],
-    complaints: [{ body: String, date: Date }],
+    complaints: [{type: ObjectId, ref: 'Complaint'}],
 });
 
 module.exports = mongoose.model('Group', GroupSchema);

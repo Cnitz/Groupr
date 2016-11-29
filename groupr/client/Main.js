@@ -8,6 +8,7 @@ require.config({
         'ngMessages': './bower_components/angular-messages/angular-messages',
         'ngSanitize': './bower_components/angular-sanitize/angular-sanitize',
         'ngCookies': './bower_components/angular-cookies/angular-cookies',
+        'ngToast': './bower_components/ngToast/dist/ngToast',
         'pascalprecht.translate': './bower_components/angular-translate/angular-translate',
         'ui.router': './bower_components/angular-ui-router/release/angular-ui-router',
         'ui.tree': './bower_components/angular-ui-tree/dist/angular-ui-tree',
@@ -61,6 +62,9 @@ require.config({
         },
         'xregexp': {
             exports: "XRegExp",
+        },
+        'ngToast': {
+            deps:['ngSanitize']
         }
     },
     deps: ['./Bootstrap']

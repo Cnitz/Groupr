@@ -14,24 +14,36 @@ var User = require('../models/user');
 var Group = require('../models/group');
 var Complaint = require('../models/complaint');
 
-var comlaint = new Object();
-
-var passUser = function(token, cb){
-    console.log("Finding user with token " + token);
-    User.findOne({token : token}, function(err, user) {
-        cb(err, user);
-    });
-};
+var complaint = new Object();
 
 complaint.createComplaint = function(req, res) {
-    var complaint = new Complaint();
-        complaint.group = req.body.group;
-        complaint.title = req.body.title;
-        complaint.message = req.body.message;
-        complaint.dateCreated = Date();
-        complaint.urgency = req.body.urgency;
+     
+    User.findOne({token: req.cookies.grouprToken}).exec(function(err, user){
+        if(err){
+            res.status(500).json({
+                    error: err,
+                    message: 'Error: User cannot create comlpaints'
+                });
+        }
+        else if(user.groups.indexOf(req.body.group) == -1){
+            res.status(500).json({
+                    error: err,
+                    message: 'Error: User not in group'
+                });
+        }
 
-        comlaint.save((err, complaint) => {
+    else {
+
+    var newComplaint = new Complaint();
+        newComplaint.group = req.body.group;
+        newComplaint.title = req.body.title;
+        newComplaint.message = req.body.message;
+        newComplaint.dateCreated = new Date();
+        newComplaint.urgency = req.body.urgency;
+
+       
+
+        newComplaint.save((err, complaint) => {
             if (err) {
                 res.status(500).json({
                     error: err,
@@ -39,11 +51,30 @@ complaint.createComplaint = function(req, res) {
                 });
             }
             else {
-                res.status(200).json({
-                    message: 'Complaint created'
-                });
+                 Group.findOne({_id: req.body.group}).exec(function(err,group){
+                    group.complaints.push(complaint._id);
+                    group.save((err, group) => {
+                        if (err) {
+                            res.status(500).json({
+                                error: err,
+                                message: 'Error: Complaint creation failed'
+                            });
+                        }
+                        else {
+                            res.status(200).json({
+                                message: 'Complaint submitted!',
+                                complaintID: newComplaint._id,
+                            })
+                        }
+                    });
+
+                 });
             }
 
+
+        });
+
+    }
 
         });
 }

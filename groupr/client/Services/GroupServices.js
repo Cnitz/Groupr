@@ -14,7 +14,6 @@ define([
 					description: group.description,
 					isPublic: group.isPublic
 				}
-				console.log(data);
 				return $http({
 					method: 'POST',
 					url: url + 'groups/create',
