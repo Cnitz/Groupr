@@ -141,9 +141,7 @@ define([
 					goToGroup(group);
 					
 				}, function(res) {
-					console.log("failed: ");
-					console.log(res.data);
-					ngToast.danger('User is all ready a memeber of group');
+					ngToast.danger(res.data.message);
 				});
 
 				
