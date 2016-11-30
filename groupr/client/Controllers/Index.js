@@ -6,4 +6,5 @@ define([
 	'./GroupController',
 	'./IndividualGroupController',
 	'./ComplaintBoxController',
+	'./ScheduleAssistantController',
 ], function () {});

@@ -21,13 +21,10 @@ define([
 			vm.googleAuth = googleAuth;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
-			vm.user = user;
-			vm.events = events;
 			$scope.currentNavItem = "home";
 			$scope.myDate = new Date();
-
-			var user = {};
-			var events = [];
+			$scope.user = {};
+			$scope.events = [];
 
 			function goHome(){
 				$state.go('home');
@@ -93,8 +90,8 @@ define([
 				CalendarServices.addEvent(event)
 				.then(
 					function(result) {
-						events.push(event);
-						console.log(events);
+						$scope.events.push(event);
+						console.log($scope.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -106,9 +103,9 @@ define([
 				CalendarServices.deleteEvent(event)
 				.then(
 					function(result) {
-						var index = CalendarServices.searchEvent(events, event);
-						vm.events.splice(index, 1);
-						console.log(events);
+						var index = CalendarServices.searchEvents($scope.events, event);
+						$scope.events.splice(index, 1);
+						console.log($scope.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -120,9 +117,9 @@ define([
 				CalendarServices.editEvent(event)
 				.then(
 					function(result) {
-						var index = CalendarServices.searchEvent(events, event);
-						vm.events[index] = event;
-						console.log(events);
+						var index = CalendarServices.searchEvents($scope.events, event);
+						$scope.events[index] = event;
+						console.log($scope.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -134,14 +131,14 @@ define([
 				AccountServices.getUser()
 				.then(
 					function(result) {
-						vm.user = result.data;
+						$scope.user = result.data;
 						// get the users calendar
 						CalendarServices.getPersonalCalendar()
 						.then(
 							function(resultTwo) {
 								console.log(resultTwo);
-								vm.events = resultTwo.data;
-								console.log(vm.events);
+								$scope.events = resultTwo.data;
+								console.log($scope.events);
 							},
 							function(resultTwo) {
 								console.log(resultTwo);
