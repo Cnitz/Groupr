@@ -171,6 +171,7 @@ define([
 
 			}
 
+			/* back end, take current highest */
 			function endVoting() {
 
 			}

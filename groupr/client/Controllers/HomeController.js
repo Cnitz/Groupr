@@ -21,7 +21,6 @@ define([
 			vm.googleAuth = googleAuth;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
-			vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
 			$scope.currentNavItem = "home";
 			$scope.myDate = new Date();
 			$scope.user = {};
@@ -60,9 +59,6 @@ define([
 			}
 			function goToGroup(g) {
 				$state.go('groupindiv', {groupID: g._id});
-			}
-			function navigateToScheduleAssistant() {
-				$state.go('scheduleAssistant', {groupID: g._id});
 			}
 
 			function addEvent() {
