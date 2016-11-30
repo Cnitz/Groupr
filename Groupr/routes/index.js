@@ -336,7 +336,11 @@ router.route('/calendar/get_events').post((req, res) => {
             }
             else {
                 console.log(group.calendar);
-                res.status(200).send(group.calendar.events);
+                res.status(200).json({ 
+                    events: group.calendar.events, 
+                    schedule_assistant_active: group.calendar.schedule_assistant.active,
+                    voters: group.calendar.schedule_assistant.voters 
+                });
             }
         });
     }
@@ -352,7 +356,7 @@ router.route('/calendar/get_events').post((req, res) => {
             }
             else {
                 console.log(user.calendar.events);
-                res.status(200).json( {events: user.calendar.events, schedule_assistant_active: user.calendar.schedule_assistant.active } );
+                res.status(200).send(user.calendar.events);
             }
         });
     }
@@ -468,6 +472,7 @@ router.route('/calendar/edit_group_event').post((req, res) => {
     });
 });
 
+/* generateMeetingTimes */
 router.route('/calendar/schedule_assistant').post((req, res) => {
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
@@ -494,22 +499,22 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
     });
 });
 
-router.route('/calendar/propose_meeting').post((req, res) => {
+/* submitProposedMeetingTimes */
+router.route('/calendar/propose_meeting_times').post((req, res) => {
 
 });
 
-router.route('/calendar/propose_meeting').post((req, res) => {
+/* submitVote */
+router.route('/calendar/vote').post((req, res) => {
 
 });
 
-router.route('/calendar/vote_for_meeting').post((req, res) => {
-
-});
-
+/* endVoting */
 router.route('/calendar/end_voting').post((req, res) => {
 
 });
 
+/* cancelVoting */
 router.route('/calendar/cancel_voting').post((req, res) => {
 
 });

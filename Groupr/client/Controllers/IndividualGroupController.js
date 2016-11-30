@@ -25,7 +25,8 @@ define([
 			vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
 			vm.vote = vote;
 			vm.submitVote = submitVote;
-			vm.cancelMeetingProposal = cancelMeetingProposal;
+			vm.cancelVoting = cancelVoting;
+			vm.endVoting = endVoting;
 			$scope.currentNavItem = "groups";
 			$scope.customFullscreen = false;
 			$scope.title= "";
@@ -150,21 +151,30 @@ define([
 				$state.go('main');
 			}
 
+			/* if there is no current vote, navigate to the schedule assistant page to create a new "doodle" */
 			function navigateToScheduleAssistant() {
 				$state.go('scheduleAssistant', {groupID: $stateParams.groupID;});
 			}
 
+			/* Vote for one proposed time, front end only */
 			function vote(index) {
 				$scope.checkBoxData[index] = true;
 			}
 
+			/* submit all votes and store in back end database */
 			function submitVote() {
 
 			}
 
-			function cancelMeetingProposal() {
+			/* cancel the voting, back end to clear schedule assistant fields */
+			function cancelVoting() {
 
 			}
+
+			function endVoting() {
+
+			}
+
 
 			function printDate(event){
 				var newDate = new Date(event.startTime);
