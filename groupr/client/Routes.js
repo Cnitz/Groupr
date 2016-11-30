@@ -45,6 +45,15 @@ define([
 					templateUrl:	'Views/_group.html',
 					controller:		'Groupr.Controllers.Group',
 					controllerAs:   'vm',
+				})
+				.state('scheduleAssistant', {
+					url:			'/scheduleAssistant',
+					templateUrl:	'Views/_shedule_assistant.html',
+					controller:		'Groupr.Controllers.ScheduleAssistant',
+					controllerAs:   'vm',
+					params: {
+						groupID: ""
+					}
 				});
 			$urlRouterProvider.otherwise('main');
 		}

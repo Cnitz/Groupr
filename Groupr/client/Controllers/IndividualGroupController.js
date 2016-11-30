@@ -22,6 +22,10 @@ define([
 			vm.refresh = refresh;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
+			vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
+			vm.vote = vote;
+			vm.submitVote = submitVote;
+			vm.cancelMeetingProposal = cancelMeetingProposal;
 			$scope.currentNavItem = "groups";
 			$scope.customFullscreen = false;
 			$scope.title= "";
@@ -30,6 +34,7 @@ define([
 			$scope.myDate = new Date();
 			vm.currGroup = "";
 			vm.events = [];
+			$scope.pendingEvents = [];
 			$scope.checkBoxData = [];
 
 			vm.leaveGroup = leaveGroup;
@@ -143,6 +148,22 @@ define([
 			function logout(){
 				AccountServices.logout();
 				$state.go('main');
+			}
+
+			function navigateToScheduleAssistant() {
+				$state.go('scheduleAssistant', {groupID: $stateParams.groupID;});
+			}
+
+			function vote(index) {
+				$scope.checkBoxData[index] = true;
+			}
+
+			function submitVote() {
+
+			}
+
+			function cancelMeetingProposal() {
+
 			}
 
 			function printDate(event){

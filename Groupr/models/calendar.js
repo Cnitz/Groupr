@@ -10,16 +10,18 @@ var CalendarSchema = new mongoose.Schema({
     	endTime: Date,
     	description: String
     }],
-    pending_events: {
-    	threshold: Number,
-    	events: [{ 
-    		name: String,
-	    	location: String,
-	    	startTime: Date,
-	    	endTime: Date,
-	    	description: String,
-	    	votes: Number
-    	}]
+    schedule_assistant: {
+        active: Boolean,
+        voters: [{type: ObjectId, ref: 'User'}],
+        threshold: Number,
+        name: String,
+        description: String,
+        location: String,
+        events: [{ 
+            startTime: Date,
+            endTime: Date,
+            votes: Number
+        }]
     }
 });
 

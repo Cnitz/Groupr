@@ -21,10 +21,15 @@ define([
 			vm.googleAuth = googleAuth;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
+			vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
 			$scope.currentNavItem = "home";
 			$scope.myDate = new Date();
 			$scope.user = {};
-			$scope.events = [];
+			$scope.calendar = {
+				events: [],
+				doodle_active: false,
+			}
+
 
 			function goHome(){
 				$state.go('home');
@@ -55,6 +60,9 @@ define([
 			}
 			function goToGroup(g) {
 				$state.go('groupindiv', {groupID: g._id});
+			}
+			function navigateToScheduleAssistant() {
+				$state.go('scheduleAssistant', {groupID: g._id});
 			}
 
 			function addEvent() {
@@ -90,8 +98,8 @@ define([
 				CalendarServices.addEvent(event)
 				.then(
 					function(result) {
-						$scope.events.push(event);
-						console.log($scope.events);
+						$scope.calendar.events.push(event);
+						console.log($scope.calendar.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -103,9 +111,9 @@ define([
 				CalendarServices.deleteEvent(event)
 				.then(
 					function(result) {
-						var index = CalendarServices.searchEvents($scope.events, event);
-						$scope.events.splice(index, 1);
-						console.log($scope.events);
+						var index = CalendarServices.searchEvents($scope.calendar.events, event);
+						$scope.calendar.events.splice(index, 1);
+						console.log($scope.calendar.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -117,9 +125,9 @@ define([
 				CalendarServices.editEvent(event)
 				.then(
 					function(result) {
-						var index = CalendarServices.searchEvents($scope.events, event);
-						$scope.events[index] = event;
-						console.log($scope.events);
+						var index = CalendarServices.searchEvents($scope.calendar.events, event);
+						$scope.calendar.events[index] = event;
+						console.log($scope.calendar.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -137,8 +145,8 @@ define([
 						.then(
 							function(resultTwo) {
 								console.log(resultTwo);
-								$scope.events = resultTwo.data;
-								console.log($scope.events);
+								$scope.calendar.events = resultTwo.data.events;
+								console.log($scope.calendar.events);
 							},
 							function(resultTwo) {
 								console.log(resultTwo);

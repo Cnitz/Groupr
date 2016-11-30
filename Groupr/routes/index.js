@@ -352,7 +352,7 @@ router.route('/calendar/get_events').post((req, res) => {
             }
             else {
                 console.log(user.calendar.events);
-                res.status(200).send(user.calendar.events);
+                res.status(200).json( {events: user.calendar.events, schedule_assistant_active: user.calendar.schedule_assistant.active } );
             }
         });
     }
@@ -498,11 +498,19 @@ router.route('/calendar/propose_meeting').post((req, res) => {
 
 });
 
+router.route('/calendar/propose_meeting').post((req, res) => {
+
+});
+
 router.route('/calendar/vote_for_meeting').post((req, res) => {
 
 });
 
 router.route('/calendar/end_voting').post((req, res) => {
+
+});
+
+router.route('/calendar/cancel_voting').post((req, res) => {
 
 });
 /* End Calendar APIs */
