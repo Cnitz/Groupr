@@ -506,17 +506,62 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
 
 /* submitVote */
 router.route('/calendar/vote').post((req, res) => {
-
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            
+        }
+    });
 });
 
 /* endVoting */
 router.route('/calendar/end_voting').post((req, res) => {
-
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            
+        }
+    });
 });
 
 /* cancelVoting */
 router.route('/calendar/cancel_voting').post((req, res) => {
-
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            group.calendar.schedule_assistant = {};
+            group.calendar.schedule_assistant.active = false;
+            group.calendar.schedule_assistant.voters = [];
+            group.calendar.schedule_assistant.threshold = 0;
+            group.calendar.schedule_assistant.name = "";
+            group.calendar.schedule_assistant.location = "";
+            group.calendar.schedule_assistant.description = "";
+            group.calendar.schedule_assistant.events = [];
+            group.calendar.save((err) => {
+                if (err) {
+                    res.status(500).json({message: 'Error: Cannot create Calendar'});
+                }
+                else {
+                    res.status(200).json({message: 'Success: Voting canceled'});
+                }
+            })
+        }
+    });
 });
 /* End Calendar APIs */
 

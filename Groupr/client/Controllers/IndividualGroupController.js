@@ -171,7 +171,7 @@ define([
 
 			}
 
-			/* back end, take current highest */
+			/* back end, take current highest, send the index of the event */
 			function endVoting() {
 
 			}
