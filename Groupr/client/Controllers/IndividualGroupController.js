@@ -22,6 +22,11 @@ define([
 			vm.refresh = refresh;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
+			vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
+			vm.vote = vote;
+			vm.submitVote = submitVote;
+			vm.cancelVoting = cancelVoting;
+			vm.endVoting = endVoting;
 			$scope.currentNavItem = "groups";
 			$scope.customFullscreen = false;
 			$scope.title= "";
@@ -30,6 +35,7 @@ define([
 			$scope.myDate = new Date();
 			vm.currGroup = "";
 			vm.events = [];
+			$scope.pendingEvents = [];
 			$scope.checkBoxData = [];
 
 			vm.leaveGroup = leaveGroup;
@@ -144,6 +150,32 @@ define([
 				AccountServices.logout();
 				$state.go('main');
 			}
+
+			/* if there is no current vote, navigate to the schedule assistant page to create a new "doodle" */
+			function navigateToScheduleAssistant() {
+				$state.go('scheduleAssistant', {groupID: $stateParams.groupID;});
+			}
+
+			/* Vote for one proposed time, front end only */
+			function vote(index) {
+				$scope.checkBoxData[index] = true;
+			}
+
+			/* submit all votes and store in back end database */
+			function submitVote() {
+
+			}
+
+			/* cancel the voting, back end to clear schedule assistant fields */
+			function cancelVoting() {
+
+			}
+
+			/* back end, take current highest, send the index of the event */
+			function endVoting() {
+
+			}
+
 
 			function printDate(event){
 				var newDate = new Date(event.startTime);
