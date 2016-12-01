@@ -29,6 +29,7 @@
     "underscore": "^1.8.3",
     "viewport-units-buggyfill": "^0.6.0",
     "angular-mocks": "^1.5.8",
-    "angular-cookies": "^1.5.8"
+    "angular-cookies": "^1.5.8",
+    "ngToast": "ngtoast#^2.0.0"
   }
 }
