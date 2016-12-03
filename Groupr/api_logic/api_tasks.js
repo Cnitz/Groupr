@@ -80,8 +80,8 @@ tasks.tasksByUser = function (req, res) {
             res.status(500).json({ message: 'Error: invalid user' });
         }
         else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
-            var query = formTaskQuery({body: req.body, user: user}, true);
-            Task.find({group : mongoose.Types.ObjectId(req.body.group), us}, function (error, docs) {
+            //var query = formTaskQuery({body: req.body, user: user}, true);
+            Task.find({group : mongoose.Types.ObjectId(req.body.group), users: [user.username]}, function (error, docs) {
                 console.log(JSON.stringify(docs));
                 if (error)
                     res.status(500).json({ message: 'Error: Database access' });
@@ -215,10 +215,13 @@ tasks.addUser = function (req, res) {
         else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
             Task.findOne({_id: mongoose.Types.ObjectId(req.body.taskId)}, function (err, task) {
                 if (err) {
+                    res.status(500).json({ message: 'Error: DB Access' });
+                }
+                else if (task == undefined) {
                     res.status(500).json({ message: 'Error: Task not found' });
                 }
                 else {
-                    if (req.body.user != undefined)
+                    if (req.body.user != undefined && task.indexOf(req.body.user) < 0)
                         task.users.push(req.body.user);
 
                     task.save(function (err, updatedTask){
