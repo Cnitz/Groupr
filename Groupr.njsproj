@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <SchemaVersion>2.0</SchemaVersion>
+        <ProjectGuid>{b89e3593-07f3-423d-9ef3-f989a686f2a3}</ProjectGuid>
+        <ProjectHome />
+        <ProjectView>ShowAllFiles</ProjectView>
+        <StartupFile />
+        <WorkingDirectory>.</WorkingDirectory>
+        <OutputPath>.</OutputPath>
+        <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+        <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+    <ItemGroup>
+        <Content Include="design\chat view.png" />
+        <Content Include="design\home.png" />
+        <Content Include="groupr\package.json" />
+        <Content Include="groupr\README.md" />
+        <Compile Include="groupr\config.js" />
+        <Compile Include="groupr\server.js" />
+        <Compile Include="groupr\api_logic\api_account.js" />
+        <Compile Include="groupr\api_logic\api_calendar.js" />
+        <Compile Include="groupr\api_logic\api_chat.js" />
+        <Compile Include="groupr\api_logic\api_complaint.js" />
+        <Compile Include="groupr\api_logic\api_groups.js" />
+        <Compile Include="groupr\api_logic\api_tasks.js" />
+        <Content Include="groupr\client\index.html" />
+        <Content Include="groupr\client\app.css" />
+        <Content Include="groupr\client\bower.json" />
+        <Compile Include="groupr\client\Application.js" />
+        <Compile Include="groupr\client\Bootstrap.js" />
+        <Compile Include="groupr\client\karma.conf.js" />
+        <Compile Include="groupr\client\Main.js" />
+        <Compile Include="groupr\client\Routes.js" />
+        <Compile Include="groupr\models\calendar.js" />
+        <Compile Include="groupr\models\chatmsg.js" />
+        <Compile Include="groupr\models\complaint.js" />
+        <Compile Include="groupr\models\group.js" />
+        <Compile Include="groupr\models\meeting.js" />
+        <Compile Include="groupr\models\task.js" />
+        <Compile Include="groupr\models\user.js" />
+        <Compile Include="groupr\routes\api.js" />
+        <Compile Include="groupr\routes\index.js" />
+        <Content Include="groupr\views\index.jade" />
+        <Content Include="groupr\views\layout.jade" />
+        <Compile Include="groupr\client\Controllers\ComplaintBoxController.js" />
+        <Compile Include="groupr\client\Controllers\GroupController.js" />
+        <Compile Include="groupr\client\Controllers\HomeController.js" />
+        <Compile Include="groupr\client\Controllers\Index.js" />
+        <Compile Include="groupr\client\Controllers\IndividualGroupController.js" />
+        <Compile Include="groupr\client\Controllers\LoginController.js" />
+        <Compile Include="groupr\client\Controllers\MainController.js" />
+        <Compile Include="groupr\client\Controllers\Module.js" />
+        <Compile Include="groupr\client\Controllers\ScheduleAssistantController.js" />
+        <Compile Include="groupr\client\Controllers\SignupController.js" />
+        <Compile Include="groupr\client\Directives\Index.js" />
+        <Compile Include="groupr\client\Directives\Module.js" />
+        <Compile Include="groupr\client\Directives\xregPattern.js" />
+        <Compile Include="groupr\client\Filters\Index.js" />
+        <Compile Include="groupr\client\Filters\Module.js" />
+        <Compile Include="groupr\client\Filters\ParentFolderFilter.js" />
+        <Compile Include="groupr\client\Filters\SelectedAccountsFilter.js" />
+        <Compile Include="groupr\client\Libraries\_underscore.js" />
+        <Compile Include="groupr\client\Localisation\BrowserLanguage.js" />
+        <Compile Include="groupr\client\Localisation\en.js" />
+        <Compile Include="groupr\client\Localisation\it.js" />
+        <Compile Include="groupr\client\Services\AccountServices.js" />
+        <Compile Include="groupr\client\Services\CalendarServices.js" />
+        <Compile Include="groupr\client\Services\GoogleServices.js" />
+        <Compile Include="groupr\client\Services\GroupServices.js" />
+        <Compile Include="groupr\client\Services\Index.js" />
+        <Compile Include="groupr\client\Services\Module.js" />
+        <Content Include="groupr\client\Shelved\_treetest.html" />
+        <Compile Include="groupr\client\Shelved\TreeTestController.js" />
+        <Compile Include="groupr\client\Test\Main.test.js" />
+        <Content Include="groupr\client\Views\_folder.html" />
+        <Content Include="groupr\client\Views\_group.html" />
+        <Content Include="groupr\client\Views\_groupindiv.html" />
+        <Content Include="groupr\client\Views\_home.html" />
+        <Content Include="groupr\client\Views\_layout.html" />
+        <Content Include="groupr\client\Views\_login.html" />
+        <Content Include="groupr\client\Views\_main.html" />
+        <Content Include="groupr\client\Views\_sidePanel.html" />
+        <Content Include="groupr\client\Views\_signup.html" />
+        <Compile Include="groupr\client\Controllers\Static\HomeController.js" />
+        <Compile Include="groupr\client\Controllers\Static\Index.js" />
+        <Compile Include="groupr\client\Controllers\Static\LoginController.js" />
+        <Compile Include="groupr\client\Controllers\Static\MainController.js" />
+        <Compile Include="groupr\client\Controllers\Static\Module.js" />
+        <Compile Include="groupr\client\Controllers\Static\SignupController.js" />
+        <Compile Include="groupr\client\Test\Controllers\FolderSpec.js" />
+        <Compile Include="groupr\client\Test\Controllers\GroupSpec.js" />
+        <Compile Include="groupr\client\Test\Controllers\HomeSpec.js" />
+        <Compile Include="groupr\client\Test\Controllers\LoginSpec.js" />
+        <Compile Include="groupr\client\Test\Controllers\SignupSpec.js" />
+        <Compile Include="groupr\client\Test\Views\HomeSpec.js" />
+        <Compile Include="groupr\client\Test\Views\SignupSpec.js" />
+        <Content Include="groupr\client\Views\img\icons\blue_pixel.gif" />
+        <Content Include="groupr\client\Views\img\icons\red_pixel.gif" />
+        <Content Include="groupr\client\Views\img\icons\folder.svg" />
+        <Content Include="groupr\client\Views\img\icons\ic_add_48px.svg" />
+        <Content Include="groupr\client\Views\img\icons\ic_cloud_48px.svg" />
+        <Content Include="groupr\client\Views\img\icons\ic_cloud_done_48px.svg" />
+        <Content Include="groupr\client\Views\img\icons\ic_cloud_off_48px.svg" />
+        <Content Include="groupr\client\Views\img\icons\ic_folder_open_48px.svg" />
+        <Content Include="groupr\client\Views\img\icons\ic_note_add_48px.svg" />
+        <Content Include="groupr\client\Views\img\icons\menu.svg" />
+        <Content Include="groupr\client\Views\img\icons\more_horiz.svg" />
+        <Content Include="groupr\client\Views\img\icons\more_vert.svg" />
+        <Content Include="groupr\views\partials\partial1.jade" />
+        <Content Include="groupr\views\partials\partial2.jade" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="design" />
+        <Folder Include="groupr" />
+        <Folder Include="groupr\api_logic" />
+        <Folder Include="groupr\client" />
+        <Folder Include="groupr\client\Controllers" />
+        <Folder Include="groupr\client\Controllers\Static" />
+        <Folder Include="groupr\client\Directives" />
+        <Folder Include="groupr\client\Filters" />
+        <Folder Include="groupr\client\Libraries" />
+        <Folder Include="groupr\client\Localisation" />
+        <Folder Include="groupr\client\Services" />
+        <Folder Include="groupr\client\Shelved" />
+        <Folder Include="groupr\client\Test" />
+        <Folder Include="groupr\client\Test\Controllers" />
+        <Folder Include="groupr\client\Test\Views" />
+        <Folder Include="groupr\client\Views" />
+        <Folder Include="groupr\client\Views\img" />
+        <Folder Include="groupr\client\Views\img\icons" />
+        <Folder Include="groupr\models" />
+        <Folder Include="groupr\routes" />
+        <Folder Include="groupr\views" />
+        <Folder Include="groupr\views\partials" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
+    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+    <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+    <ProjectExtensions>
+        <VisualStudio>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+            <WebProjectProperties>
+              <UseIIS>False</UseIIS>
+              <AutoAssignPort>True</AutoAssignPort>
+              <DevelopmentServerPort>0</DevelopmentServerPort>
+              <DevelopmentServerVPath>/</DevelopmentServerVPath>
+              <IISUrl>http://localhost:48022/</IISUrl>
+              <NTLMAuthentication>False</NTLMAuthentication>
+              <UseCustomServer>True</UseCustomServer>
+              <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+              <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+            </WebProjectProperties>
+          </FlavorProperties>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+            <WebProjectProperties>
+              <StartPageUrl>
+              </StartPageUrl>
+              <StartAction>CurrentPage</StartAction>
+              <AspNetDebugging>True</AspNetDebugging>
+              <SilverlightDebugging>False</SilverlightDebugging>
+              <NativeDebugging>False</NativeDebugging>
+              <SQLDebugging>False</SQLDebugging>
+              <ExternalProgram>
+              </ExternalProgram>
+              <StartExternalURL>
+              </StartExternalURL>
+              <StartCmdLineArguments>
+              </StartCmdLineArguments>
+              <StartWorkingDirectory>
+              </StartWorkingDirectory>
+              <EnableENC>False</EnableENC>
+              <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+            </WebProjectProperties>
+          </FlavorProperties>
+        </VisualStudio>
+    </ProjectExtensions>
+</Project>
