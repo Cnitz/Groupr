@@ -507,7 +507,17 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
 
 /* submitProposedMeetingTimes */
 router.route('/calendar/propose_meeting_times').post((req, res) => {
-
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            
+        }
+    });
 });
 
 /* submitVote */
