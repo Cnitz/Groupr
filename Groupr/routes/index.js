@@ -515,7 +515,19 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            
+            group.calendar.schedule_assistant.active = true;
+            group.calendar.schedule_assistant.name = req.body.name;
+            group.calendar.schedule_assistant.location = req.body.location;
+            group.calendar.schedule_assistant.description = req.body.description;
+            group.calendar.schedule_assistant.events = req.body.events;
+            group.save((err) => {
+                if (err) {
+                    res.status(500).json({message: 'Error: Meeting times could not be added'});
+                }
+                else {
+                    res.status(200).json({message: 'Success: Proposed Meeting Time Added'});
+                }
+            })
         }
     });
 });
@@ -530,7 +542,20 @@ router.route('/calendar/vote').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            
+            group.calendar.schedule_assistant.voters.push(req.body.username);
+            req.body.votes.forEach(function(event, index) {
+                if (votes[index] == true) {
+                    group.calendar.schedule_assistant.events[index] += 1;
+                }
+            })
+            group.save((err) => {
+                if (err) {
+                    res.status(500).json({message: 'Error: Votes could not be added'});
+                }
+                else {
+                     res.status(200).json({message: 'Success: Votes Added'});
+                }
+            })   
         }
     });
 });
@@ -545,7 +570,23 @@ router.route('/calendar/end_voting').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            
+            group.calendar.events.push(group.calendar.schedule_assistant.events[req.body.index]);             
+            group.calendar.schedule_assistant = {};
+            group.calendar.schedule_assistant.active = false;
+            group.calendar.schedule_assistant.voters = [];
+            group.calendar.schedule_assistant.threshold = 0;
+            group.calendar.schedule_assistant.name = "";
+            group.calendar.schedule_assistant.location = "";
+            group.calendar.schedule_assistant.description = "";
+            group.calendar.schedule_assistant.events = [];
+            group.save((err) => {
+                if (err) {
+                    res.status(500).json({message: 'Error: Voting could not be ended'});
+                }
+                else {
+                     res.status(200).json({message: 'Success: Voting ended'});
+                }
+            })
         }
     });
 });
@@ -568,9 +609,9 @@ router.route('/calendar/cancel_voting').post((req, res) => {
             group.calendar.schedule_assistant.location = "";
             group.calendar.schedule_assistant.description = "";
             group.calendar.schedule_assistant.events = [];
-            group.calendar.save((err) => {
+            group.save((err) => {
                 if (err) {
-                    res.status(500).json({message: 'Error: Cannot create Calendar'});
+                    res.status(500).json({message: 'Error: Voting could not be canceled'});
                 }
                 else {
                     res.status(200).json({message: 'Success: Voting canceled'});
