@@ -176,7 +176,7 @@ define([
                                 function (resultThree) {
                                     console.log(resultThree.data.events);
                                     vm.events = resultThree.data.events;
-                                    console.log(vm.events);
+                                    
                                 },
                                 function (resultThree) {
                                     console.log(resultThree);
