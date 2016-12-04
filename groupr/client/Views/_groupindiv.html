@@ -32,12 +32,21 @@
                         <div class="md-list-item-text" layout="column">
                             <h3 style="text-align:center;"><b>{{task.title}}</b></h3>
                             <h4 style="text-align:center;">{{task.description}}</h4>
+                            <h5 style="text-align:center;">Created by: {{task.creator}} on {{task.dateCreated | date: 'MM-dd-yyyy'}}</h5>
+                            <div style="text-align:center;" ng-if="task.users.length > 0">
+                                Assigned to: <span ng-repeat="user in task.users">{{user}}</span>
+                            </div>
+                            <p style="text-align:center; color:darkred" ng-if="task.users.length == 0">No users assigned to this task</p>
                             <div flex-gt-sm="50">
                                 <md-checkbox ng-model="task.status" aria-label="Completed?" ng-change="statusChanged(task)">
                                     Task Complete?
                                 </md-checkbox>
                             </div>
                         </div>
+
+                        <md-button id="btnJoinTask" ng-click="addUserToTask(task)" class="md-primary" type="button" aria-label="Join Task">
+                            JOIN TASK
+                        </md-button>
                         <md-button id="btnRemoveTask" ng-click="removeTask(task.title)" class="md-primary" type="button" aria-label="Delete Task">
                             DELETE TASK
                         </md-button>

@@ -81,7 +81,7 @@ tasks.tasksByUser = function (req, res) {
         }
         else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
             var query = formTaskQuery({body: req.body, user: user}, true);
-            Task.find({group : mongoose.Types.ObjectId(req.body.group), us}, function (error, docs) {
+            Task.find({group : mongoose.Types.ObjectId(req.body.group), user}, function (error, docs) {
                 console.log(JSON.stringify(docs));
                 if (error)
                     res.status(500).json({ message: 'Error: Database access' });

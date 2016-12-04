@@ -83,6 +83,31 @@ define([
                     }
                 }
             };
+
+            $scope.addUserToTask = function (task) {
+                AccountServices.getUser()
+                    .then(function (result) {
+                        var user = result.data;
+                        var data = { user: user.name, taskId: task._id };
+                        GroupServices.addUserToTask(data)
+                            .then(function (res) {
+                                console.log("Success!");
+                                console.log(res.data);
+                                var g = { group: vm.currGroup._id };
+                                GroupServices.getTasks(g)
+                                    .then(function (res) {
+                                        vm.tasks = res.data;
+                                    }, function (res) {
+                                        console.log("Failure");
+                                        console.log(res.data.message);
+                                    })
+                            }, function (res) {
+                                console.log("Failure.");
+                                console.log(res.data);
+                            });
+                    });
+            };
+
             $scope.statusChanged = function (task) {
                 console.log(task);
 

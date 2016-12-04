@@ -1,179 +1,203 @@
 define([
-	'./Module'
-], function(module) {
-	return module.controller('Groupr.Controllers.Home', [
-		'$scope',
-		'$state',
-		'Groupr.Services.AccountServices',
-		'Groupr.Services.GroupServices',
-		'Groupr.Services.CalendarServices',
-		'Groupr.Services.GoogleServices',
-		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices) {
-			var vm = this;
-			vm.goHome = goHome;
-			vm.navigateToGroups = navigateToGroups;
-			vm.logout = logout;
-			vm.goToGroup = goToGroup;
-			vm.activate = activate;
-			vm.addEvent = addEvent;
-			vm.deleteEvent = deleteEvent;
-			vm.editEvent = editEvent;
-			vm.googleAuth = googleAuth;
-			vm.printDate = printDate;
-			vm.printTimes = printTimes;
-			$scope.currentNavItem = "home";
-			$scope.myDate = new Date();
-			$scope.user = {};
-			$scope.calendar = {
-				events: [],
-				doodle_active: false,
-			}
+    './Module'
+], function (module) {
+    return module.controller('Groupr.Controllers.Home', [
+        '$scope',
+        '$state',
+        'Groupr.Services.AccountServices',
+        'Groupr.Services.GroupServices',
+        'Groupr.Services.CalendarServices',
+        'Groupr.Services.GoogleServices',
+        function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices) {
+            var vm = this;
+            vm.goHome = goHome;
+            vm.navigateToGroups = navigateToGroups;
+            vm.logout = logout;
+            vm.goToGroup = goToGroup;
+            vm.activate = activate;
+            vm.addEvent = addEvent;
+            vm.deleteEvent = deleteEvent;
+            vm.editEvent = editEvent;
+            vm.googleAuth = googleAuth;
+            vm.printDate = printDate;
+            vm.printTimes = printTimes;
+            $scope.currentNavItem = "home";
+            $scope.myDate = new Date();
+            $scope.user = {};
+            $scope.calendar = {
+                events: [],
+                doodle_active: false,
+            }
 
 
-			function goHome(){
-				$state.go('home');
-			}
-			function printDate(event){
-				var newDate = new Date(event.startTime);
-				return (newDate.getMonth()+1)+'/'+newDate.getDate();
-			}
 
-			function printTimes(event){
-				var newStartTime = new Date(event.startTime);
-				var newEndTime   = new Date(event.endTime);
 
-				return newStartTime.getHours()+':'+newStartTime.getMinutes()+' - '+newEndTime.getHours()+':'+newEndTime.getMinutes()
-			}
+            function goHome() {
+                $state.go('home');
+            }
+            function printDate(event) {
+                var newDate = new Date(event.startTime);
+                return (newDate.getMonth() + 1) + '/' + newDate.getDate();
+            }
 
-			function getGoogleCalEvents(){
-				GoogleServices.login();
-			}
+            function printTimes(event) {
+                var newStartTime = new Date(event.startTime);
+                var newEndTime = new Date(event.endTime);
 
-			function navigateToGroups(){
-				$state.go('groups');
-			}
+                return newStartTime.getHours() + ':' + newStartTime.getMinutes() + ' - ' + newEndTime.getHours() + ':' + newEndTime.getMinutes()
+            }
 
-			function logout(){
-				AccountServices.logout();
-				$state.go('main');
-			}
-			function goToGroup(g) {
-				$state.go('groupindiv', {groupID: g._id});
-			}
+            function getGoogleCalEvents() {
+                GoogleServices.login();
+            }
 
-			function addEvent() {
-				console.log($scope.myDate);
-				var event = {
-					name: $scope.eventName,
-					description: $scope.eventDescription,
-					location: $scope.eventLocation,
-					startTime: $scope.myDate,
-					endTime: $scope.myDate,
-				}
+            function navigateToGroups() {
+                $state.go('groups');
+            }
 
-				if (event.name === '') {
-					return;
-				}
+            function logout() {
+                AccountServices.logout();
+                $state.go('main');
+            }
+            function goToGroup(g) {
+                $state.go('groupindiv', { groupID: g._id });
+            }
 
-				//Now reading in the time strings and setting times. Remove when better time picker is made
-				var newStartDate = new Date($scope.myDate);
-				var newEndDate = new Date($scope.myDate);
+            function addEvent() {
+                console.log($scope.myDate);
+                var event = {
+                    name: $scope.eventName,
+                    description: $scope.eventDescription,
+                    location: $scope.eventLocation,
+                    startTime: $scope.myDate,
+                    endTime: $scope.myDate,
+                }
 
-				var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-				newStartDate.setHours( parseInt(time[1]) + (time[3] ? 12 : 0) );
-				newStartDate.setMinutes( parseInt(time[2]) || 0 );
+                if (event.name === '') {
+                    return;
+                }
 
-				var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-				newEndDate.setHours( parseInt(time2[1]) + (time2[3] ? 12 : 0) );
-				newEndDate.setMinutes( parseInt(time2[2]) || 0 );
+                //Now reading in the time strings and setting times. Remove when better time picker is made
+                var newStartDate = new Date($scope.myDate);
+                var newEndDate = new Date($scope.myDate);
 
-				event.startTime = newStartDate;
-				event.endTime = newEndDate;
-				//End Time Reading Hack
+                var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+                newStartDate.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+                newStartDate.setMinutes(parseInt(time[2]) || 0);
 
-				CalendarServices.addEvent(event)
-				.then(
-					function(result) {
-						$scope.calendar.events.push(event);
-						console.log($scope.calendar.events);
-					},
-					function(result) {
-						console.log(result.data);
-					}
-				)
-			}
+                var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+                newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
+                newEndDate.setMinutes(parseInt(time2[2]) || 0);
 
-			function deleteEvent(event) {
-				CalendarServices.deleteEvent(event)
-				.then(
-					function(result) {
-						var index = CalendarServices.searchEvents($scope.calendar.events, event);
-						$scope.calendar.events.splice(index, 1);
-						console.log($scope.calendar.events);
-					},
-					function(result) {
-						console.log(result.data);
-					}
-				)
-			}
+                event.startTime = newStartDate;
+                event.endTime = newEndDate;
+                //End Time Reading Hack
 
-			function editEvent() {
-				CalendarServices.editEvent(event)
-				.then(
-					function(result) {
-						var index = CalendarServices.searchEvents($scope.calendar.events, event);
-						$scope.calendar.events[index] = event;
-						console.log($scope.calendar.events);
-					},
-					function(result) {
-						console.log(result.data);
-					}
-				)
-			}
+                CalendarServices.addEvent(event)
+                    .then(
+                    function (result) {
+                        $scope.calendar.events.push(event);
+                        console.log($scope.calendar.events);
+                    },
+                    function (result) {
+                        console.log(result.data);
+                    }
+                    )
+            }
 
-			function activate(){
-				AccountServices.getUser()
-				.then(
-					function(result) {
-						$scope.user = result.data;
-						// get the users calendar
-						CalendarServices.getPersonalCalendar()
-						.then(
-							function(resultTwo) {
-								console.log(resultTwo);
-								$scope.calendar.events = resultTwo.data.events;
-								console.log($scope.calendar.events);
-							},
-							function(resultTwo) {
-								console.log(resultTwo);
-							}
-						);
+            function deleteEvent(event) {
+                CalendarServices.deleteEvent(event)
+                    .then(
+                    function (result) {
+                        var index = CalendarServices.searchEvents($scope.calendar.events, event);
+                        $scope.calendar.events.splice(index, 1);
+                        console.log($scope.calendar.events);
+                    },
+                    function (result) {
+                        console.log(result.data);
+                    }
+                    )
+            }
 
-						// get the users groups
-						GroupServices.getGroupByUser()
-						.then(function(res) {
-							vm.groups = res.data.data;
-							}, 
-							function(res) {
-								console.log(res.data);
-								if (res.status == 450)
-									$state.go('login');
-							}
-						);
-					},
-					function(result) {
-						console.log(result.data);
-					}
-				)
-			}
+            function editEvent() {
+                CalendarServices.editEvent(event)
+                    .then(
+                    function (result) {
+                        var index = CalendarServices.searchEvents($scope.calendar.events, event);
+                        $scope.calendar.events[index] = event;
+                        console.log($scope.calendar.events);
+                    },
+                    function (result) {
+                        console.log(result.data);
+                    }
+                    )
+            }
 
-			function googleAuth(){
-				GoogleServices.googleAuth();
-			}
+            function activate() {
+                AccountServices.getUser()
+                    .then(
+                    function (result) {
+                        $scope.user = result.data;
+                        // get the users calendar
+                        CalendarServices.getPersonalCalendar()
+                            .then(
+                            function (resultTwo) {
+                                console.log(resultTwo);
+                                $scope.calendar.events = resultTwo.data.events;
+                                console.log($scope.calendar.events);
+                            },
+                            function (resultTwo) {
+                                console.log(resultTwo);
+                            }
+                            );
 
-			activate();
+                        // get the users groups
+                        GroupServices.getGroupByUser()
+                            .then(function (res) {
+                                vm.groups = res.data.data;
+                            },
+                            function (res) {
+                                console.log(res.data);
+                                if (res.status == 450)
+                                    $state.go('login');
+                            }
+                            );
+                        AccountServices.getUser()
+                            .then(function (result) {
+                                var user = result.data;
+                                var data = {};
 
-			return vm;
-		}
-	]);
+
+
+                                // get the users tasks
+                                GroupServices.getTasksByUser(data)
+                                    .then(function (res) {
+                                        vm.tasks = res.data;
+                                        console.log(res);
+
+                                    },
+                                    function (res) {
+                                        console.log(res.data)
+                                        if (res.status == 450)
+                                            $state.go('login');
+                                    }
+                                    );
+                            });
+                    },
+                    function (result) {
+                        console.log(result.data);
+                    }
+                    )
+            }
+
+            function googleAuth() {
+                GoogleServices.googleAuth();
+            }
+
+            activate();
+
+
+            return vm;
+        }
+    ]);
 });
