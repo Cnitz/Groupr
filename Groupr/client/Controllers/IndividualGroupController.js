@@ -15,6 +15,7 @@ define([
                 vm.tasks = [];
             }
             vm.goHome = goHome;
+            vm.groupCalendar = groupCalendar;
             vm.logout = logout;
             vm.addEvent = addEvent;
             vm.deleteEvent = deleteEvent;
@@ -101,6 +102,12 @@ define([
             function leaveGroup() {
                 GroupServices.leaveGroup(vm.groupID);
                 $state.go('home');
+            }
+
+            /*Navigates to Group Calendar sub-page*/
+            function groupCalendar(){
+              console.log("groupID: "+vm.groupID);
+              $state.go('groupCalendar',{groupID: vm.groupID});
             }
 
             function activate() {
