@@ -1,7 +1,7 @@
 define([
     './Module'
 ], function (module) {
-    return module.controller('Groupr.Controllers.IndividualGroup', [
+    return module.controller('Groupr.Controllers.GroupCalendar', [
         '$scope',
         '$state',
         'Groupr.Services.GroupServices',
@@ -26,14 +26,20 @@ define([
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
             vm.vote = vote;
             vm.submitVote = submitVote;
+            vm.votingActive = votingActive;
+            vm.deleteProposedEvent = deleteProposedEvent;
             vm.cancelVoting = cancelVoting;
             vm.endVoting = endVoting;
+            vm.proposeEvent = proposeEvent;
+            vm.submitToGroup = submitToGroup;
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
             $scope.title = "";
             $scope.description = "";
             $scope.users = [];
             $scope.myDate = new Date();
+            $scope.votingInactive = true;
+            $scope.votingActive = false;
             vm.currGroup = "";
             vm.events = [];
             $scope.pendingEvents = [];
@@ -106,8 +112,50 @@ define([
 
             /*Navigates to Group Calendar sub-page*/
             function groupCalendar(){
-              console.log("groupID: "+vm.groupID);
-              $state.go('groupCalendar',{groupID: vm.groupID});
+              $state.go('groupCalendar',{groupID: g._id});
+            }
+
+            /* Takes the current proposedEvents and allows the group to vote on them*/
+            function submitToGroup(){
+              //Not sure what to do here friendo. Gotta talk to my main man mitch-the-bitch "call him mitchyboi" suck-that-bama-dick holt
+            }
+
+            function deleteProposedEvent(event){
+              $scope.pendingEvents.splice($scope.pendingEvents.indexOf(event),1);
+            }
+
+            //Not sure where this goes on the back end, but for testing this should return a boolean
+            function votingActive(){
+              //For false
+              return "style=\"display: none;\"";
+            }
+
+            /*Adds the given event to the proposal list */
+            function proposeEvent(){
+              var event = {
+                  name: $scope.eventName,
+                  description: $scope.eventDescription,
+                  location: $scope.eventLocation,
+                  startTime: $scope.myDate,
+                  endTime: $scope.myDate
+              }
+
+              //Now reading in the time strings and setting times. Remove when better time picker is made
+              var newStartDate = new Date($scope.myDate);
+              var newEndDate = new Date($scope.myDate);
+
+              var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+              newStartDate.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+              newStartDate.setMinutes(parseInt(time[2]) || 0);
+
+              var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+              newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
+              newEndDate.setMinutes(parseInt(time2[2]) || 0);
+
+              event.startTime = newStartDate;
+              event.endTime = newEndDate;
+              //End Time Reading Hack
+              $scope.pendingEvents.push(event);
             }
 
             function activate() {
@@ -128,7 +176,7 @@ define([
                                 function (resultThree) {
                                     console.log(resultThree.data.events);
                                     vm.events = resultThree.data.events;
-                                    console.log(vm.events);
+                                    
                                 },
                                 function (resultThree) {
                                     console.log(resultThree);

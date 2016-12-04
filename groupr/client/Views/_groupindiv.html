@@ -16,10 +16,13 @@
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-md')">
             <md-toolbar class="md-theme-indigo">
-                <h1 class="md-toolbar-tools">Sidenav Yo</h1>
+                <h1 class="md-toolbar-tools">{{vm.currGroup.name}}</h1>
             </md-toolbar>
             <md-content layout-padding ng-controller="LeftCtrl">
-                <p>stuff</p>
+                <p>  <md-button ng-click="vm.groupCalendar()" onclick="disabled='true';" class="md-primary" type="button">Group Schedule</md-button></p>
+                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Chat</md-button></p>
+                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Tasks</md-button></p>
+                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Complaint Box</md-button></p>
             </md-content>
         </md-sidenav>
         <md-content layout="column" layout-align="center center" flex="">

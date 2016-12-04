@@ -528,6 +528,7 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
                     res.status(200).json({message: 'Success: Proposed Meeting Time Added'});
                 }
             })
+            
         }
     });
 });
@@ -542,20 +543,30 @@ router.route('/calendar/vote').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            group.calendar.schedule_assistant.voters.push(req.body.username);
             req.body.votes.forEach(function(event, index) {
                 if (votes[index] == true) {
                     group.calendar.schedule_assistant.events[index] += 1;
                 }
             })
-            group.save((err) => {
+            User.findOne({ 'token': token}, (err, user) => {
                 if (err) {
-                    res.status(500).json({message: 'Error: Votes could not be added'});
+                    res.status(500).json({message: 'Error: Database access'});
+                }
+                else if (user === null) {
+                    res.status(403).json({message: 'Error: No User found'});
                 }
                 else {
-                     res.status(200).json({message: 'Success: Votes Added'});
+                    group.calendar.schedule_assistant.voters.push(user.username);
+                    group.save((err) => {
+                        if (err) {
+                            res.status(500).json({message: 'Error: Votes could not be added'});
+                        }
+                        else {
+                             res.status(200).json({message: 'Success: Votes Added'});
+                        }
+                    })   
                 }
-            })   
+            });
         }
     });
 });
