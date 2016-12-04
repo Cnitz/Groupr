@@ -1,0 +1,136 @@
+<div id="body-div" layout="column">
+    <md-nav-bar md-selected-nav-item="currentNavItem">
+        <md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
+        <md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Find Groups</md-nav-item>
+        <span flex></span>
+        <md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button">Logout</md-button>
+    </md-nav-bar>
+    <md-toolbar layout="row" class="md-hue-3">
+        <div class="md-toolbar-tools">
+            <span>{{vm.currGroup.name}}</span>
+        </div>
+        <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">
+            Leave Group
+        </md-button>
+    </md-toolbar>
+    <section layout="row" flex>
+        <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-md')">
+            <md-toolbar class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">{{vm.currGroup.name}}</h1>
+            </md-toolbar>
+            <md-content layout-padding ng-controller="LeftCtrl">
+                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Group Schedule</md-button></p>
+                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Chat</md-button></p>
+                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Tasks</md-button></p>
+                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Complaint Box</md-button></p>
+            </md-content>
+        </md-sidenav>
+            <!----<div>
+                <md-card style="overflow:auto;" layout="row" layout-align="space-around center">
+                    <h2> Group Calendar </h2>
+
+                </md-card>
+
+                <!--
+                      <md-card style="overflow:auto;">
+                       <md-list flex>
+                        <md-list-item class="md-3-line" ng-repeat="event in vm.events" ng-click="null">
+                          <div class="md-list-event-dates" layout="column">
+                            <h3>NOV. 21</h3>
+                            <h4>12:00 - 12:00</h4>
+                            <h4>Lawson</h4>
+                          </div>
+                          <div class="md-list-event-item-text" layout="column">
+                            <h3 style="text-align:center;"><b>{{ event.name }} </b></h3>
+                            <h4 style="text-align:center;">{{event.description}}</h4>
+                          </div>
+                          <md-button id="btnRemoveEvent" ng-click="vm.deleteEvent(event)" class="md-primary" type="button" aria-label="Delete Event">
+                            DELETE EVENT
+                          </md-button>
+                        </md-list-item>
+                      </md-list>
+                  -->
+                <div width="100%" layout="row">
+                <div width="500" maxwidth="50%" ng-show="votingInactive">
+                  <h2> Propose New Event </h2>
+
+                  <md-card layout="row" layout-align="space-around center">
+                  <div layout="column" layout-align="center center">
+                  <div layout="row" layout-align="space-around center">
+
+                        <md-input-container>
+                          <label>Event Name</label>
+                          <input ng-model="eventName" type="text" name="eventName">
+                        </md-input-container>
+                        <md-input-container>
+                          <label>Description</label>
+                          <input ng-model="eventDescription" type="text" name="eventDescription">
+                        </md-input-container>
+                        <md-input-container>
+                          <label>Location</label>
+                          <input ng-model="eventLocation" type="text" name="eventLocation">
+                        </md-input-container>
+
+                      </div>
+
+                        <div layout="row" layout-align="space-around center">
+                        <md-input-container>
+                          <md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
+                        </md-input-container>
+                        <md-input-container>
+                          <label>StartTime</label>
+                          <input ng-model="startTime" type="text" name="startTime">
+                        </md-input-container>
+                        <md-input-container>
+                          <label>EndTime</label>
+                          <input ng-model="endTime" type="text" name="endTime">
+                        </md-input-container>
+                      </div>
+                    </div>
+
+                        <md-button ng-click="vm.proposeEvent()" class="md-primary" type="button">
+                          Propose Event
+                        </md-button>
+                  </md-card>
+
+                  <div ng-repeat="event in pendingEvents">
+                      <md-card layout="row">
+                          <md-card-content layout="row" layout-align="center center">
+                              <md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
+                              <div> {{vm.printTimes(event)}}</div>
+                          </md-card-content>
+                          <md-card-actions layout="column" layout-align="center space-around">
+                              <md-button ng-click="vm.deleteProposedEvent(event)" onclick="disabled='false';" class="md-primary" type="button">Remove</md-button>
+                          </md-card-actions>
+                      </md-card>
+                    </div>
+
+                      <md-button ng-click="vm.submitToGroup" onclick="disabled='false';" class="md-primary" type="button">Submit for Voting</md-button>
+
+                </div>
+                <div width="50%" maxwidth="50%">
+                <h2> Current Group Calendar </h2>
+                <div ng-repeat="event in vm.events">
+                    <md-card layout="row">
+                        <md-card-content layout="column" layout-align="center center">
+                            <md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
+                            <div> {{vm.printTimes(event)}}</div>
+                            <div> {{ event.location }} </div>
+                        </md-card-content>
+                        <md-card-content layout="column" layout-align="center center" flex="">
+                            <div><h2> {{ event.name }}  </h2></div>
+                            <div> {{ event.description }} </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <md-button ng-click="vm.editEvent() " onclick="disabled='false';" class="md-primary" type="button">Edit Event</md-button>
+                            <md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-primary" type="button">Delete Event</md-button>
+                        </md-card-actions>
+                    </md-card>
+                  </div>
+                  </div>
+                </div>
+            </div>
+
+
+    </section>
+</div>
