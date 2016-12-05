@@ -395,19 +395,19 @@ define([
 
             function editEvent() {
                 CalendarServices.editGroupEvent(event, $stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
                         refresh();
                     },
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
             }
 
             function refresh() {
                 CalendarServices.getGroupCalendar($stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
                         vm.events = result.data.events;
                         console.log(vm.events);
@@ -415,7 +415,7 @@ define([
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
             }
 
             return vm;
