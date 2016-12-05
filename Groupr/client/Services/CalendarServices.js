@@ -17,6 +17,22 @@ define([
 				});
 			}
 
+			service.proposedMeetingTimes = function(events, name, location, description, groupId) {
+				var data = {
+					groupId: groupId,
+					name: name,
+					location: location,
+					description: description,
+					events: events
+				}
+				console.log(data);
+				return $http({
+					method: 'POST',
+					url: url + 'propose_meeting_times',
+					data: data
+				});
+			}
+
 			service.deleteEvent = function(calendarEvent) {
 				return $http({
 					method: 'POST',

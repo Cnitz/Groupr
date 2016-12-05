@@ -341,11 +341,10 @@ router.route('/calendar/get_events').post((req, res) => {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                console.log(group.calendar);
                 res.status(200).json({ 
                     events: group.calendar.events, 
                     schedule_assistant_active: group.calendar.schedule_assistant.active,
-                    voters: group.calendar.schedule_assistant.voters 
+                    voters: group.calendar.schedule_assistant.voters,
                 });
             }
         });
@@ -507,6 +506,8 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
 
 /* submitProposedMeetingTimes */
 router.route('/calendar/propose_meeting_times').post((req, res) => {
+    console.log('here');
+    console.log(req.body);
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -515,12 +516,13 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
+            console.log(group.calendar.schedule_assistant.active);
             group.calendar.schedule_assistant.active = true;
             group.calendar.schedule_assistant.name = req.body.name;
             group.calendar.schedule_assistant.location = req.body.location;
             group.calendar.schedule_assistant.description = req.body.description;
             group.calendar.schedule_assistant.events = req.body.events;
-            group.save((err) => {
+            group.calendar.save((err) => {
                 if (err) {
                     res.status(500).json({message: 'Error: Meeting times could not be added'});
                 }

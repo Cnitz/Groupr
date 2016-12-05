@@ -26,14 +26,6 @@ account.login = function(username, password, TOKEN_SECRET, res) {
                 console.log('no calendar');
                 var newCalendar = Calendar();
                 newCalendar.events = [];
-                newCalendar.schedule_assistant = {};
-                newCalendar.schedule_assistant.active = false;
-                newCalendar.schedule_assistant.voters = [];
-                newCalendar.schedule_assistant.threshold = 0;
-                newCalendar.schedule_assistant.name = "";
-                newCalendar.schedule_assistant.location = "";
-                newCalendar.schedule_assistant.description = "";
-                newCalendar.schedule_assistant.events = [];
                 newCalendar.save((err, calendar) => {
                     if (err) {
                         res.status(500).json({message: 'Error: Cannot create Calendar'});

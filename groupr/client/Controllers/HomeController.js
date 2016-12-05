@@ -140,9 +140,7 @@ define([
 						CalendarServices.getPersonalCalendar()
 						.then(
 							function(resultTwo) {
-								console.log(resultTwo);
 								$scope.calendar.events = resultTwo.data.events;
-								console.log($scope.calendar.events);
 							},
 							function(resultTwo) {
 								console.log(resultTwo);

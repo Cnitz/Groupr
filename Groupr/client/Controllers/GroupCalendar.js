@@ -25,8 +25,8 @@ define([
             vm.printTimes = printTimes;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
             vm.vote = vote;
+            vm.voters = [];
             vm.submitVote = submitVote;
-            vm.votingActive = votingActive;
             vm.deleteProposedEvent = deleteProposedEvent;
             vm.cancelVoting = cancelVoting;
             vm.endVoting = endVoting;
@@ -34,17 +34,19 @@ define([
             vm.submitToGroup = submitToGroup;
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
-            $scope.title = "";
-            $scope.description = "";
+            $scope.eventName = "";
+            $scope.eventDescription = "";
+            $scope.eventLocation = "";
             $scope.users = [];
             $scope.myDate = new Date();
-            $scope.votingInactive = true;
             $scope.votingActive = false;
+            $scope.hasVoted = false;
             vm.currGroup = "";
             vm.events = [];
             $scope.pendingEvents = [];
             $scope.checkBoxData = [];
             $scope.toggleLeft = buildDelayedToggler('left');
+            $scope.user = {};
 
             vm.leaveGroup = leaveGroup;
             vm.groupID = $stateParams.groupID;
@@ -117,7 +119,13 @@ define([
 
             /* Takes the current proposedEvents and allows the group to vote on them*/
             function submitToGroup(){
-              //Not sure what to do here friendo. Gotta talk to my main man mitch-the-bitch "call him mitchyboi" suck-that-bama-dick holt
+                CalendarServices.proposedMeetingTimes($scope.pendingEvents, $scope.eventName, $scope.eventDescription, $scope.eventLocation, vm.groupID).then(
+                    function(res) {
+                        console.log(res.data);
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    });
             }
 
             function deleteProposedEvent(event){
@@ -132,10 +140,7 @@ define([
 
             /*Adds the given event to the proposal list */
             function proposeEvent(){
-              var event = {
-                  name: $scope.eventName,
-                  description: $scope.eventDescription,
-                  location: $scope.eventLocation,
+              var pEvent = {
                   startTime: $scope.myDate,
                   endTime: $scope.myDate
               }
@@ -152,43 +157,64 @@ define([
               newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
               newEndDate.setMinutes(parseInt(time2[2]) || 0);
 
-              event.startTime = newStartDate;
-              event.endTime = newEndDate;
+              pEvent.startTime = newStartDate;
+              pEvent.endTime = newEndDate;
               //End Time Reading Hack
-              $scope.pendingEvents.push(event);
+              $scope.pendingEvents.push(pEvent);
             }
 
             function activate() {
                 if ($stateParams.groupID != null) {
+                    AccountServices.getUser()
+                    .then(
+                        function(res) {
+                            $scope.user = res.data;
+                            console.log($scope.user);
+                            CalendarServices.getGroupCalendar($stateParams.groupID)
+                            .then(
+                                function(result) {
+                                    vm.events = result.data.events;
+                                    $scope.votingActive = result.data.schedule_assistant_active;
+                                    vm.voters = result.data.voters;
+                                     console.log(vm.events);
+                                     console.log(vm.votingActive);
+                                     console.log(vm.voters);
+
+                                    if (votingActive) {
+                                        vm.voters.forEach(function(voter) {
+                                            if (voter === $scope.user.username) {
+                                                $scope.hasVoted = true;
+                                            }
+                                        })
+                                    }
+                                },
+                                function(result) {
+                                    console.log(res.data);
+                                })
+                        },
+                        function(res) {
+                            console.log(res.data);
+                        }
+                    )
+
                     GroupServices.getGroupInfo($stateParams.groupID)
-                        .then(function (resOne) {
+                    .then(
+                        function(resOne) {
                             vm.currGroup = resOne.data;
                             var g = { group: vm.currGroup._id };
-
                             GroupServices.getTasks(g)
-                                .then(function (resTwo) {
+                            .then(
+                                function (resTwo) {
                                     vm.tasks = resTwo.data;
-                                }, function (resTwo) {
+                                }, 
+                                function (resTwo) {
                                     console.log(resTwo.data);
-                                });
-                            CalendarServices.getGroupCalendar($stateParams.groupID)
-                                .then(
-                                function (resultThree) {
-                                    console.log(resultThree.data.events);
-                                    vm.events = resultThree.data.events;
-                                    
-                                },
-                                function (resultThree) {
-                                    console.log(resultThree);
-                                }
-                                )
-
-                        }, function (resOne) {
+                                })
+                        }, 
+                        function (resOne) {
                             console.log(res.data);
-                        });
-
-
-
+                        }
+                    )
                 }
             }
 
