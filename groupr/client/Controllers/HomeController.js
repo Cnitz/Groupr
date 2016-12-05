@@ -21,6 +21,7 @@ define([
             vm.googleAuth = googleAuth;
             vm.printDate = printDate;
             vm.printTimes = printTimes;
+            vm.goToTaskGroup = goToTaskGroup;
             $scope.currentNavItem = "home";
             $scope.myDate = new Date();
             $scope.user = {};
@@ -28,8 +29,6 @@ define([
                 events: [],
                 doodle_active: false,
             }
-
-
 
 
             function goHome() {
@@ -61,6 +60,10 @@ define([
             }
             function goToGroup(g) {
                 $state.go('groupindiv', { groupID: g._id });
+            }
+            function goToTaskGroup(t) {
+                console.log(t);
+                $state.go('groupindiv', { groupID: t.group });
             }
 
             function addEvent() {
@@ -164,13 +167,9 @@ define([
                             );
                         AccountServices.getUser()
                             .then(function (result) {
-                                var user = result.data;
-                                var data = {};
-
-
 
                                 // get the users tasks
-                                GroupServices.getTasksByUser(data)
+                                GroupServices.getTasksByUser()
                                     .then(function (res) {
                                         vm.tasks = res.data;
                                         console.log(res);

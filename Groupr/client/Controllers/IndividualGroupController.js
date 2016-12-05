@@ -8,13 +8,19 @@ define([
         'Groupr.Services.AccountServices',
         '$stateParams',
         'Groupr.Services.CalendarServices',
-        function IndividualGroupController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log) {
+        '$mdSidenav',
+        '$log',
+        '$mdDialog',
+        '$sce',
+        '$filter',
+        function IndividualGroupController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log, $mdDialog, $sce, $filter) {
             var vm = this;
             {
                 vm.groups = [];
                 vm.tasks = [];
             }
             vm.goHome = goHome;
+            vm.navigateToGroups = navigateToGroups;
             vm.groupCalendar = groupCalendar;
             vm.logout = logout;
             vm.addEvent = addEvent;
@@ -28,10 +34,11 @@ define([
             vm.submitVote = submitVote;
             vm.cancelVoting = cancelVoting;
             vm.endVoting = endVoting;
-            $scope.currentNavItem = "groups";
+            $scope.currentNavItem = "indiv";
             $scope.customFullscreen = false;
             $scope.title = "";
             $scope.description = "";
+            $scope.duedate = "";
             $scope.users = [];
             $scope.myDate = new Date();
             vm.currGroup = "";
@@ -39,17 +46,91 @@ define([
             $scope.pendingEvents = [];
             $scope.checkBoxData = [];
             $scope.toggleLeft = buildDelayedToggler('left');
+            $sce.trustAsResourceUrl("http://lh3.ggpht.com/_LOoKjxVTcbc/Snzl2ZTp6DI/AAAAAAAAGn0/OG3FBZrF_N4/6.png");
 
             vm.leaveGroup = leaveGroup;
             vm.groupID = $stateParams.groupID;
 
+            $scope.openEditDialog = function (task) {
+                var d = new Date(task.dueDate),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
 
+                if(month.length < 2) month = '0' + month;
+                if(day.length < 2) day = '0' + day;
+
+                $scope.realDueDate = $filter("date") (new Date(year, month, day), 'yyyy-MM-dd');
+                if(task.dueDate == null)
+                    $scope.realDueDate = "";
+                $mdDialog.show({
+                    controller: DialogController,
+                    template:
+                    '<md-dialog aria-label="Edit Task">' +
+                    '   <form ng-cloak>' +
+                    '       <md-toolbar>' +
+                    '           <div class="md-toolbar-tools">' +
+                    '               <h2>Edit Task</h2>' +
+                    '               <span flex></span>' +
+                    '               <md-button class="md-icon-button" ng-click="cancel()">' +
+                    '                   <md-icon aria-label="Close dialog">X</md-icon>' +
+                    '               </md-button>' +
+                    '           </div>' +
+                    '       </md-toolbar>' +
+                    '   <md-dialog-content>' +
+                    '       <div class="md-dialog-content" layout="column">' +
+                    '           <md-input-container>' +
+                    '               <label>Task Name</label>' +
+                    '               <input ng-model="title" type="text" name="title" placeholder="New Task Title" ng-init="title=\'' + task.title + '\'">' +
+                    '           </md-input-container>' +
+                    '           <md-input-container>' +
+                    '               <label>Task Description</label>' +
+                    '               <input ng-model="description" type="text" name="description" placeholder="New Task Description" ng-init="description=\'' + task.description + '\'">' +
+                    '           </md-input-container>' +
+                    '           <md-input-container>' +
+                    '               <label>Due Date (optional)</label>' +
+                    '               <input ng-model="duedate" type="text" name="duedate" placeholder="yyyy-MM-dd" ng-init="duedate=\'' + $scope.realDueDate + '\'">' +
+                    '           </md-input-container>' +
+                    '   </md-dialog-content>' +
+                    '   <md-dialog-actions layout="row">' +
+                    '       <md-button ng-click="answer(\'save\')" class="md-primary">' +
+                    '           Save Changes' +
+                    '       </md-button>' +
+                    '       <md-button ng-click="answer(\'cancel\')" class="md-primary" style="color:darkred">' +
+                    '           Cancel' +
+                    '       </md-button>' +
+                    '   </md-dialog-actions>' +
+                    '</md-dialog>',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: true
+                })
+                    .then(function (answer) {
+                        $scope.status = 'You said the information was "' + answer + '".';
+                    }, function () {
+                        $scope.status = 'You cancelled the dialog.';
+                    });
+
+            };
+
+            function DialogController($scope, $mdDialog) {
+                $scope.hide = function () {
+                    $mdDialog.hide();
+                };
+
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+
+                $scope.answer = function (answer) {
+                    $mdDialog.hide(answer);
+                };
+            }
 
 
             $scope.addTask = function (data) {
                 if ($scope.title == "" || $scope.description == "")
                     return;
-                var task = { group: vm.currGroup._id, title: $scope.title, description: $scope.description };
+                var task = { group: vm.currGroup._id, title: $scope.title, description: $scope.description, dueDate: $scope.duedate };
                 GroupServices.addTask(task)
                     .then(function (res) {
                         console.log(res.data);
@@ -129,10 +210,14 @@ define([
                 $state.go('home');
             }
 
+            function navigateToGroups() {
+                $state.go('groups');
+            }
+
             /*Navigates to Group Calendar sub-page*/
-            function groupCalendar(){
-              console.log("groupID: "+vm.groupID);
-              $state.go('groupCalendar',{groupID: vm.groupID});
+            function groupCalendar() {
+                console.log("groupID: " + vm.groupID);
+                $state.go('groupCalendar', { groupID: vm.groupID });
             }
 
             function activate() {

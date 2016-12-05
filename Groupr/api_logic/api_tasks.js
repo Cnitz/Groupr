@@ -81,7 +81,7 @@ tasks.tasksByUser = function (req, res) {
         }
         else {
             //var query = formTaskQuery({body: req.body, user: user}, true);
-            Task.find({ users: [user.username] }, function (error, docs) {
+            Task.find({ users: user.username }, function (error, docs) {
                 console.log(JSON.stringify(docs));
                 if (error)
                     res.status(500).json({ message: 'Error: Database access' });
@@ -218,7 +218,7 @@ tasks.addUser = function (req, res) {
                     res.status(500).json({ message: 'Error: Task not found' });
                 }
                 else {
-                    if (req.body.user != undefined && task.indexOf(req.body.user) < 0)
+                    if (req.body.user != undefined && task.users.indexOf(req.body.user) < 0)
                         task.users.push(req.body.user);
 
                     task.save(function (err, updatedTask){

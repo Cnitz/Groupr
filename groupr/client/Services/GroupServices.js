@@ -99,8 +99,7 @@ define([
             service.getTasksByUser = function (data) {
                 return $http({
                     method: 'POST',
-                    url: url + 'tasks/user',
-                    data: data
+                    url: url + 'tasks/user'
                 });
             }
 
