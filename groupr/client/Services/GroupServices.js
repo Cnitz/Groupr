@@ -86,7 +86,22 @@ define([
 					url: url + 'tasks/updateStatus',
 					data: data
 				});
-			}
+            }
+
+            service.addUserToTask = function (data) {
+                return $http({
+                    method: 'POST',
+                    url: url + 'tasks/addUser',
+                    data: data
+                });
+            }
+
+            service.getTasksByUser = function (data) {
+                return $http({
+                    method: 'POST',
+                    url: url + 'tasks/user'
+                });
+            }
 
 			return service;
 		}

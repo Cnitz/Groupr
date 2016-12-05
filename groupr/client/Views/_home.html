@@ -7,7 +7,7 @@
 	</md-nav-bar>
 	<md-content class="md-padding" layout="row" layout-align="space-around center" flex="">
 		<p data-ng-if="vm.groups.length == 0">You're not a part of any groups! Click on the "Groups" tab above to find some to join!</p>
-		<div data-ng-cloak data-ng-if="vm.groups.length > 0">
+		<div data-ng-cloak data-ng-if="vm.groups.length > 0" style="width:20%;">
 			<md-card style="overflow:auto;">
 				<md-list flex>
 					<md-subheader class="md-no-sticky">Your Groups:</md-subheader>
@@ -69,6 +69,22 @@
       </div>
 		-->
 
+        <p data-ng-if="vm.tasks.length == 0">You don't have any tasks! Find a group and jump on some!</p>
+        <div data-ng-cloak data-ng-if="vm.tasks.length > 0" style="width:20%;">
+            <md-card style="overflow:auto;">
+                <md-list flex>
+                    <md-subheader class="md-no-sticky">Your Tasks:</md-subheader>
+                    <md-list-item class="md-3-line" ng-click="vm.goToTaskGroup(task)" data-ng-repeat="task in vm.tasks">
+                        <img ng-src="https://static1.squarespace.com/static/50146ef684aea6ed68d3267c/t/53ec3e70e4b085b1e2a01333/1407991419928/" class="md-avatar" alt="A Group Image" />
+                        <div class="md-list-item-text" layout="column">
+                            <h3 style="text-align:center;"><b>{{ task.title }}</b></h3>
+                            <h4 style="text-align:center;">{{ task.description }}</h4>
+                            <div style="text-align:center;" ng-if="task.dueDate != null">{{task.dueDate | date: 'MM-dd-yyyy'}}</div>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-card>
+        </div>
 
 
 		<div>
