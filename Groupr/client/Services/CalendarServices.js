@@ -33,6 +33,44 @@ define([
 				});
 			}
 
+			service.cancelVoting = function(groupId) {
+				var data = {
+					groupId: groupId,
+				}
+				console.log(data);
+				return $http({
+					method: 'POST',
+					url: url + 'cancel_voting',
+					data: data
+				});
+			}
+
+			service.endVoting = function(groupId, indexOfChoice) {
+				var data = {
+					groupId: groupId,
+					index: indexOfChoice
+				}
+				console.log(data);
+				return $http({
+					method: 'POST',
+					url: url + 'end_voting',
+					data: data
+				});
+			}
+
+			service.vote = function(groupId, arrayOfIndicesOfVotes) {
+				var data = {
+					groupId: groupId,
+					votes: arrayOfIndicesOfVotes
+				}
+				console.log(data);
+				return $http({
+					method: 'POST',
+					url: url + 'vote',
+					data: data
+				});
+			}
+
 			service.deleteEvent = function(calendarEvent) {
 				return $http({
 					method: 'POST',
