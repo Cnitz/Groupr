@@ -304,11 +304,14 @@ define([
             /* cancel the voting, back end to clear schedule assistant fields */
             function cancelVoting() {
 
+                $scope.hasVoted = false;
+                $scope.votingActive = false;
             }
 
             /* back end, take current highest, send the index of the event */
             function endVoting() {
-
+                $scope.hasVoted = false;
+                $scope.votingActive = false;
             }
 
 
@@ -352,7 +355,7 @@ define([
 
                 console.log(event);
                 CalendarServices.addGroupEvent(event, $stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
                         console.log('success adding event');
                         refresh();
@@ -360,7 +363,7 @@ define([
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
             }
 
             function deleteEvent(event) {

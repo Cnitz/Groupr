@@ -589,7 +589,25 @@ router.route('/calendar/end_voting').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            group.calendar.events.push(group.calendar.schedule_assistant.events[req.body.index]);             
+            var schedule_assistant = group.calendar.schedule_assistant;
+            var winner = {
+                event: {
+                    name: schedule_assistant.name,
+                    description: schedule_assistant.description,
+                    location: schedule_assistant.location,
+                    startTime: null,
+                    endTime: null,
+                },
+                votes: 0
+            }
+            group.calendar.schedule_assistant.events.forEach(function(event, index) {
+                if (event.votes > winner.votes) {
+                    winner.event.startTime = event.startTime;
+                    winner.event.endTime = event.endTime;
+                    winner.votes = event.votes;
+                }
+            })
+            group.calendar.events.push(winner.event);           
             group.calendar.schedule_assistant = {};
             group.calendar.schedule_assistant.active = false;
             group.calendar.schedule_assistant.voters = [];

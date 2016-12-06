@@ -48,7 +48,6 @@ define([
 			service.endVoting = function(groupId, indexOfChoice) {
 				var data = {
 					groupId: groupId,
-					index: indexOfChoice
 				}
 				console.log(data);
 				return $http({
