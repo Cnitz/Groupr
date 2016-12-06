@@ -550,7 +550,7 @@ router.route('/calendar/vote').post((req, res) => {
         else {
             req.body.votes.forEach(function(event, index) {
                 if (votes[index] == true) {
-                    group.calendar.schedule_assistant.events[index] += 1;
+                    group.calendar.schedule_assistant.events[index].votes += 1;
                 }
             })
             User.findOne({ 'token': token}, (err, user) => {
