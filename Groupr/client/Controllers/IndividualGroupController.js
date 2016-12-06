@@ -308,27 +308,6 @@ define([
                 $state.go('scheduleAssistant', { groupID: $stateParams.groupID });
             }
 
-            /* Vote for one proposed time, front end only */
-            function vote(index) {
-                $scope.checkBoxData[index] = true;
-            }
-
-            /* submit all votes and store in back end database */
-            function submitVote() {
-
-            }
-
-            /* cancel the voting, back end to clear schedule assistant fields */
-            function cancelVoting() {
-
-            }
-
-            /* back end, take current highest, send the index of the event */
-            function endVoting() {
-
-            }
-
-
             function printDate(event) {
                 var newDate = new Date(event.startTime);
                 return (newDate.getMonth() + 1) + '/' + newDate.getDate();
