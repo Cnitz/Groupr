@@ -143,7 +143,8 @@ define([
             function proposeEvent(){
               var pEvent = {
                   startTime: $scope.myDate,
-                  endTime: $scope.myDate
+                  endTime: $scope.myDate,
+                  votes: 0
               }
 
               //Now reading in the time strings and setting times. Remove when better time picker is made
@@ -327,7 +328,7 @@ define([
                         console.log(res.data);
                     }
                 )
-                
+
             }
 
 
