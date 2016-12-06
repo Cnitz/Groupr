@@ -283,6 +283,7 @@ define([
                     function(res) {
                         $scope.hasVoted = false;
                         $scope.votingActive = false;
+                        $scope.pendingEvents = [];
                     },
                     function(res) {
                         console.log(res.data);
