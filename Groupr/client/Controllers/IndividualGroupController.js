@@ -30,7 +30,6 @@ define([
             vm.printDate = printDate;
             vm.printTimes = printTimes;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
-            vm.vote = vote;
             $scope.currentNavItem = "indiv";
             $scope.customFullscreen = false;
             $scope.title = "";
