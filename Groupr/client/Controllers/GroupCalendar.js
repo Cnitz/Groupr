@@ -303,17 +303,31 @@ define([
 
             /* cancel the voting, back end to clear schedule assistant fields */
             function cancelVoting() {
-
-                $scope.hasVoted = false;
-                $scope.votingActive = false;
-                refresh();
+                CalendarServices.cancelVoting($stateParams.groupID)
+                .then(
+                    function(res) {
+                        $scope.hasVoted = false;
+                        $scope.votingActive = false;
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    }
+                )
             }
 
             /* back end, take current highest, send the index of the event */
             function endVoting() {
-                $scope.hasVoted = false;
-                $scope.votingActive = false;
-                refesh();
+                CalendarServices.endVoting($stateParams.groupID)
+                .then(
+                    function(res) {
+                        $scope.hasVoted = false;
+                        $scope.votingActive = false;
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    }
+                )
+                
             }
 
 
