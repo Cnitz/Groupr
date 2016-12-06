@@ -637,7 +637,7 @@ router.route('/calendar/cancel_voting').post((req, res) => {
             group.calendar.schedule_assistant.location = "";
             group.calendar.schedule_assistant.description = "";
             group.calendar.schedule_assistant.events = [];
-            group.save((err) => {
+            group.calendar.save((err) => {
                 if (err) {
                     res.status(500).json({message: 'Error: Voting could not be canceled'});
                 }
