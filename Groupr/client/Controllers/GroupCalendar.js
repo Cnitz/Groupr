@@ -297,7 +297,7 @@ define([
                 console.log($scope.checkBoxData);
 
                 $scope.hasVoted = true;
-                vm.voters.push(user.username);
+                vm.voters.push($scope.user.username);
                 refresh();
             }
 
