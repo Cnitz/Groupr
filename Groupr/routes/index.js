@@ -343,8 +343,7 @@ router.route('/calendar/get_events').post((req, res) => {
             else {
                 res.status(200).json({ 
                     events: group.calendar.events, 
-                    schedule_assistant_active: group.calendar.schedule_assistant.active,
-                    voters: group.calendar.schedule_assistant.voters,
+                    schedule_assistant: group.calendar.schedule_assistant,
                 });
             }
         });
