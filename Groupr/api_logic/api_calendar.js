@@ -73,9 +73,106 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
     })
 }
 
-calendar.schedule_assistant = function(calendars, day, startTime, endTime, length, callback) {
+calendar.schedule_assistant = function(calendarList, startTime, endTime, meetingLength, callback) {
     var reponseObj = {};
 
+    var interval = (endTime - startTime) / 60000;
+
+    /* Date aggregation */
+    aggregateCalendar = [];
+    for (var i = 0; i < calendarList.length; i++) {
+        for (var j = 0; j < calendarList[i].length; j++) {
+            //console.log(calendarList[i][j]);
+            if (calendarList[i][j].endTime <= startTime) {
+            }
+            else if (calendarList[i][j].startTime >= endTime) {
+            }
+            else {
+                var event = calendarList[i][j];
+                if (event.startTime < startTime) {
+                    event.startTime = startTime;
+                }
+                if (event.endTime > endTime) {
+                    event.endTime = endTime;
+                }
+                event.startTime = (event.startTime - startTime) / 60000;
+                event.endTime = (event.endTime - startTime) / 60000;
+                aggregateCalendar.push(event);
+
+            }
+        }
+    }
+    console.log(aggregateCalendar);
+
+    /* calculate conflict frequency */
+    var conflictFrequency = [];
+    for (var i = 0; i < interval; i++) {
+        conflictFrequency[i] = 0;
+    }
+
+    for (var i = 0; i < aggregateCalendar.length; i++) {
+        var event = aggregateCalendar[i];
+        for (var j = event.startTime; j < event.endTime; j++) {
+            conflictFrequency[j] += 1;
+        }
+    }
+    console.log(conflictFrequency);
+
+    /* find best fit meeting time */
+    var bestFit = {
+        startIndex: 0,
+        endIndex: 0,
+        score: 0,
+    } 
+    var curCount = 0;
+    for (var i = 0; i < interval; i++) {
+        if (i < meetingLength) {
+            curCount += conflictFrequency[i];
+
+            if (i == meetingLength - 1) {
+                // initialize best fit
+                bestFit.startIndex = 0;
+                bestFit.endIndex = i;
+                bestFit.score = curCount;
+            }
+        }
+        else {
+                // check against new value
+            curCount -= conflictFrequency[i - meetingLength];
+            curCount += conflictFrequency[i];
+
+            if (curCount < bestFit.score) {
+                bestFit.startIndex = i - meetingLength + 1;
+                bestFit.endIndex = i + 1;
+                bestFit.score = curCount;
+            }
+        }
+    }
+    console.log(bestFit);
+
+    /* create date for best fit event */            
+    var finalStartTime = new Date(startTime);
+    var finalEndTime = new Date(startTime);
+    var startHours = startTime.getHours();
+    var startMinutes = startTime.getMinutes();
+    var totalStartTime = ((bestFit.startIndex + startMinutes) / 60) + startHours;
+    var totalEndTime = ((bestFit.endIndex + startMinutes) / 60) + startHours;
+    var startHours = Math.floor(totalStartTime);
+    var startMinutes = Math.round((totalStartTime - startHours) * 60);
+    var endHours = Math.floor(totalEndTime);
+    var endMinutes = Math.round((totalEndTime - startHours) * 60);
+
+    finalStartTime.setHours(startHours);
+    finalStartTime.setMinutes(startMinutes);
+    finalEndTime.setHours(endHours);
+    finalEndTime.setMinutes(endMinutes);
+
+    console.log(finalStartTime);
+    console.log(finalEndTime);
+
+    reponseObj.status = 200;
+    reponseObj.event = { startTime: finalStartTime, endTime: finalEndTime };
+    callback(reponseObj);
 }
 
 module.exports = calendar;

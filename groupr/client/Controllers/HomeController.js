@@ -24,10 +24,7 @@ define([
 			$scope.currentNavItem = "home";
 			$scope.myDate = new Date();
 			$scope.user = {};
-			$scope.calendar = {
-				events: [],
-				doodle_active: false,
-			}
+			$scope.events = [];
 
 
 			function goHome(){
@@ -76,6 +73,8 @@ define([
 				}
 
 				//Now reading in the time strings and setting times. Remove when better time picker is made
+				$scope.myDate.setSeconds(0);
+				$scope.myDate.setMilliseconds(0);
 				var newStartDate = new Date($scope.myDate);
 				var newEndDate = new Date($scope.myDate);
 
@@ -94,8 +93,8 @@ define([
 				CalendarServices.addEvent(event)
 				.then(
 					function(result) {
-						$scope.calendar.events.push(event);
-						console.log($scope.calendar.events);
+						$scope.events.push(event);
+						console.log($scope.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -107,9 +106,9 @@ define([
 				CalendarServices.deleteEvent(event)
 				.then(
 					function(result) {
-						var index = CalendarServices.searchEvents($scope.calendar.events, event);
-						$scope.calendar.events.splice(index, 1);
-						console.log($scope.calendar.events);
+						var index = CalendarServices.searchEvents($scope.events, event);
+						$scope.events.splice(index, 1);
+						console.log($scope.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -121,9 +120,9 @@ define([
 				CalendarServices.editEvent(event)
 				.then(
 					function(result) {
-						var index = CalendarServices.searchEvents($scope.calendar.events, event);
-						$scope.calendar.events[index] = event;
-						console.log($scope.calendar.events);
+						var index = CalendarServices.searchEvents($scope.events, event);
+						$scope.events[index] = event;
+						console.log($scope.events);
 					},
 					function(result) {
 						console.log(result.data);
@@ -140,7 +139,9 @@ define([
 						CalendarServices.getPersonalCalendar()
 						.then(
 							function(resultTwo) {
-								$scope.calendar.events = resultTwo.data.events;
+								console.log(resultTwo.data);
+								$scope.events = resultTwo.data;
+								console.log($scope.events);
 							},
 							function(resultTwo) {
 								console.log(resultTwo);

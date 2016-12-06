@@ -487,19 +487,26 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendarList = [];
-            calendarList.push(group.calendar);
+            userIds = [];
             group.users.forEach(function(user) {
-                calendarList.push(user.calendar);
-            })
-            api_calendar.schedule_assistant(calendarList, req.body.day, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
-                if (obj.status != 500) {
-                    res.status(200).json({message: 'Success'})
-                }
-                else {
-                    res.status(obj.status).send(obj.message);
-                }
+                userIds.push(user._id);
             });
+            User.find({'_id': { $in: userIds } })
+            .populate('calendar')
+            .exec(function(err, users) {
+                var calendarList = [];
+                users.forEach(function(user) {
+                    calendarList.push(user.calendar.events);
+                })
+                api_calendar.schedule_assistant(calendarList, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
+                    if (obj.status != 500) {
+                        res.status(200).json({message: 'Success: The event has been added'})
+                    }
+                    else {
+                        res.status(obj.status).send(obj.event);
+                    }
+                });
+            })
         }
     });
 });

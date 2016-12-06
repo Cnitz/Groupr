@@ -148,9 +148,9 @@ define([
 				});
 			}
 
-			service.scheduleAssistant = function(day, startTime, endTime, length, groupId) {
+			/* Start Time Date, End Time Date, length in minutes, and the groupID */
+			service.scheduleAssistant = function(startTime, endTime, length, groupId) {
 				var data = {
-					day: day,
 					startTime: startTime,
 					endTime: endTime,
 					length: length,
