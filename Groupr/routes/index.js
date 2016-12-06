@@ -512,6 +512,7 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
 
 /* submitProposedMeetingTimes */
 router.route('/calendar/propose_meeting_times').post((req, res) => {
+    console.log('propose_meeting_times');
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -524,7 +525,9 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
             group.calendar.schedule_assistant.name = req.body.name;
             group.calendar.schedule_assistant.location = req.body.location;
             group.calendar.schedule_assistant.description = req.body.description;
-            group.calendar.schedule_assistant.events = req.body.events;
+            req.body.events.forEach(function(event) {
+                group.calendar.schedule_assistant.events.push(event);
+            })
             group.calendar.save((err) => {
                 if (err) {
                     res.status(500).json({message: 'Error: Meeting times could not be added'});
@@ -548,30 +551,20 @@ router.route('/calendar/vote').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            req.body.votes.forEach(function(event, index) {
-                if (votes[index] == true) {
+            req.body.votes.forEach(function(vote, index) {
+                if (vote === true) {
                     group.calendar.schedule_assistant.events[index].votes += 1;
                 }
             })
-            User.findOne({ 'token': token}, (err, user) => {
+            group.calendar.schedule_assistant.voters.push(req.body.username);
+            group.calendar.save((err) => {
                 if (err) {
-                    res.status(500).json({message: 'Error: Database access'});
-                }
-                else if (user === null) {
-                    res.status(403).json({message: 'Error: No User found'});
+                    res.status(500).json({message: 'Error: Votes could not be added'});
                 }
                 else {
-                    group.calendar.schedule_assistant.voters.push(user.username);
-                    group.save((err) => {
-                        if (err) {
-                            res.status(500).json({message: 'Error: Votes could not be added'});
-                        }
-                        else {
-                             res.status(200).json({message: 'Success: Votes Added'});
-                        }
-                    })   
+                     res.status(200).json({message: 'Success: Votes Added'});
                 }
-            });
+            })
         }
     });
 });
@@ -613,7 +606,7 @@ router.route('/calendar/end_voting').post((req, res) => {
             group.calendar.schedule_assistant.location = "";
             group.calendar.schedule_assistant.description = "";
             group.calendar.schedule_assistant.events = [];
-            group.save((err) => {
+            group.calendar.save((err) => {
                 if (err) {
                     res.status(500).json({message: 'Error: Voting could not be ended'});
                 }
@@ -627,6 +620,7 @@ router.route('/calendar/end_voting').post((req, res) => {
 
 /* cancelVoting */
 router.route('/calendar/cancel_voting').post((req, res) => {
+    console.log('cancel voting');
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')

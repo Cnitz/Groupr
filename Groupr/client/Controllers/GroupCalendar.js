@@ -32,6 +32,7 @@ define([
             vm.endVoting = endVoting;
             vm.proposeEvent = proposeEvent;
             vm.submitToGroup = submitToGroup;
+
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
             $scope.eventName = "";
@@ -295,15 +296,21 @@ define([
                 $scope.votingEvents.forEach(function(event){
                   $scope.checkBoxData[index++] = event.selected;
                 })
-                console.log($scope.checkBoxData);
-
-                $scope.hasVoted = true;
-                vm.voters.push($scope.user.username);
-                refresh();
+                CalendarServices.vote($stateParams.groupID, $scope.checkBoxData, $scope.user.username)
+                .then(
+                    function(res) {
+                        $scope.hasVoted = true;
+                        vm.voters.push($scope.user.username);
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    }
+                )
             }
 
             /* cancel the voting, back end to clear schedule assistant fields */
             function cancelVoting() {
+                console.log('cancelVoting');
                 CalendarServices.cancelVoting($stateParams.groupID)
                 .then(
                     function(res) {
