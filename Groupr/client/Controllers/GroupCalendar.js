@@ -292,6 +292,7 @@ define([
 
             /* submit all votes and store in back end database */
             function submitVote() {
+                console.log('submitVote');
                 var index = 0;
                 $scope.votingEvents.forEach(function(event){
                   $scope.checkBoxData[index++] = event.selected;
