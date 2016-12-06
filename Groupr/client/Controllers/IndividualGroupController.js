@@ -31,9 +31,6 @@ define([
             vm.printTimes = printTimes;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
             vm.vote = vote;
-            vm.submitVote = submitVote;
-            vm.cancelVoting = cancelVoting;
-            vm.endVoting = endVoting;
             $scope.currentNavItem = "indiv";
             $scope.customFullscreen = false;
             $scope.title = "";
