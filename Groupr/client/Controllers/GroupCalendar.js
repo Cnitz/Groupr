@@ -325,6 +325,7 @@ define([
 
             /* back end, take current highest, send the index of the event */
             function endVoting() {
+                console.log('endVoting');
                 CalendarServices.endVoting($stateParams.groupID)
                 .then(
                     function(res) {
