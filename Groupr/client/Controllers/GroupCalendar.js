@@ -298,7 +298,7 @@ define([
 
                 $scope.hasVoted = true;
                 vm.voters.push(user.username);
-
+                refresh();
             }
 
             /* cancel the voting, back end to clear schedule assistant fields */
@@ -306,12 +306,14 @@ define([
 
                 $scope.hasVoted = false;
                 $scope.votingActive = false;
+                refresh();
             }
 
             /* back end, take current highest, send the index of the event */
             function endVoting() {
                 $scope.hasVoted = false;
                 $scope.votingActive = false;
+                refesh();
             }
 
 
