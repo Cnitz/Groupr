@@ -275,6 +275,37 @@ define([
                 $state.go('home');
             }
 
+            /* cancel the voting, back end to clear schedule assistant fields */
+            function cancelVoting() {
+                console.log('cancelVoting');
+                CalendarServices.cancelVoting($stateParams.groupID)
+                .then(
+                    function(res) {
+                        $scope.hasVoted = false;
+                        $scope.votingActive = false;
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    }
+                )
+            }
+
+            /* back end, take current highest, send the index of the event */
+            function endVoting() {
+                console.log('endVoting');
+                CalendarServices.endVoting($stateParams.groupID)
+                .then(
+                    function(res) {
+                        $scope.hasVoted = false;
+                        $scope.votingActive = false;
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    }
+                )
+
+            }
+
             function logout() {
                 AccountServices.logout();
                 $state.go('main');
@@ -308,38 +339,6 @@ define([
                     }
                 )
             }
-
-            /* cancel the voting, back end to clear schedule assistant fields */
-            function cancelVoting() {
-                console.log('cancelVoting');
-                CalendarServices.cancelVoting($stateParams.groupID)
-                .then(
-                    function(res) {
-                        $scope.hasVoted = false;
-                        $scope.votingActive = false;
-                    },
-                    function(res) {
-                        console.log(res.data);
-                    }
-                )
-            }
-
-            /* back end, take current highest, send the index of the event */
-            function endVoting() {
-                console.log('endVoting');
-                CalendarServices.endVoting($stateParams.groupID)
-                .then(
-                    function(res) {
-                        $scope.hasVoted = false;
-                        $scope.votingActive = false;
-                    },
-                    function(res) {
-                        console.log(res.data);
-                    }
-                )
-
-            }
-
 
             function printDate(event) {
                 var newDate = new Date(event.startTime);
