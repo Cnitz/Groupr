@@ -58,10 +58,11 @@ define([
 				});
 			}
 
-			service.vote = function(groupId, arrayOfIndicesOfVotes) {
+			service.vote = function(groupId, arrayOfIndicesOfVotes, username) {
 				var data = {
 					groupId: groupId,
-					votes: arrayOfIndicesOfVotes
+					votes: arrayOfIndicesOfVotes,
+					username: username
 				}
 				console.log(data);
 				return $http({
