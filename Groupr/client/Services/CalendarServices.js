@@ -17,7 +17,7 @@ define([
 				});
 			}
 
-			service.proposedMeetingTimes = function(events, name, location, description, groupId) {
+			service.proposedMeetingTimes = function(events, name, description, location, groupId) {
 				var data = {
 					groupId: groupId,
 					name: name,

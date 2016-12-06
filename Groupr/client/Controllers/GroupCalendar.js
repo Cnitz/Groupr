@@ -122,7 +122,7 @@ define([
             function submitToGroup(){
                 CalendarServices.proposedMeetingTimes($scope.pendingEvents, $scope.eventName, $scope.eventDescription, $scope.eventLocation, vm.groupID).then(
                     function(res) {
-                        console.log(res.data);
+                        refresh();
                     },
                     function(res) {
                         console.log(res.data);
@@ -411,8 +411,20 @@ define([
                 CalendarServices.getGroupCalendar($stateParams.groupID)
                 .then(
                     function (result) {
+                        $scope.votingEvents = result.data.schedule_assistant.events;
+                        $scope.votingEvents.forEach(function(event){
+                          event.selected = false;
+                        })
+                        $scope.votingActive = result.data.schedule_assistant.active;
                         vm.events = result.data.events;
-                        console.log(vm.events);
+                        vm.voters = result.data.schedule_assistant.voters;
+                        if (votingActive) {
+                            vm.voters.forEach(function(voter) {
+                                if (voter === $scope.user.username) {
+                                    $scope.hasVoted = true;
+                                }
+                            })
+                        }
                     },
                     function (result) {
                         console.log(result.data);
