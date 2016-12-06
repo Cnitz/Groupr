@@ -44,6 +44,7 @@ define([
             vm.currGroup = "";
             vm.events = [];
             $scope.pendingEvents = [];
+            $scope.votingEvents = [];
             $scope.checkBoxData = [];
             $scope.toggleLeft = buildDelayedToggler('left');
             $scope.user = {};
@@ -173,12 +174,19 @@ define([
                             CalendarServices.getGroupCalendar($stateParams.groupID)
                             .then(
                                 function(result) {
+                                    $scope.votingEvents = result.data.schedule_assistant.events;
+
+                                    $scope.votingEvents.forEach(function(event){
+                                      event.selected = false;
+                                    })
+
+                                    $scope.votingActive = result.data.schedule_assistant.active;
                                     vm.events = result.data.events;
-                                    $scope.votingActive = result.data.schedule_assistant_active;
-                                    vm.voters = result.data.voters;
+                                    vm.voters = result.data.schedule_assistant.voters;
+                                     /*console.log(result);
                                      console.log(vm.events);
-                                     console.log(vm.votingActive);
-                                     console.log(vm.voters);
+                                     console.log($scope.votingEvents);
+                                     console.log(vm.voters);*/
 
                                     if (votingActive) {
                                         vm.voters.forEach(function(voter) {
@@ -187,6 +195,9 @@ define([
                                             }
                                         })
                                     }
+
+                                    //console.log($scope.hasVoted);
+
                                 },
                                 function(result) {
                                     console.log(res.data);
@@ -206,11 +217,11 @@ define([
                             .then(
                                 function (resTwo) {
                                     vm.tasks = resTwo.data;
-                                }, 
+                                },
                                 function (resTwo) {
                                     console.log(resTwo.data);
                                 })
-                        }, 
+                        },
                         function (resOne) {
                             console.log(res.data);
                         }
@@ -279,6 +290,14 @@ define([
 
             /* submit all votes and store in back end database */
             function submitVote() {
+                var index = 0;
+                $scope.votingEvents.forEach(function(event){
+                  $scope.checkBoxData[index++] = event.selected;
+                })
+                console.log($scope.checkBoxData);
+
+                $scope.hasVoted = true;
+                vm.voters.push(user.username);
 
             }
 

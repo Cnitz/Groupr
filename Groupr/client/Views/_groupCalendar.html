@@ -50,10 +50,52 @@
                         </md-list-item>
                       </md-list>
                   -->
-                <div width="100%" layout="row">
+                  <md-content layout="row" layout-align="space-around center" flex="">
                 <div width="500" maxwidth="50%" ng-show="votingActive">
 
                 <h2> Vote on meeting times </h2>
+
+
+
+
+                  <!--  <div ng-repeat="event in votingEvents">
+                      <md-list>
+                        <md-list-item>
+                          <h2> {{vm.printDate(event)}} </h2>
+                          {{vm.printTimes(event)}}
+                        </md-list-item>
+                      </md-list>
+                    </div> -->
+
+
+
+
+                    <md-card width="500">
+                        <md-list flex>
+                            <md-list-item class="md-3-line" ng-repeat="event in votingEvents">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3 style="text-align:center;"><b>{{vm.printDate(event)}} </b></h3>
+                                    <h4 style="text-align:center;">{{vm.printTimes(event)}}</h4>
+                                    <div style="text-align:center;">
+                                        <md-checkbox  ng-model="event.selected" value="true" aria-label="Vote" ng-show="!hasVoted">
+                                            Vote for this Event?
+                                        </md-checkbox>
+                                    </div>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </md-card>
+
+                    <md-button ng-click="vm.submitVote()" class="md-primary" type="button" ng-show="!hasVoted">
+                      Submit Votes
+                    </md-button>
+                    <md-button ng-click="vm.cancelVote()" class="md-primary" type="button" ng-show="!hasVoted">
+                      Cancel Vote
+                    </md-button>
+                    <md-button ng-click="vm.submitVote()" class="md-primary" type="button" ng-show="!hasVoted">
+                      End Vote
+                    </md-button>
+
 
                 </div>
                 <div width="500" maxwidth="50%" ng-show="!votingActive">
@@ -134,7 +176,7 @@
                     </md-card>
                   </div>
                   </div>
-                </div>
+                </md-content>
             </div>
 
 
