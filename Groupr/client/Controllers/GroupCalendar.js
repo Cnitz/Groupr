@@ -283,6 +283,7 @@ define([
                     function(res) {
                         $scope.hasVoted = false;
                         $scope.votingActive = false;
+                        refresh();
                     },
                     function(res) {
                         console.log(res.data);
@@ -298,6 +299,7 @@ define([
                     function(res) {
                         $scope.hasVoted = false;
                         $scope.votingActive = false;
+                        refresh();
                     },
                     function(res) {
                         console.log(res.data);
