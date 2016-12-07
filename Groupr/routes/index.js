@@ -341,8 +341,8 @@ router.route('/calendar/get_events').post((req, res) => {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                res.status(200).json({ 
-                    events: group.calendar.events, 
+                res.status(200).json({
+                    events: group.calendar.events,
                     schedule_assistant: group.calendar.schedule_assistant,
                 });
             }
@@ -478,6 +478,9 @@ router.route('/calendar/edit_group_event').post((req, res) => {
 
 /* generateMeetingTimes */
 router.route('/calendar/schedule_assistant').post((req, res) => {
+    console.log("Request:");
+    console.log(req.body);
+    console.log("/Request");
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -536,7 +539,7 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
                     res.status(200).json({message: 'Success: Proposed Meeting Time Added'});
                 }
             })
-            
+
         }
     });
 });
@@ -597,7 +600,7 @@ router.route('/calendar/end_voting').post((req, res) => {
                     winner.votes = event.votes;
                 }
             })
-            group.calendar.events.push(winner.event);           
+            group.calendar.events.push(winner.event);
             group.calendar.schedule_assistant = {};
             group.calendar.schedule_assistant.active = false;
             group.calendar.schedule_assistant.voters = [];
@@ -695,13 +698,13 @@ router.route('/chat/:group').get((req, res) => {
 
 /*
  * Complaint api routes
- * 
- * 
- * 
- * 
- * 
- * 
- */ 
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 /*
  * POST

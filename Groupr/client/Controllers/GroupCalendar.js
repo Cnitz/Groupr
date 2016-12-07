@@ -129,6 +129,9 @@ define([
 
               var duration = ($scope.durationHours * 60) + $scope.durationMinutes;
 
+              console.log(newStartDate);
+              console.log(newEndDate);
+
               CalendarServices.scheduleAssistant(newStartDate, newEndDate, duration, vm.groupID).then(
                 function(res){
                   $scope.pendingEvents.push(res.event);
