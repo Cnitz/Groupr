@@ -8,7 +8,7 @@ define([
         'Groupr.Services.AccountServices',
         '$stateParams',
         'Groupr.Services.CalendarServices',
-        function IndividualGroupController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log) {
+        function GroupCalendarController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log) {
             var vm = this;
             {
                 vm.groups = [];
