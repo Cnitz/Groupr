@@ -127,11 +127,27 @@
                           <input ng-model="endTime" type="text" name="endTime">
                         </md-input-container>
                       </div>
+
+                      <div layout="row" layout-align="space-around center">
+                      <md-input-container>
+                        <label> Hours </label>
+                        <input ng-model="durationHours" type="text" name="durationHours">
+                      </md-input-container>
+                      <md-input-container>
+                        <label> Minutes </label>
+                        <input ng-model="durationMinutes" type="text" name="durationMinutes">
+                      </md-input-container>
                     </div>
 
+                    </div>
+                    <div layout="column">
                         <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
                           Propose Event
                         </md-button>
+                        <md-button ng-click="vm.scheuduleAssistant()" class="md-accent" type="button">
+                          Reccomend A Time
+                        </md-button>
+                      </div>
                   </md-card>
 
                   <div ng-repeat="event in pendingEvents">

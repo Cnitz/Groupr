@@ -22,6 +22,7 @@ define([
             vm.editEvent = editEvent;
             vm.refresh = refresh;
             vm.printDate = printDate;
+            vm.scheuduleAssistant = scheuduleAssistant;
             vm.printTimes = printTimes;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
             vm.vote = vote;
@@ -35,6 +36,8 @@ define([
 
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
+            $scope.durationHours = 0;
+            $scope.durationMinutes = 0;
             $scope.eventName = "";
             $scope.eventDescription = "";
             $scope.eventLocation = "";
@@ -108,6 +111,32 @@ define([
 
 
             };
+
+
+            function scheuduleAssistant(){
+
+
+              var newStartDate = new Date($scope.myDate);
+              var newEndDate = new Date($scope.myDate);
+
+              var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+              newStartDate.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+              newStartDate.setMinutes(parseInt(time[2]) || 0);
+
+              var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+              newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
+              newEndDate.setMinutes(parseInt(time2[2]) || 0);
+
+              var duration = ($scope.durationHours * 60) + $scope.durationMinutes;
+
+              CalendarServices.scheduleAssistant(newStartDate, newEndDate, duration, vm.groupID).then(
+                function(res){
+                  $scope.pendingEvents.push(res.event);
+                },
+                function(res){
+                  console.log(res.event);
+                });
+            }
 
             function leaveGroup() {
                 GroupServices.leaveGroup(vm.groupID);
@@ -284,7 +313,7 @@ define([
                         $scope.hasVoted = false;
                         $scope.votingActive = false;
                         $scope.pendingEvents = [];
-                        refresh();  
+                        refresh();
                     },
                     function(res) {
                         console.log(res.data);
