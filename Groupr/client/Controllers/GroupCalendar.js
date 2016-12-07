@@ -8,7 +8,7 @@ define([
         'Groupr.Services.AccountServices',
         '$stateParams',
         'Groupr.Services.CalendarServices',
-        function IndividualGroupController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log) {
+        function GroupCalendarController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log) {
             var vm = this;
             {
                 vm.groups = [];
@@ -22,29 +22,38 @@ define([
             vm.editEvent = editEvent;
             vm.refresh = refresh;
             vm.printDate = printDate;
+            vm.scheuduleAssistant = scheuduleAssistant;
             vm.printTimes = printTimes;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
             vm.vote = vote;
+            vm.voters = [];
             vm.submitVote = submitVote;
-            vm.votingActive = votingActive;
             vm.deleteProposedEvent = deleteProposedEvent;
             vm.cancelVoting = cancelVoting;
             vm.endVoting = endVoting;
             vm.proposeEvent = proposeEvent;
             vm.submitToGroup = submitToGroup;
+            vm.openAddEventDialog = openAddEventDialog;
+            vm.openEditEventDialog = openEditEventDialog;
+
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
-            $scope.title = "";
-            $scope.description = "";
+            $scope.durationHours = 0;
+            $scope.durationMinutes = 0;
+            $scope.eventName = "";
+            $scope.eventDescription = "";
+            $scope.eventLocation = "";
             $scope.users = [];
             $scope.myDate = new Date();
-            $scope.votingInactive = true;
             $scope.votingActive = false;
+            $scope.hasVoted = false;
             vm.currGroup = "";
             vm.events = [];
             $scope.pendingEvents = [];
+            $scope.votingEvents = [];
             $scope.checkBoxData = [];
             $scope.toggleLeft = buildDelayedToggler('left');
+            $scope.user = {};
 
             vm.leaveGroup = leaveGroup;
             vm.groupID = $stateParams.groupID;
@@ -105,6 +114,42 @@ define([
 
             };
 
+
+            function scheuduleAssistant(){
+
+
+              var newStartDate = new Date($scope.myDate);
+              var newEndDate = new Date($scope.myDate);
+
+              var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+              newStartDate.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+              newStartDate.setMinutes(parseInt(time[2]) || 0);
+
+              var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+              newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
+              newEndDate.setMinutes(parseInt(time2[2]) || 0);
+
+              var duration = ($scope.durationHours * 60) + $scope.durationMinutes;
+
+              console.log(newStartDate);
+              console.log(newEndDate);
+
+              newStartDate.setSeconds(0);
+              newStartDate.setMilliseconds(0);
+              newEndDate.setSeconds(0);
+              newEndDate.setMilliseconds(0);
+
+              CalendarServices.scheduleAssistant(newStartDate, newEndDate, duration, vm.groupID).then(
+                function(res){
+                  console.log(res.data);
+                  $scope.pendingEvents.push(res.data);
+                },
+                function(res){
+                  console.log("Failure");
+                  console.log(res.event);
+                });
+            }
+
             function leaveGroup() {
                 GroupServices.leaveGroup(vm.groupID);
                 $state.go('home');
@@ -117,7 +162,13 @@ define([
 
             /* Takes the current proposedEvents and allows the group to vote on them*/
             function submitToGroup(){
-              //Not sure what to do here friendo. Gotta talk to my main man mitch-the-bitch "call him mitchyboi" suck-that-bama-dick holt
+                CalendarServices.proposedMeetingTimes($scope.pendingEvents, $scope.eventName, $scope.eventDescription, $scope.eventLocation, vm.groupID).then(
+                    function(res) {
+                        refresh();
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    });
             }
 
             function deleteProposedEvent(event){
@@ -132,12 +183,10 @@ define([
 
             /*Adds the given event to the proposal list */
             function proposeEvent(){
-              var event = {
-                  name: $scope.eventName,
-                  description: $scope.eventDescription,
-                  location: $scope.eventLocation,
+              var pEvent = {
                   startTime: $scope.myDate,
-                  endTime: $scope.myDate
+                  endTime: $scope.myDate,
+                  votes: 0
               }
 
               //Now reading in the time strings and setting times. Remove when better time picker is made
@@ -152,43 +201,74 @@ define([
               newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
               newEndDate.setMinutes(parseInt(time2[2]) || 0);
 
-              event.startTime = newStartDate;
-              event.endTime = newEndDate;
+              pEvent.startTime = newStartDate;
+              pEvent.endTime = newEndDate;
               //End Time Reading Hack
-              $scope.pendingEvents.push(event);
+              $scope.pendingEvents.push(pEvent);
             }
 
             function activate() {
                 if ($stateParams.groupID != null) {
+                    AccountServices.getUser()
+                    .then(
+                        function(res) {
+                            $scope.user = res.data;
+                            console.log($scope.user);
+                            CalendarServices.getGroupCalendar($stateParams.groupID)
+                            .then(
+                                function(result) {
+                                    $scope.votingEvents = result.data.schedule_assistant.events;
+
+                                    $scope.votingEvents.forEach(function(event){
+                                      event.selected = false;
+                                    })
+
+                                    $scope.votingActive = result.data.schedule_assistant.active;
+                                    vm.events = result.data.events;
+                                    vm.voters = result.data.schedule_assistant.voters;
+                                     /*console.log(result);
+                                     console.log(vm.events);
+                                     console.log($scope.votingEvents);
+                                     console.log(vm.voters);*/
+
+                                    if (votingActive) {
+                                        vm.voters.forEach(function(voter) {
+                                            if (voter === $scope.user.username) {
+                                                $scope.hasVoted = true;
+                                            }
+                                        })
+                                    }
+
+                                    //console.log($scope.hasVoted);
+
+                                },
+                                function(result) {
+                                    console.log(res.data);
+                                })
+                        },
+                        function(res) {
+                            console.log(res.data);
+                        }
+                    )
+
                     GroupServices.getGroupInfo($stateParams.groupID)
-                        .then(function (resOne) {
+                    .then(
+                        function(resOne) {
                             vm.currGroup = resOne.data;
                             var g = { group: vm.currGroup._id };
-
                             GroupServices.getTasks(g)
-                                .then(function (resTwo) {
+                            .then(
+                                function (resTwo) {
                                     vm.tasks = resTwo.data;
-                                }, function (resTwo) {
-                                    console.log(resTwo.data);
-                                });
-                            CalendarServices.getGroupCalendar($stateParams.groupID)
-                                .then(
-                                function (resultThree) {
-                                    console.log(resultThree.data.events);
-                                    vm.events = resultThree.data.events;
-                                    
                                 },
-                                function (resultThree) {
-                                    console.log(resultThree);
-                                }
-                                )
-
-                        }, function (resOne) {
+                                function (resTwo) {
+                                    console.log(resTwo.data);
+                                })
+                        },
+                        function (resOne) {
                             console.log(res.data);
-                        });
-
-
-
+                        }
+                    )
                 }
             }
 
@@ -236,6 +316,40 @@ define([
                 $state.go('home');
             }
 
+            /* cancel the voting, back end to clear schedule assistant fields */
+            function cancelVoting() {
+                console.log('cancelVoting');
+                CalendarServices.cancelVoting($stateParams.groupID)
+                .then(
+                    function(res) {
+                        $scope.hasVoted = false;
+                        $scope.votingActive = false;
+                        $scope.pendingEvents = [];
+                        refresh();
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    }
+                )
+            }
+
+            /* back end, take current highest, send the index of the event */
+            function endVoting() {
+                console.log('endVoting');
+                CalendarServices.endVoting($stateParams.groupID)
+                .then(
+                    function(res) {
+                        $scope.hasVoted = false;
+                        $scope.votingActive = false;
+                        refresh();
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    }
+                )
+
+            }
+
             function logout() {
                 AccountServices.logout();
                 $state.go('main');
@@ -253,19 +367,22 @@ define([
 
             /* submit all votes and store in back end database */
             function submitVote() {
-
+                console.log('submitVote');
+                var index = 0;
+                $scope.votingEvents.forEach(function(event){
+                  $scope.checkBoxData[index++] = event.selected;
+                })
+                CalendarServices.vote($stateParams.groupID, $scope.checkBoxData, $scope.user.username)
+                .then(
+                    function(res) {
+                        $scope.hasVoted = true;
+                        vm.voters.push($scope.user.username);
+                    },
+                    function(res) {
+                        console.log(res.data);
+                    }
+                )
             }
-
-            /* cancel the voting, back end to clear schedule assistant fields */
-            function cancelVoting() {
-
-            }
-
-            /* back end, take current highest, send the index of the event */
-            function endVoting() {
-
-            }
-
 
             function printDate(event) {
                 var newDate = new Date(event.startTime);
@@ -307,7 +424,7 @@ define([
 
                 console.log(event);
                 CalendarServices.addGroupEvent(event, $stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
                         console.log('success adding event');
                         refresh();
@@ -315,7 +432,7 @@ define([
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
             }
 
             function deleteEvent(event) {
@@ -345,15 +462,55 @@ define([
 
             function refresh() {
                 CalendarServices.getGroupCalendar($stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
+                        $scope.votingEvents = result.data.schedule_assistant.events;
+                        $scope.votingEvents.forEach(function(event){
+                          event.selected = false;
+                        })
+                        $scope.votingActive = result.data.schedule_assistant.active;
                         vm.events = result.data.events;
-                        console.log(vm.events);
+                        vm.voters = result.data.schedule_assistant.voters;
+                        if (votingActive) {
+                            vm.voters.forEach(function(voter) {
+                                if (voter === $scope.user.username) {
+                                    $scope.hasVoted = true;
+                                }
+                            })
+                        }
                     },
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
+            }
+
+            function openAddEventDialog() {
+                $mdDialog.show({
+                    controller: 'CloudView.Controllers.AddEvent',
+                    templateUrl: './Views/_add_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
+            }
+
+            function openEditEventDialog() {
+                $mdDialog.show({
+                    controller: 'CloudView.Controllers.EditEvent',
+                    templateUrl: './Views/_edit_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
             }
 
             return vm;

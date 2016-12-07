@@ -49,6 +49,15 @@ define([
 						groupID: ""
 					}
 				})
+				.state('groupChat', {
+					url:			'/groupChat/:groupID',
+					templateUrl:	'Views/_groupChat.html',
+					controller:		'Groupr.Controllers.GroupChatController',
+					controllerAs:  	'vm',
+					params: {
+						groupID: ""
+					}
+				})
 				.state('groups', {
 					url:			'/groups',
 					templateUrl:	'Views/_group.html',

@@ -54,3 +54,5 @@ Groupr/.ntvs_analysis.dat
 Groupr/Groupr/.ntvs_analysis.dat
 Groupr/Groupr/node_modules
 .vs
+Groupr.sln
+*.njsproj

@@ -23,17 +23,9 @@ define([
             vm.navigateToGroups = navigateToGroups;
             vm.groupCalendar = groupCalendar;
             vm.logout = logout;
-            vm.addEvent = addEvent;
-            vm.deleteEvent = deleteEvent;
-            vm.editEvent = editEvent;
-            vm.refresh = refresh;
             vm.printDate = printDate;
             vm.printTimes = printTimes;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
-            vm.vote = vote;
-            vm.submitVote = submitVote;
-            vm.cancelVoting = cancelVoting;
-            vm.endVoting = endVoting;
             $scope.currentNavItem = "indiv";
             $scope.customFullscreen = false;
             $scope.title = "";
@@ -311,27 +303,6 @@ define([
                 $state.go('scheduleAssistant', { groupID: $stateParams.groupID });
             }
 
-            /* Vote for one proposed time, front end only */
-            function vote(index) {
-                $scope.checkBoxData[index] = true;
-            }
-
-            /* submit all votes and store in back end database */
-            function submitVote() {
-
-            }
-
-            /* cancel the voting, back end to clear schedule assistant fields */
-            function cancelVoting() {
-
-            }
-
-            /* back end, take current highest, send the index of the event */
-            function endVoting() {
-
-            }
-
-
             function printDate(event) {
                 var newDate = new Date(event.startTime);
                 return (newDate.getMonth() + 1) + '/' + newDate.getDate();
@@ -342,83 +313,6 @@ define([
                 var newEndTime = new Date(event.endTime);
 
                 return newStartTime.getHours() + ':' + newStartTime.getMinutes() + ' - ' + newEndTime.getHours() + ':' + newEndTime.getMinutes()
-            }
-
-            function addEvent() {
-                var event = {
-                    name: $scope.eventName,
-                    description: $scope.eventDescription,
-                    location: $scope.eventLocation,
-                    startTime: $scope.myDate,
-                    endTime: $scope.myDate
-                }
-
-                //Now reading in the time strings and setting times. Remove when better time picker is made
-                var newStartDate = new Date($scope.myDate);
-                var newEndDate = new Date($scope.myDate);
-
-                var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-                newStartDate.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
-                newStartDate.setMinutes(parseInt(time[2]) || 0);
-
-                var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-                newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
-                newEndDate.setMinutes(parseInt(time2[2]) || 0);
-
-                event.startTime = newStartDate;
-                event.endTime = newEndDate;
-                //End Time Reading Hack
-
-
-                console.log(event);
-                CalendarServices.addGroupEvent(event, $stateParams.groupID)
-                    .then(
-                    function (result) {
-                        console.log('success adding event');
-                        refresh();
-                    },
-                    function (result) {
-                        console.log(result.data);
-                    }
-                    )
-            }
-
-            function deleteEvent(event) {
-                CalendarServices.deleteGroupEvent(event, $stateParams.groupID)
-                    .then(
-                    function (result) {
-                        console.log('success deleting event');
-                        refresh();
-                    },
-                    function (result) {
-                        console.log(result.data);
-                    }
-                    )
-            }
-
-            function editEvent() {
-                CalendarServices.editGroupEvent(event, $stateParams.groupID)
-                    .then(
-                    function (result) {
-                        refresh();
-                    },
-                    function (result) {
-                        console.log(result.data);
-                    }
-                    )
-            }
-
-            function refresh() {
-                CalendarServices.getGroupCalendar($stateParams.groupID)
-                    .then(
-                    function (result) {
-                        vm.events = result.data.events;
-                        console.log(vm.events);
-                    },
-                    function (result) {
-                        console.log(result.data);
-                    }
-                    )
             }
 
             return vm;

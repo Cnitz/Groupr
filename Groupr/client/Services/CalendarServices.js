@@ -17,6 +17,60 @@ define([
 				});
 			}
 
+			service.proposedMeetingTimes = function(events, name, description, location, groupId) {
+				var data = {
+					groupId: groupId,
+					name: name,
+					location: location,
+					description: description,
+					events: events
+				}
+				console.log(data);
+				return $http({
+					method: 'POST',
+					url: url + 'propose_meeting_times',
+					data: data
+				});
+			}
+
+			service.cancelVoting = function(groupId) {
+				var data = {
+					groupId: groupId,
+				}
+				console.log(data);
+				return $http({
+					method: 'POST',
+					url: url + 'cancel_voting',
+					data: data
+				});
+			}
+
+			service.endVoting = function(groupId, indexOfChoice) {
+				var data = {
+					groupId: groupId,
+				}
+				console.log(data);
+				return $http({
+					method: 'POST',
+					url: url + 'end_voting',
+					data: data
+				});
+			}
+
+			service.vote = function(groupId, arrayOfIndicesOfVotes, username) {
+				var data = {
+					groupId: groupId,
+					votes: arrayOfIndicesOfVotes,
+					username: username
+				}
+				console.log(data);
+				return $http({
+					method: 'POST',
+					url: url + 'vote',
+					data: data
+				});
+			}
+
 			service.deleteEvent = function(calendarEvent) {
 				return $http({
 					method: 'POST',
@@ -94,9 +148,9 @@ define([
 				});
 			}
 
-			service.scheduleAssistant = function(day, startTime, endTime, length, groupId) {
+			/* Start Time Date, End Time Date, length in minutes, and the groupID */
+			service.scheduleAssistant = function(startTime, endTime, length, groupId) {
 				var data = {
-					day: day,
 					startTime: startTime,
 					endTime: endTime,
 					length: length,

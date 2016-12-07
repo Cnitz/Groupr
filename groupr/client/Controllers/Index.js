@@ -8,4 +8,5 @@ define([
 	'./ComplaintBoxController',
 	'./ScheduleAssistantController',
 	'./GroupCalendar',
+	'./GroupChatController',
 ], function () {});

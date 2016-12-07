@@ -5,14 +5,7 @@
         <span flex></span>
         <md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button">Logout</md-button>
     </md-nav-bar>
-    <md-toolbar layout="row" class="md-hue-3">
-        <div class="md-toolbar-tools">
-            <span>{{vm.currGroup.name}}</span>
-        </div>
-        <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">
-            Leave Group
-        </md-button>
-    </md-toolbar>
+
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-md')">
             <md-toolbar class="md-theme-indigo">
@@ -23,6 +16,7 @@
                 <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Chat</md-button></p>
                 <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Tasks</md-button></p>
                 <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Complaint Box</md-button></p>
+                <p>  <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></p>
             </md-content>
         </md-sidenav>
             <!----<div>
@@ -50,9 +44,56 @@
                         </md-list-item>
                       </md-list>
                   -->
-                <div width="100%" layout="row">
-                <div width="500" maxwidth="50%" ng-show="votingInactive">
-                  <h2> Propose New Event </h2>
+                  <md-content layout="row" layout-align="space-around center" flex="">
+                <div width="500" maxwidth="50%" ng-show="votingActive">
+
+                <h2> Vote on meeting times </h2>
+
+
+
+
+                  <!--  <div ng-repeat="event in votingEvents">
+                      <md-list>
+                        <md-list-item>
+                          <h2> {{vm.printDate(event)}} </h2>
+                          {{vm.printTimes(event)}}
+                        </md-list-item>
+                      </md-list>
+                    </div> -->
+
+
+
+
+                    <md-card width="500">
+                        <md-list flex>
+                            <md-list-item class="md-3-line" ng-repeat="event in votingEvents">
+                                <div class="md-list-item-text" layout="column">
+                                    <h3 style="text-align:center;"><b>{{vm.printDate(event)}} </b></h3>
+                                    <h4 style="text-align:center;">{{vm.printTimes(event)}}</h4>
+                                    <div style="text-align:center;">
+                                        <md-checkbox  ng-model="event.selected" value="true" aria-label="Vote" ng-show="!hasVoted">
+                                            Vote for this Event?
+                                        </md-checkbox>
+                                    </div>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </md-card>
+
+                    <md-button ng-click="vm.submitVote()" class="md-primary" type="button" ng-show="!hasVoted">
+                      Submit Votes
+                    </md-button>
+                    <md-button ng-click="vm.cancelVoting()" class="md-primary" type="button">
+                      Cancel Vote
+                    </md-button>
+                    <md-button ng-click="vm.endVoting()" class="md-primary" type="button">
+                      End Vote
+                    </md-button>
+
+
+                </div>
+                <div width="500" maxwidth="50%" ng-show="!votingActive">
+                  <h2> Propose New Event</h2>
 
                   <md-card layout="row" layout-align="space-around center">
                   <div layout="column" layout-align="center center">
@@ -86,11 +127,27 @@
                           <input ng-model="endTime" type="text" name="endTime">
                         </md-input-container>
                       </div>
+
+                      <div layout="row" layout-align="space-around center">
+                      <md-input-container>
+                        <label> Hours </label>
+                        <input ng-model="durationHours" type="text" name="durationHours">
+                      </md-input-container>
+                      <md-input-container>
+                        <label> Minutes </label>
+                        <input ng-model="durationMinutes" type="text" name="durationMinutes">
+                      </md-input-container>
                     </div>
 
-                        <md-button ng-click="vm.proposeEvent()" class="md-primary" type="button">
+                    </div>
+                    <div layout="column">
+                        <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
                           Propose Event
                         </md-button>
+                        <md-button ng-click="vm.scheuduleAssistant()" class="md-accent" type="button">
+                          Reccomend A Time
+                        </md-button>
+                      </div>
                   </md-card>
 
                   <div ng-repeat="event in pendingEvents">
@@ -104,33 +161,52 @@
                           </md-card-actions>
                       </md-card>
                     </div>
+                      <md-button ng-click="vm.submitToGroup()" onclick="disabled='false';" class="md-accent" type="button">Submit for Voting</md-button>
 
-                      <md-button ng-click="vm.submitToGroup" onclick="disabled='false';" class="md-primary" type="button">Submit for Voting</md-button>
 
                 </div>
-                <div width="50%" maxwidth="50%">
-                <h2> Current Group Calendar </h2>
-                <div ng-repeat="event in vm.events">
-                    <md-card layout="row">
-                        <md-card-content layout="column" layout-align="center center">
-                            <md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
-                            <div> {{vm.printTimes(event)}}</div>
-                            <div> {{ event.location }} </div>
-                        </md-card-content>
-                        <md-card-content layout="column" layout-align="center center" flex="">
-                            <div><h2> {{ event.name }}  </h2></div>
-                            <div> {{ event.description }} </div>
-                        </md-card-content>
-                        <md-card-actions layout="column" layout-align="center center">
-                            <md-button ng-click="vm.editEvent() " onclick="disabled='false';" class="md-primary" type="button">Edit Event</md-button>
-                            <md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-primary" type="button">Delete Event</md-button>
-                        </md-card-actions>
-                    </md-card>
+                <md-content class="md-padding" layout="column" layout-align="center center" flex="">
+                    <md-card>
+                            <md-toolbar>
+                                <div class="md-toolbar-tools">
+                                    <h1>Group Calendar</h1>
+                                </div>
+                            </md-toolbar>
+                            <md-list flex>
+                                <md-list-item class="md-3-line" ng-repeat="event in vm.events" ng-click="vm.openEditEventDialog(event)">
+                                    <div class="md-list-item-text" layout="column">
+                                        <h2 style="text-align:center;">{{ event.name }}</h2>
+                                        <div class="md-list-item-text" layout="row">
+                                            <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
+                                            <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
+                                        </div>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                            <md-button ng-click="vm.openAddEventDialog()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
+                        </md-card>
+                </md-content>
+                <!--<div width="50%" maxwidth="50%">
+                    <md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
+                    <div ng-repeat="event in vm.events">
+                        <md-card layout="row">
+                            <md-card-content layout="column" layout-align="center center">
+                                <md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
+                                <div> {{vm.printTimes(event)}}</div>
+                                <div> {{ event.location }} </div>
+                            </md-card-content>
+                            <md-card-content layout="column" layout-align="center center" flex="">
+                                <div><h2> {{ event.name }}  </h2></div>
+                                <div> {{ event.description }} </div>
+                            </md-card-content>
+                            <md-card-actions layout="column" layout-align="center center">
+                                <md-button ng-click="vm.editEvent() " onclick="disabled='false';" class="md-accent" type="button">Edit Event</md-button>
+                                <md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-accent" type="button">Delete Event</md-button>
+                            </md-card-actions>
+                        </md-card>
                   </div>
-                  </div>
-                </div>
-            </div>
-
-
+                </div>-->
+            </md-content>
+        </div>
     </section>
 </div>

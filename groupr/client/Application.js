@@ -42,11 +42,11 @@ define([
         '$mdThemingProvider',
         function($mdThemingProvider) {
             $mdThemingProvider.theme('GrouprTheme')
-                .primaryPalette('teal')
-                .accentPalette('amber');
+                .primaryPalette('indigo')
+                .accentPalette('pink');
             $mdThemingProvider.theme('GrouprTheme-Dark')
-                .primaryPalette('teal')
-                .accentPalette('amber')
+                .primaryPalette('indigo')
+                .accentPalette('pink')
                 .dark();
             $mdThemingProvider.theme('grey')
                 .primaryPalette('blue-grey')

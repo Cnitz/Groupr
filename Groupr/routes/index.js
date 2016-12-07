@@ -341,11 +341,9 @@ router.route('/calendar/get_events').post((req, res) => {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                console.log(group.calendar);
-                res.status(200).json({ 
-                    events: group.calendar.events, 
-                    schedule_assistant_active: group.calendar.schedule_assistant.active,
-                    voters: group.calendar.schedule_assistant.voters 
+                res.status(200).json({
+                    events: group.calendar.events,
+                    schedule_assistant: group.calendar.schedule_assistant,
                 });
             }
         });
@@ -480,6 +478,9 @@ router.route('/calendar/edit_group_event').post((req, res) => {
 
 /* generateMeetingTimes */
 router.route('/calendar/schedule_assistant').post((req, res) => {
+    console.log("Request:");
+    console.log(req.body);
+    console.log("Request");
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -488,25 +489,33 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            var calendarList = [];
-            calendarList.push(group.calendar);
+            userIds = [];
             group.users.forEach(function(user) {
-                calendarList.push(user.calendar);
-            })
-            api_calendar.schedule_assistant(calendarList, req.body.day, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
-                if (obj.status != 500) {
-                    res.status(200).json({message: 'Success'})
-                }
-                else {
-                    res.status(obj.status).send(obj.message);
-                }
+                userIds.push(user._id);
             });
+            User.find({'_id': { $in: userIds } })
+            .populate('calendar')
+            .exec(function(err, users) {
+                var calendarList = [];
+                users.forEach(function(user) {
+                    calendarList.push(user.calendar.events);
+                })
+                api_calendar.schedule_assistant(calendarList, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
+                    if (obj.status != 500) {
+                        res.status(obj.status).send(obj.event);
+                    }
+                    else {
+                        res.status(500).json({message: 'Failure'})
+                    }
+                });
+            })
         }
     });
 });
 
 /* submitProposedMeetingTimes */
 router.route('/calendar/propose_meeting_times').post((req, res) => {
+    console.log('propose_meeting_times');
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -519,8 +528,10 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
             group.calendar.schedule_assistant.name = req.body.name;
             group.calendar.schedule_assistant.location = req.body.location;
             group.calendar.schedule_assistant.description = req.body.description;
-            group.calendar.schedule_assistant.events = req.body.events;
-            group.save((err) => {
+            req.body.events.forEach(function(event) {
+                group.calendar.schedule_assistant.events.push(event);
+            })
+            group.calendar.save((err) => {
                 if (err) {
                     res.status(500).json({message: 'Error: Meeting times could not be added'});
                 }
@@ -528,7 +539,7 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
                     res.status(200).json({message: 'Success: Proposed Meeting Time Added'});
                 }
             })
-            
+
         }
     });
 });
@@ -543,30 +554,20 @@ router.route('/calendar/vote').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            req.body.votes.forEach(function(event, index) {
-                if (votes[index] == true) {
-                    group.calendar.schedule_assistant.events[index] += 1;
+            req.body.votes.forEach(function(vote, index) {
+                if (vote === true) {
+                    group.calendar.schedule_assistant.events[index].votes += 1;
                 }
             })
-            User.findOne({ 'token': token}, (err, user) => {
+            group.calendar.schedule_assistant.voters.push(req.body.username);
+            group.calendar.save((err) => {
                 if (err) {
-                    res.status(500).json({message: 'Error: Database access'});
-                }
-                else if (user === null) {
-                    res.status(403).json({message: 'Error: No User found'});
+                    res.status(500).json({message: 'Error: Votes could not be added'});
                 }
                 else {
-                    group.calendar.schedule_assistant.voters.push(user.username);
-                    group.save((err) => {
-                        if (err) {
-                            res.status(500).json({message: 'Error: Votes could not be added'});
-                        }
-                        else {
-                             res.status(200).json({message: 'Success: Votes Added'});
-                        }
-                    })   
+                     res.status(200).json({message: 'Success: Votes Added'});
                 }
-            });
+            })
         }
     });
 });
@@ -581,7 +582,25 @@ router.route('/calendar/end_voting').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            group.calendar.events.push(group.calendar.schedule_assistant.events[req.body.index]);             
+            var schedule_assistant = group.calendar.schedule_assistant;
+            var winner = {
+                event: {
+                    name: schedule_assistant.name,
+                    description: schedule_assistant.description,
+                    location: schedule_assistant.location,
+                    startTime: null,
+                    endTime: null,
+                },
+                votes: 0
+            }
+            group.calendar.schedule_assistant.events.forEach(function(event, index) {
+                if (event.votes > winner.votes) {
+                    winner.event.startTime = event.startTime;
+                    winner.event.endTime = event.endTime;
+                    winner.votes = event.votes;
+                }
+            })
+            group.calendar.events.push(winner.event);
             group.calendar.schedule_assistant = {};
             group.calendar.schedule_assistant.active = false;
             group.calendar.schedule_assistant.voters = [];
@@ -590,7 +609,7 @@ router.route('/calendar/end_voting').post((req, res) => {
             group.calendar.schedule_assistant.location = "";
             group.calendar.schedule_assistant.description = "";
             group.calendar.schedule_assistant.events = [];
-            group.save((err) => {
+            group.calendar.save((err) => {
                 if (err) {
                     res.status(500).json({message: 'Error: Voting could not be ended'});
                 }
@@ -604,6 +623,7 @@ router.route('/calendar/end_voting').post((req, res) => {
 
 /* cancelVoting */
 router.route('/calendar/cancel_voting').post((req, res) => {
+    console.log('cancel voting');
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -620,7 +640,7 @@ router.route('/calendar/cancel_voting').post((req, res) => {
             group.calendar.schedule_assistant.location = "";
             group.calendar.schedule_assistant.description = "";
             group.calendar.schedule_assistant.events = [];
-            group.save((err) => {
+            group.calendar.save((err) => {
                 if (err) {
                     res.status(500).json({message: 'Error: Voting could not be canceled'});
                 }
@@ -678,13 +698,13 @@ router.route('/chat/:group').get((req, res) => {
 
 /*
  * Complaint api routes
- * 
- * 
- * 
- * 
- * 
- * 
- */ 
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 /*
  * POST
