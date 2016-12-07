@@ -23,10 +23,6 @@ define([
             vm.navigateToGroups = navigateToGroups;
             vm.groupCalendar = groupCalendar;
             vm.logout = logout;
-            vm.addEvent = addEvent;
-            vm.deleteEvent = deleteEvent;
-            vm.editEvent = editEvent;
-            vm.refresh = refresh;
             vm.printDate = printDate;
             vm.printTimes = printTimes;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
@@ -53,11 +49,12 @@ define([
                     day = '' + d.getDate(),
                     year = d.getFullYear();
 
-                if(month.length < 2) month = '0' + month;
-                if(day.length < 2) day = '0' + day;
 
-                $scope.realDueDate = $filter("date") (new Date(year, month, day), 'yyyy-MM-dd');
-                if(task.dueDate == null)
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                $scope.realDueDate = $filter("date")(new Date(year, month, day), 'yyyy-MM-dd');
+                if (task.dueDate == null)
                     $scope.realDueDate = "";
                 $mdDialog.show({
                     controller: DialogController,
@@ -77,19 +74,19 @@ define([
                     '       <div class="md-dialog-content" layout="column">' +
                     '           <md-input-container>' +
                     '               <label>Task Name</label>' +
-                    '               <input ng-model="title" type="text" name="title" placeholder="New Task Title" ng-init="title=\'' + task.title + '\'">' +
+                    '               <input ng-model="formdata.title" type="text" name="formdata.title" placeholder="New Task Title" ng-init="formdata.title=\'' + task.title + '\'">' +
                     '           </md-input-container>' +
                     '           <md-input-container>' +
                     '               <label>Task Description</label>' +
-                    '               <input ng-model="description" type="text" name="description" placeholder="New Task Description" ng-init="description=\'' + task.description + '\'">' +
+                    '               <input ng-model="formdata.desc" type="text" name="formdata.desc" placeholder="New Task Description" ng-init="formdata.desc=\'' + task.description + '\'">' +
                     '           </md-input-container>' +
                     '           <md-input-container>' +
                     '               <label>Due Date (optional)</label>' +
-                    '               <input ng-model="duedate" type="text" name="duedate" placeholder="yyyy-MM-dd" ng-init="duedate=\'' + $scope.realDueDate + '\'">' +
+                    '               <input ng-model="formdata.dd" type="text" name="formdata.dd" placeholder="yyyy-MM-dd" ng-init="formdata.dd=\'' + $scope.realDueDate + '\'">' +
                     '           </md-input-container>' +
                     '   </md-dialog-content>' +
                     '   <md-dialog-actions layout="row">' +
-                    '       <md-button ng-click="answer(\'save\')" class="md-primary">' +
+                    '       <md-button ng-click="answer(formdata)" class="md-primary">' +
                     '           Save Changes' +
                     '       </md-button>' +
                     '       <md-button ng-click="answer(\'cancel\')" class="md-primary" style="color:darkred">' +
@@ -101,14 +98,16 @@ define([
                     clickOutsideToClose: true
                 })
                     .then(function (answer) {
-                        $scope.status = 'You said the information was "' + answer + '".';
+                        console.log("New Title: " + answer.title + "; New Desc: " + answer.desc + "; New Due Date: " + answer.dd);
                     }, function () {
-                        $scope.status = 'You cancelled the dialog.';
+                        console.log('You cancelled the dialog.');
                     });
 
             };
 
             function DialogController($scope, $mdDialog) {
+                $scope.title = {};
+
                 $scope.hide = function () {
                     $mdDialog.hide();
                 };
@@ -316,83 +315,6 @@ define([
                 return newStartTime.getHours() + ':' + newStartTime.getMinutes() + ' - ' + newEndTime.getHours() + ':' + newEndTime.getMinutes()
             }
 
-            function addEvent() {
-                var event = {
-                    name: $scope.eventName,
-                    description: $scope.eventDescription,
-                    location: $scope.eventLocation,
-                    startTime: $scope.myDate,
-                    endTime: $scope.myDate
-                }
-
-                //Now reading in the time strings and setting times. Remove when better time picker is made
-                var newStartDate = new Date($scope.myDate);
-                var newEndDate = new Date($scope.myDate);
-
-                var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-                newStartDate.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
-                newStartDate.setMinutes(parseInt(time[2]) || 0);
-
-                var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-                newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
-                newEndDate.setMinutes(parseInt(time2[2]) || 0);
-
-                event.startTime = newStartDate;
-                event.endTime = newEndDate;
-                //End Time Reading Hack
-
-
-                console.log(event);
-                CalendarServices.addGroupEvent(event, $stateParams.groupID)
-                    .then(
-                    function (result) {
-                        console.log('success adding event');
-                        refresh();
-                    },
-                    function (result) {
-                        console.log(result.data);
-                    }
-                    )
-            }
-
-            function deleteEvent(event) {
-                CalendarServices.deleteGroupEvent(event, $stateParams.groupID)
-                    .then(
-                    function (result) {
-                        console.log('success deleting event');
-                        refresh();
-                    },
-                    function (result) {
-                        console.log(result.data);
-                    }
-                    )
-            }
-
-            function editEvent() {
-                CalendarServices.editGroupEvent(event, $stateParams.groupID)
-                .then(
-                    function (result) {
-                        refresh();
-                    },
-                    function (result) {
-                        console.log(result.data);
-                    }
-                )
-            }
-
-            function refresh() {
-                CalendarServices.getGroupCalendar($stateParams.groupID)
-                .then(
-                    function (result) {
-                        vm.events = result.data.events;
-                        console.log(vm.events);
-                    },
-                    function (result) {
-                        console.log(result.data);
-                    }
-                )
-            }
-
             return vm;
         }
     ])
@@ -405,4 +327,5 @@ define([
                     });
             };
         });
+        
 });
