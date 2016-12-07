@@ -5,14 +5,7 @@
         <span flex></span>
         <md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button">Logout</md-button>
     </md-nav-bar>
-    <md-toolbar layout="row" class="md-hue-3">
-        <div class="md-toolbar-tools">
-            <span>{{vm.currGroup.name}}</span>
-        </div>
-        <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">
-            Leave Group
-        </md-button>
-    </md-toolbar>
+
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-md')">
             <md-toolbar class="md-theme-indigo">
@@ -23,6 +16,7 @@
                 <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Chat</md-button></p>
                 <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Tasks</md-button></p>
                 <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Complaint Box</md-button></p>
+                <p>  <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></p>
             </md-content>
         </md-sidenav>
             <!----<div>
@@ -152,7 +146,11 @@
                       </md-card>
                     </div>
 
+<<<<<<< HEAD
                       <md-button ng-click="vm.submitToGroup()" class="md-accent" type="button">Submit for Voting</md-button>
+=======
+                      <md-button ng-click="vm.submitToGroup()" onclick="disabled='false';" class="md-primary" type="button">Submit for Voting</md-button>
+>>>>>>> origin/master
 
                 </div>
                 <div width="50%" maxwidth="50%">

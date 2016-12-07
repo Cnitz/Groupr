@@ -6,14 +6,6 @@
         <span flex></span>
         <md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button">Logout</md-button>
     </md-nav-bar>
-    <md-toolbar layout="row" class="md-hue-3">
-        <div class="md-toolbar-tools">
-            <span>{{vm.currGroup.name}}</span>
-        </div>
-        <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">
-            Leave Group
-        </md-button>
-    </md-toolbar>
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-md')">
             <md-toolbar class="md-theme-indigo">
@@ -24,6 +16,7 @@
                 <div style="text-align:center;"><md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Chat</md-button></div>
                 <div style="text-align:center;"><md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Tasks</md-button></div>
                 <div style="text-align:center;"><md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Complaint Box</md-button></div>
+                <div style="text-align:center;"><md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></div>
             </md-content>
         </md-sidenav>
         <md-content layout="column" layout-align="center center" flex="">
