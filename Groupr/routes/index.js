@@ -673,13 +673,28 @@ router.route('/tasks/remove').post((req, res) => {
     api_tasks.removeTask(req, res);
 });
 router.route('/tasks/markComplete').post((req, res) => {
-    api_tasks.removeTask(req, res);
+    //api_tasks.removeTask(req, res);
 });
 router.route('/tasks/updateStatus').post((req, res) => {
     api_tasks.updateStatus(req, res);
 });
 router.route('/tasks/addUser').post((req, res) => {
     api_tasks.addUser(req, res);
+});
+/*
+    Update information for a task
+    Example JSON POST input:
+    {
+        taskId: 'XXXXXX' (string, required),
+        title: 'title' (string, optional),
+        description: 'description' (string, optional),
+        status: 'status' (string, optional),
+        category: 'category' (string, optional),
+        dueDate: mm/dd/yy (Date, optional)
+    }
+*/
+router.route('/tasks/updateInfo').post((req, res) => {
+    api_tasks.updateInfo(req, res);
 });
 
 /*
