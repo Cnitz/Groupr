@@ -73,9 +73,11 @@ calendar.event_action = function(calendarList, eventList, action_type, callback)
     })
 }
 
-calendar.schedule_assistant = function(calendarList, startTime, endTime, meetingLength, callback) {
+calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, meetingLength, callback) {
     var reponseObj = {};
 
+    var startTime = new Date(startTimeUTC);
+    var endTime = new Date(endTimeUTC);
     var interval = (endTime - startTime) / 60000;
 
     /* Date aggregation */
