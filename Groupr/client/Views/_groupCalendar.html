@@ -135,7 +135,7 @@
                       </div>
                     </div>
 
-                        <md-button ng-click="vm.proposeEvent()" class="md-primary" type="button">
+                        <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
                           Propose Event
                         </md-button>
                   </md-card>
@@ -152,12 +152,12 @@
                       </md-card>
                     </div>
 
-                      <md-button ng-click="vm.submitToGroup()" class="md-primary" type="button">Submit for Voting</md-button>
+                      <md-button ng-click="vm.submitToGroup()" class="md-accent" type="button">Submit for Voting</md-button>
 
                 </div>
                 <div width="50%" maxwidth="50%">
                 <h2> Current Group Calendar </h2>
-                 <md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-primary" type="button">Add Event</md-button>
+                 <md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
                 <div ng-repeat="event in vm.events">
                     <md-card layout="row">
                         <md-card-content layout="column" layout-align="center center">
@@ -170,8 +170,8 @@
                             <div> {{ event.description }} </div>
                         </md-card-content>
                         <md-card-actions layout="column" layout-align="center center">
-                            <md-button ng-click="vm.editEvent() " onclick="disabled='false';" class="md-primary" type="button">Edit Event</md-button>
-                            <md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-primary" type="button">Delete Event</md-button>
+                            <md-button ng-click="vm.editEvent() " onclick="disabled='false';" class="md-accent" type="button">Edit Event</md-button>
+                            <md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-accent" type="button">Delete Event</md-button>
                         </md-card-actions>
                     </md-card>
                   </div>
