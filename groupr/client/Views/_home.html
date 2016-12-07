@@ -99,15 +99,8 @@
 						<md-card>
 							<md-toolbar>
 								<div class="md-toolbar-tools">
-									<h1 id="title">
-										<span>
-											Personal Calendar
-											<md-button ng-click="vm.addEvent()" onclick="disabled='false';" type="button">Add Event</md-button>
-											<md-button  href="/api/auth/google" onclick="disabled='true';" class="md-primary" type="button" >Google Calendar</md-button>
-										</span>
-									</h1>
-									<span flex=""></span>
-								</div>
+                                    <h1>Group Calendar</h1>
+                                </div>
 							</md-toolbar>
 							<md-list flex>
 								<md-list-item class="md-3-line" ng-repeat="event in events" ng-click="vm.addEvent()">
@@ -119,6 +112,8 @@
                                         </div>
                                     </div>
 								</md-list-item>
+								<md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
+								<md-button  href="/api/auth/google" onclick="disabled='true';" class="md-accent" type="button" >Import Calendar</md-button>
 							</md-list>
 						</md-card>
 				</md-content>

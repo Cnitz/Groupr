@@ -170,8 +170,6 @@
                             <md-toolbar>
                                 <div class="md-toolbar-tools">
                                     <h1>Group Calendar</h1>
-                                        <md-button ng-click="vm.openAddEventDialog()" onclick="disabled='false';" type="button">Add Event</md-button>
-                                    <span flex=""></span>
                                 </div>
                             </md-toolbar>
                             <md-list flex>
@@ -185,6 +183,7 @@
                                     </div>
                                 </md-list-item>
                             </md-list>
+                            <md-button ng-click="vm.openAddEventDialog()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
                         </md-card>
                 </md-content>
                 <!--<div width="50%" maxwidth="50%">
