@@ -480,7 +480,7 @@ router.route('/calendar/edit_group_event').post((req, res) => {
 router.route('/calendar/schedule_assistant').post((req, res) => {
     console.log("Request:");
     console.log(req.body);
-    console.log("/Request");
+    console.log("Request");
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -502,10 +502,10 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
                 })
                 api_calendar.schedule_assistant(calendarList, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
                     if (obj.status != 500) {
-                        res.status(200).json({message: 'Success: The event has been added'})
+                        res.status(obj.status).send(obj.event);
                     }
                     else {
-                        res.status(obj.status).send(obj.event);
+                        res.status(500).json({message: 'Failure'})
                     }
                 });
             })

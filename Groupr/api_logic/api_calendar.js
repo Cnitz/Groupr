@@ -78,6 +78,10 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
 
     var startTime = new Date(startTimeUTC);
     var endTime = new Date(endTimeUTC);
+
+    console.log(startTime);
+    console.log(endTime);
+
     var interval = (endTime - startTime) / 60000;
 
     /* Date aggregation */
@@ -90,17 +94,30 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
             else if (calendarList[i][j].startTime >= endTime) {
             }
             else {
+                console.log("In Else");
                 var event = calendarList[i][j];
+                var newEvent = {
+                  startTime: 0,
+                  endTime: 0
+                };
                 if (event.startTime < startTime) {
                     event.startTime = startTime;
                 }
                 if (event.endTime > endTime) {
                     event.endTime = endTime;
                 }
-                event.startTime = (event.startTime - startTime) / 60000;
-                event.endTime = (event.endTime - startTime) / 60000;
-                aggregateCalendar.push(event);
 
+                console.log(event.startTime);
+                console.log(event.endTime);
+
+                newEvent.startTime = (event.startTime - startTime) / 60000;
+                newEvent.endTime = (event.endTime - startTime) / 60000;
+
+                console.log(newEvent.startTime);
+                console.log(newEvent.endTime);
+
+                aggregateCalendar.push(newEvent);
+                console.log("/Else");
             }
         }
     }
@@ -125,7 +142,7 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
         startIndex: 0,
         endIndex: 0,
         score: 0,
-    } 
+    }
     var curCount = 0;
     for (var i = 0; i < interval; i++) {
         if (i < meetingLength) {
@@ -152,17 +169,27 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
     }
     console.log(bestFit);
 
-    /* create date for best fit event */            
+    /* create date for best fit event */
     var finalStartTime = new Date(startTime);
+    console.log("finalStartTime: "+finalStartTime);
     var finalEndTime = new Date(startTime);
+    console.log("finalEndTime: "+finalEndTime);
     var startHours = startTime.getHours();
+    console.log("startHours: "+startHours);
     var startMinutes = startTime.getMinutes();
+    console.log("startMinutes: "+startMinutes);
     var totalStartTime = ((bestFit.startIndex + startMinutes) / 60) + startHours;
+    console.log("totalStartTime: "+totalStartTime);
     var totalEndTime = ((bestFit.endIndex + startMinutes) / 60) + startHours;
+    console.log("totalEndTime: "+totalEndTime);
     var startHours = Math.floor(totalStartTime);
+    console.log("startHours: "+startHours);
     var startMinutes = Math.round((totalStartTime - startHours) * 60);
+    console.log("startMinutes: "+startMinutes);
     var endHours = Math.floor(totalEndTime);
-    var endMinutes = Math.round((totalEndTime - startHours) * 60);
+    console.log("endHours: "+endHours);
+    var endMinutes = Math.round((totalEndTime - endHours) * 60);
+    console.log("endMinutes: "+endMinutes);
 
     finalStartTime.setHours(startHours);
     finalStartTime.setMinutes(startMinutes);

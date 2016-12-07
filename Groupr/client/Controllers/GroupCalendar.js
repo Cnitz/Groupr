@@ -132,11 +132,18 @@ define([
               console.log(newStartDate);
               console.log(newEndDate);
 
+              newStartDate.setSeconds(0);
+              newStartDate.setMilliseconds(0);
+              newEndDate.setSeconds(0);
+              newEndDate.setMilliseconds(0);
+
               CalendarServices.scheduleAssistant(newStartDate, newEndDate, duration, vm.groupID).then(
                 function(res){
-                  $scope.pendingEvents.push(res.event);
+                  console.log(res.data);
+                  $scope.pendingEvents.push(res.data);
                 },
                 function(res){
+                  console.log("Failure");
                   console.log(res.event);
                 });
             }
