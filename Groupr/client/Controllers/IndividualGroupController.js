@@ -57,11 +57,12 @@ define([
                     day = '' + d.getDate(),
                     year = d.getFullYear();
 
-                if(month.length < 2) month = '0' + month;
-                if(day.length < 2) day = '0' + day;
 
-                $scope.realDueDate = $filter("date") (new Date(year, month, day), 'yyyy-MM-dd');
-                if(task.dueDate == null)
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                $scope.realDueDate = $filter("date")(new Date(year, month, day), 'yyyy-MM-dd');
+                if (task.dueDate == null)
                     $scope.realDueDate = "";
                 $mdDialog.show({
                     controller: DialogController,
@@ -81,19 +82,19 @@ define([
                     '       <div class="md-dialog-content" layout="column">' +
                     '           <md-input-container>' +
                     '               <label>Task Name</label>' +
-                    '               <input ng-model="title" type="text" name="title" placeholder="New Task Title" ng-init="title=\'' + task.title + '\'">' +
+                    '               <input ng-model="formdata.title" type="text" name="formdata.title" placeholder="New Task Title" ng-init="formdata.title=\'' + task.title + '\'">' +
                     '           </md-input-container>' +
                     '           <md-input-container>' +
                     '               <label>Task Description</label>' +
-                    '               <input ng-model="description" type="text" name="description" placeholder="New Task Description" ng-init="description=\'' + task.description + '\'">' +
+                    '               <input ng-model="formdata.desc" type="text" name="formdata.desc" placeholder="New Task Description" ng-init="formdata.desc=\'' + task.description + '\'">' +
                     '           </md-input-container>' +
                     '           <md-input-container>' +
                     '               <label>Due Date (optional)</label>' +
-                    '               <input ng-model="duedate" type="text" name="duedate" placeholder="yyyy-MM-dd" ng-init="duedate=\'' + $scope.realDueDate + '\'">' +
+                    '               <input ng-model="formdata.dd" type="text" name="formdata.dd" placeholder="yyyy-MM-dd" ng-init="formdata.dd=\'' + $scope.realDueDate + '\'">' +
                     '           </md-input-container>' +
                     '   </md-dialog-content>' +
                     '   <md-dialog-actions layout="row">' +
-                    '       <md-button ng-click="answer(\'save\')" class="md-primary">' +
+                    '       <md-button ng-click="answer(formdata)" class="md-primary">' +
                     '           Save Changes' +
                     '       </md-button>' +
                     '       <md-button ng-click="answer(\'cancel\')" class="md-primary" style="color:darkred">' +
@@ -105,14 +106,16 @@ define([
                     clickOutsideToClose: true
                 })
                     .then(function (answer) {
-                        $scope.status = 'You said the information was "' + answer + '".';
+                        console.log("New Title: " + answer.title + "; New Desc: " + answer.desc + "; New Due Date: " + answer.dd);
                     }, function () {
-                        $scope.status = 'You cancelled the dialog.';
+                        console.log('You cancelled the dialog.');
                     });
 
             };
 
             function DialogController($scope, $mdDialog) {
+                $scope.title = {};
+
                 $scope.hide = function () {
                     $mdDialog.hide();
                 };
@@ -430,4 +433,5 @@ define([
                     });
             };
         });
+        
 });
