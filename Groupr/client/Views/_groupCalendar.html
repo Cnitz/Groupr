@@ -149,30 +149,49 @@
 
 
                 </div>
-                <div width="50%" maxwidth="50%">
-                <h2> Current Group Calendar </h2>
-                 <md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
-                <div ng-repeat="event in vm.events">
-                    <md-card layout="row">
-                        <md-card-content layout="column" layout-align="center center">
-                            <md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
-                            <div> {{vm.printTimes(event)}}</div>
-                            <div> {{ event.location }} </div>
-                        </md-card-content>
-                        <md-card-content layout="column" layout-align="center center" flex="">
-                            <div><h2> {{ event.name }}  </h2></div>
-                            <div> {{ event.description }} </div>
-                        </md-card-content>
-                        <md-card-actions layout="column" layout-align="center center">
-                            <md-button ng-click="vm.editEvent() " onclick="disabled='false';" class="md-accent" type="button">Edit Event</md-button>
-                            <md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-accent" type="button">Delete Event</md-button>
-                        </md-card-actions>
+                <md-content class="md-padding" layout="column" layout-align="center center" flex="">
+                    <md-card>
+                        <md-toolbar>
+                            <div class="md-toolbar-tools">
+                                <h1 id="title">
+                                    <span>
+                                        Group Calendar 
+                                        <md-button ng-click="vm.addEvent()" onclick="disabled='false';" type="button">Add Event</md-button>
+                                    </span>
+                                </h1>
+                                <span flex=""></span>
+                            </div>
+                        </md-toolbar>
+                        <md-list flex>
+                            <md-list-item ng-repeat="event in vm.events">
+                                <div class="md-list-item-text" layout="column">
+                                    <h7 style="text-align:center;"><b>{{ event.name }}</b></h7>
+                                </div>
+                            </md-list-item>
+                        </md-list>
                     </md-card>
-                  </div>
-                  </div>
                 </md-content>
-            </div>
-
-
+                <!--<div width="50%" maxwidth="50%">
+                    <md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
+                    <div ng-repeat="event in vm.events">
+                        <md-card layout="row">
+                            <md-card-content layout="column" layout-align="center center">
+                                <md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
+                                <div> {{vm.printTimes(event)}}</div>
+                                <div> {{ event.location }} </div>
+                            </md-card-content>
+                            <md-card-content layout="column" layout-align="center center" flex="">
+                                <div><h2> {{ event.name }}  </h2></div>
+                                <div> {{ event.description }} </div>
+                            </md-card-content>
+                            <md-card-actions layout="column" layout-align="center center">
+                                <md-button ng-click="vm.editEvent() " onclick="disabled='false';" class="md-accent" type="button">Edit Event</md-button>
+                                <md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-accent" type="button">Delete Event</md-button>
+                            </md-card-actions>
+                        </md-card>
+                  </div>
+                </div>
+            </md-content>
+        </div>
     </section>
 </div>
