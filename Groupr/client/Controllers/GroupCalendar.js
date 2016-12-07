@@ -33,6 +33,8 @@ define([
             vm.endVoting = endVoting;
             vm.proposeEvent = proposeEvent;
             vm.submitToGroup = submitToGroup;
+            vm.openAddEventDialog = openAddEventDialog;
+            vm.openEditEventDialog = openEditEventDialog;
 
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
@@ -481,6 +483,34 @@ define([
                         console.log(result.data);
                     }
                 )
+            }
+
+            function openAddEventDialog() {
+                $mdDialog.show({
+                    controller: 'CloudView.Controllers.AddEvent',
+                    templateUrl: './Views/_add_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
+            }
+
+            function openEditEventDialog() {
+                $mdDialog.show({
+                    controller: 'CloudView.Controllers.EditEvent',
+                    templateUrl: './Views/_edit_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
             }
 
             return vm;

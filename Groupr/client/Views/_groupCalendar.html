@@ -167,30 +167,25 @@
                 </div>
                 <md-content class="md-padding" layout="column" layout-align="center center" flex="">
                     <md-card>
-                        <md-toolbar>
-                            <div class="md-toolbar-tools">
-                                <h1 id="title">
-                                    <span>
-                                        Group Calendar 
-                                        <md-button ng-click="vm.addEvent()" onclick="disabled='false';" type="button">Add Event</md-button>
-                                    </span>
-                                </h1>
-                                <span flex=""></span>
-                            </div>
-                        </md-toolbar>
-                        <md-list flex>
-                            <md-list-item class="md-3-line" ng-repeat="event in vm.events">
-                                <div class="md-list-item-text" layout="column">
-                                    <h2 style="text-align:center;">{{ event.name }}</h2> 
+                            <md-toolbar>
+                                <div class="md-toolbar-tools">
+                                    <h1>Group Calendar</h1>
+                                        <md-button ng-click="vm.openAddEventDialog()" onclick="disabled='false';" type="button">Add Event</md-button>
+                                    <span flex=""></span>
                                 </div>
-                                <div class="md-list-item-text" layout="column">
-                                    <h3 style="text-align:center;"> {{vm.printDate(event)}}</h3>
-                                    <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
-                                </div>
-
-                            </md-list-item>
-                        </md-list>
-                    </md-card>
+                            </md-toolbar>
+                            <md-list flex>
+                                <md-list-item class="md-3-line" ng-repeat="event in vm.events" ng-click="vm.openEditEventDialog(event)">
+                                    <div class="md-list-item-text" layout="column">
+                                        <h2 style="text-align:center;">{{ event.name }}</h2>
+                                        <div class="md-list-item-text" layout="row">
+                                            <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
+                                            <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
+                                        </div>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                        </md-card>
                 </md-content>
                 <!--<div width="50%" maxwidth="50%">
                     <md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
