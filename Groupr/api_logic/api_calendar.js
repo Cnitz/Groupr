@@ -152,7 +152,10 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
             curCount -= conflictFrequency[i - meetingLength];
             curCount += conflictFrequency[i];
 
-            if (curCount < bestFit.score) {
+            if (curCount == 0) {
+                // TODO
+            }
+            else if (curCount < bestFit.score) {
                 bestFit.startIndex = i - meetingLength + 1;
                 bestFit.endIndex = i + 1;
                 bestFit.score = curCount;
