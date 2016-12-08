@@ -1,7 +1,7 @@
 define([
     './Module'
 ], function (module) {
-    return module.controller('Groupr.Controllers.GroupCalendar', [
+    return module.controller('Groupr.Controllers.GroupCalendarController', [
         '$scope',
         '$state',
         'Groupr.Services.GroupServices',
@@ -517,7 +517,7 @@ define([
                     locals : {
                         groupID: $stateParams.groupID,
                         calendarType: 'group',
-                        event: event 
+                        event: event
                     },
                     onRemoving: function(element, removePromise) {
                         refresh();
