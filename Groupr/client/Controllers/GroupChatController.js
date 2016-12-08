@@ -14,14 +14,14 @@ define([
                 vm.tasks = [];
             }
             vm.goHome = goHome;
+
             vm.groupCalendar = groupCalendar;
-            vm.groupComplaints = groupComplaints;
             vm.groupChat = groupChat;
             vm.groupTasks = groupTasks;
+            vm.groupComplaints = groupComplaints;
             vm.logout = logout;
+
             vm.refresh = refresh;
-            vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
-            vm.navigateToGroupChat = navigateToGroupChat;
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
             $scope.users = [];
@@ -59,11 +59,6 @@ define([
                 $state.go('groupCalendar', { groupID: vm.groupID });
             }
 
-            function groupComplaints() {
-                console.log("groupID: " + vm.groupID);
-                $state.go('groupComplaints', { groupID: vm.groupID });
-            }
-
             function groupChat() {
                 $state.go('groupChat', { groupID: vm.groupID });
             }
@@ -72,82 +67,24 @@ define([
                 $state.go('groupindiv', { groupID: vm.groupID });
             }
 
-            /*Navigates to Chat Subpage*/
-            function navigateToGroupChat(){
-              $state.go('groupChat',{groupID: g._id});
+            function groupComplaints(){
+                $state.go('groupComplaints', {groupID: vm.groupID});
             }
+
+
 
             function activate() {
                 if ($stateParams.groupID != null) {
-                    AccountServices.getUser()
-                    .then(
-                        function(res) {
-                            $scope.user = res.data;
-                            console.log($scope.user);
-                            CalendarServices.getGroupCalendar($stateParams.groupID)
-                            .then(
-                                function(result) {
-                                    $scope.votingEvents = result.data.schedule_assistant.events;
-
-                                    $scope.votingEvents.forEach(function(event){
-                                      event.selected = false;
-                                    })
-
-                                    $scope.votingActive = result.data.schedule_assistant.active;
-                                    vm.events = result.data.events;
-                                    vm.voters = result.data.schedule_assistant.voters;
-                                     /*console.log(result);
-                                     console.log(vm.events);
-                                     console.log($scope.votingEvents);
-                                     console.log(vm.voters);*/
-
-                                    if (votingActive) {
-                                        vm.voters.forEach(function(voter) {
-                                            if (voter === $scope.user.username) {
-                                                $scope.hasVoted = true;
-                                            }
-                                        })
-                                    }
-
-                                    //console.log($scope.hasVoted);
-
-                                },
-                                function(result) {
-                                    console.log(res.data);
-                                })
-                        },
-                        function(res) {
-                            console.log(res.data);
-                        }
-                    )
-
                     GroupServices.getGroupInfo($stateParams.groupID)
-                    .then(
-                        function(resOne) {
+                        .then(function (resOne) {
                             vm.currGroup = resOne.data;
                             var g = { group: vm.currGroup._id };
-                            GroupServices.getTasks(g)
-                            .then(
-                                function (resTwo) {
-                                    vm.tasks = resTwo.data;
-                                },
-                                function (resTwo) {
-                                    console.log(resTwo.data);
-                                })
-                        },
-                        function (resOne) {
-                            console.log(res.data);
-                        }
-                    )
+                        }, function (resOne) {
+                            ngToast.danger(resOne.data.message);
+                        });
                 }
             }
-
             activate();
-
-            for (var i = 0; i < vm.tasks.length; i++) {
-                $scope.checkBoxData[i] = vm.tasks[i].status;
-            }
-            console.log($scope.checkBoxData);
 
             /**
             * Supplies a function that will continue to operate until the

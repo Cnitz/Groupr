@@ -14,7 +14,7 @@ define([
 		'$sce',
 		'$filter',
 		'ngToast',
-		function ComplaintBoxController($scope, $state) {
+		function ComplaintBoxController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $sce, $filter, ngToast) {
 			var vm = this;
 			{
 					vm.groups = [];
@@ -86,75 +86,39 @@ define([
 
 			function activate() {
 					if ($stateParams.groupID != null) {
-							AccountServices.getUser()
-							.then(
-									function(res) {
-											$scope.user = res.data;
-											console.log($scope.user);
-											CalendarServices.getGroupCalendar($stateParams.groupID)
-											.then(
-													function(result) {
-															$scope.votingEvents = result.data.schedule_assistant.events;
-
-															$scope.votingEvents.forEach(function(event){
-																event.selected = false;
-															})
-
-															$scope.votingActive = result.data.schedule_assistant.active;
-															vm.events = result.data.events;
-															vm.voters = result.data.schedule_assistant.voters;
-															 /*console.log(result);
-															 console.log(vm.events);
-															 console.log($scope.votingEvents);
-															 console.log(vm.voters);*/
-
-															if (votingActive) {
-																	vm.voters.forEach(function(voter) {
-																			if (voter === $scope.user.username) {
-																					$scope.hasVoted = true;
-																			}
-																	})
-															}
-
-															//console.log($scope.hasVoted);
-
-													},
-													function(result) {
-															console.log(res.data);
-													})
-									},
-									function(res) {
-											console.log(res.data);
-									}
-							)
-
 							GroupServices.getGroupInfo($stateParams.groupID)
-							.then(
-									function(resOne) {
+									.then(function (resOne) {
 											vm.currGroup = resOne.data;
 											var g = { group: vm.currGroup._id };
+
 											GroupServices.getTasks(g)
-											.then(
-													function (resTwo) {
+													.then(function (resTwo) {
 															vm.tasks = resTwo.data;
-													},
-													function (resTwo) {
+													}, function (resTwo) {
 															console.log(resTwo.data);
-													})
-									},
-									function (resOne) {
-											console.log(res.data);
-									}
-							)
+													});
+											CalendarServices.getGroupCalendar($stateParams.groupID)
+													.then(
+													function (resultThree) {
+															console.log(resultThree.data.events);
+															vm.events = resultThree.data.events;
+															console.log(vm.events);
+													},
+													function (resultThree) {
+															console.log(resultThree);
+													}
+													)
+
+									}, function (resOne) {
+											ngToast.danger(resOne.data.message);
+									});
+
+
+
 					}
 			}
 
 			activate();
-
-			for (var i = 0; i < vm.tasks.length; i++) {
-					$scope.checkBoxData[i] = vm.tasks[i].status;
-			}
-			console.log($scope.checkBoxData);
 
 			/**
 			* Supplies a function that will continue to operate until the

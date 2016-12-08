@@ -18,7 +18,13 @@ define([
                 vm.tasks = [];
             }
             vm.goHome = goHome;
+
             vm.groupCalendar = groupCalendar;
+            vm.groupChat = groupChat;
+            vm.groupTasks = groupTasks;
+            vm.groupComplaints = groupComplaints;
+            vm.logout = logout;
+
             vm.logout = logout;
             vm.addEvent = addEvent;
             vm.deleteEvent = deleteEvent;
@@ -159,8 +165,21 @@ define([
             }
 
             /*Navigates to Group Calendar sub-page*/
-            function groupCalendar(){
-              $state.go('groupCalendar',{groupID: g._id});
+            function groupCalendar() {
+                console.log("groupID: " + vm.groupID);
+                $state.go('groupCalendar', { groupID: vm.groupID });
+            }
+
+            function groupChat() {
+                $state.go('groupChat', { groupID: vm.groupID });
+            }
+
+            function groupTasks() {
+                $state.go('groupindiv', { groupID: vm.groupID });
+            }
+
+            function groupComplaints(){
+                $state.go('groupComplaints', {groupID: vm.groupID});
             }
 
             /* Takes the current proposedEvents and allows the group to vote on them*/
