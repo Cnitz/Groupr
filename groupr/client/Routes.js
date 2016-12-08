@@ -40,6 +40,15 @@ define([
 						groupID: ""
 					}
 				})
+				.state('groupComplaints', {
+					url:			'/groupindiv/:groupID',
+					templateUrl:	'Views/_groupComplaints.html',
+					controller:		'Groupr.Controllers.ComplaintBoxController',
+					controllerAs:  	'vm',
+					params: {
+						groupID: ""
+					}
+				})
 				.state('groupCalendar', {
 					url:			'/groupCalendar/:groupID',
 					templateUrl:	'Views/_groupCalendar.html',

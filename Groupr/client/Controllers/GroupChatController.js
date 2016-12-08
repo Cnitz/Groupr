@@ -15,6 +15,7 @@ define([
             }
             vm.goHome = goHome;
             vm.groupCalendar = groupCalendar;
+            vm.groupComplaints = groupComplaints;
             vm.groupChat = groupChat;
             vm.groupTasks = groupTasks;
             vm.logout = logout;
@@ -56,6 +57,11 @@ define([
             function groupCalendar() {
                 console.log("groupID: " + vm.groupID);
                 $state.go('groupCalendar', { groupID: vm.groupID });
+            }
+
+            function groupComplaints() {
+                console.log("groupID: " + vm.groupID);
+                $state.go('groupComplaints', { groupID: vm.groupID });
             }
 
             function groupChat() {

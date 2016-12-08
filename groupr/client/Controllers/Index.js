@@ -11,4 +11,5 @@ define([
 	'./GroupChatController',
 	'./AddEventDialogController',
 	'./EditEventDialogController',
+	'./ComplaintBoxController',
 ], function () {});
