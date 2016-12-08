@@ -15,11 +15,11 @@ define([
 				});
 			}
 
-			service.sendMessage = function(message, groupID) {
+			service.sendMessage = function(incomingMessage, groupID) {
 				return $http({
 					method: 'POST',
 					url: url + groupID+'/send',
-					data: message
+					data: {message: incomingMessage}
 				});
 			}
 
