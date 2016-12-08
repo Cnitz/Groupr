@@ -7,7 +7,7 @@ define([
 	'./IndividualGroupController',
 	'./ComplaintBoxController',
 	'./ScheduleAssistantController',
-	'./GroupCalendar',
+	'./GroupCalendarController',
 	'./GroupChatController',
 	'./AddEventDialogController',
 	'./EditEventDialogController',

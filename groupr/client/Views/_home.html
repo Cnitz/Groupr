@@ -1,88 +1,50 @@
 <div id="body-div" layout="column">
-	<md-nav-bar md-selected-nav-item="currentNavItem">
-		<md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
-		<md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Find Groups</md-nav-item>
-		<span flex></span>
-		<md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button" >Logout</md-button>
-	</md-nav-bar>
-	<md-content class="md-padding" layout="row" layout-align="space-around center" flex="">
-		<p data-ng-if="vm.groups.length == 0">You're not a part of any groups! Click on the "Groups" tab above to find some to join!</p>
-		<div data-ng-cloak data-ng-if="vm.groups.length > 0" style="width:20%;">
-			<md-card style="overflow:auto;">
-				<md-list flex>
-					<md-toolbar>
-							<div class="md-toolbar-tools">
-									<h1 id="title">
-											<span>
-													Your Groups
-											</span>
-									</h1>
-									<span flex=""></span>
-							</div>
-					</md-toolbar>
-					<md-list-item class="md-3-line" ng-click="vm.goToGroup(group)" data-ng-repeat="group in vm.groups">
-						<img ng-src="https://static1.squarespace.com/static/50146ef684aea6ed68d3267c/t/53ec3e70e4b085b1e2a01333/1407991419928/" class="md-avatar" alt="A Group Image" />
-						<div class="md-list-item-text" layout="column">
-							<h3 style="text-align:center;"><b>{{ group.name }}</b></h3>
-							<h4 style="text-align:center;">{{ group.description }}</h4>
-						</div>
-					</md-list-item>
-				</md-list>
-			</md-card>
-		</div>
-			<!--
-		  <div>
-			<md-card style="overflow:auto;" layout="row" layout-align="start center">
-				<h2> Group Calendar </h2>
-
-				<md-card-actions layout="row" layout-align="end center">
-				<md-button  onclick="disabled='true';" class="md-primary" type="button" href="http://localhost:3000/api/auth/google">Import Google Calendar</md-button>
-				</md-card-actions>
-			</md-card>
-      <md-card style="overflow:auto;">
-       <md-list flex>
-        <md-list-item class="md-3-line" ng-repeat="event in vm.events" ng-click="null" layout-align="center center" layout="row">
-          <md-contnet layout="column">
-            <h3>NOV. 21</h3>
-            <h4>12:00 - 12:00</h4>
-            <h4>Lawson</h4>
-          </md-contnet>
-           <md-contnet layout="column">
-            <h3 style="text-align:center;"><b>{{ event.name }} </b></h3>
-            <h4 style="text-align:center;">{{event.description}}</h4>
-          </md-contnet>
-          <md-button id="btnRemoveEvent" ng-click="vm.deleteEvent(event)" class="md-primary" type="button" aria-label="Delete Event">
-            DELETE EVENT
-          </md-button>
-        </md-list-item>
-      </md-list>
-
-<md-subheader class="md-no-sticky">Add a New Event:</md-subheader>
-      <md-input-container>
-        <label>Event Name</label>
-        <input ng-model="name" type="text" name="title">
-      </md-input-container>
-      <md-input-container>
-        <label>Description</label>
-        <input ng-model="EventDescription" type="text" name="description">
-      </md-input-container>
-      <md-input-container>
-        <label>Location</label>
-        <input ng-model="Location" type="text" name="location">
-      </md-input-container>
-      <md-button id="btnAddEvent" ng-click="addEvent()" class="md-primary" type="button" aria-label="Add Event">
-        ADD EVENT
-      </md-button>
-
-      </md-card>
-      </div>
-		-->
+    <md-nav-bar md-selected-nav-item="currentNavItem">
+        <md-nav-item md-nav-click="vm.goHome()" name="home">Home</md-nav-item>
+        <md-nav-item md-nav-click="vm.navigateToGroups()" name="groups">Find Groups</md-nav-item>
+        <span flex></span>
+        <md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button">Logout</md-button>
+    </md-nav-bar>
+    <md-content class="md-padding" layout="row" layout-align="space-around center" flex="">
+        <p data-ng-if="vm.groups.length == 0">You're not a part of any groups! Click on the "Groups" tab above to find some to join!</p>
+        <div data-ng-cloak data-ng-if="vm.groups.length > 0" style="width:20%;">
+            <md-card style="overflow:auto;">
+                <md-list flex>
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h1 id="title">
+                                <span>
+                                    Your Groups
+                                </span>
+                            </h1>
+                            <span flex=""></span>
+                        </div>
+                    </md-toolbar>
+                    <md-list-item class="md-3-line" ng-click="vm.goToGroup(group)" data-ng-repeat="group in vm.groups">
+                        <img ng-src="https://static1.squarespace.com/static/50146ef684aea6ed68d3267c/t/53ec3e70e4b085b1e2a01333/1407991419928/" class="md-avatar" alt="A Group Image" />
+                        <div class="md-list-item-text" layout="column">
+                            <h3 style="text-align:center;"><b>{{ group.name }}</b></h3>
+                            <h4 style="text-align:center;">{{ group.description }}</h4>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-card>
+        </div>
 
         <p data-ng-if="vm.tasks.length == 0">You don't have any tasks! Find a group and jump on some!</p>
         <div data-ng-cloak data-ng-if="vm.tasks.length > 0" style="width:20%;">
             <md-card style="overflow:auto;">
                 <md-list flex>
-                    <md-subheader class="md-no-sticky">Your Tasks:</md-subheader>
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h1 id="title">
+                                <span>
+                                    Your Tasks
+                                </span>
+                            </h1>
+                            <span flex=""></span>
+                        </div>
+                    </md-toolbar>
                     <md-list-item class="md-3-line" ng-click="vm.goToTaskGroup(task)" data-ng-repeat="task in vm.tasks">
                         <img ng-src="https://static1.squarespace.com/static/50146ef684aea6ed68d3267c/t/53ec3e70e4b085b1e2a01333/1407991419928/" class="md-avatar" alt="A Group Image" />
                         <div class="md-list-item-text" layout="column">
@@ -93,100 +55,26 @@
                     </md-list-item>
                 </md-list>
             </md-card>
-        </div>
-
-
-						<md-card>
-                            <md-toolbar>
-                                <div class="md-toolbar-tools">
-                                    <h1>Group Calendar</h1>
-                                </div>
-                            </md-toolbar>
-                            <md-list flex>
-                                <md-list-item class="md-3-line" ng-repeat="event in events | orderBy:'-startTime' : true" ng-click="vm.openEditEventDialog(event)">
-                                    <div class="md-list-item-text" layout="column">
-                                        <h2 style="text-align:center;">{{ event.name }}</h2>
-                                        <div class="md-list-item-text" layout="row">
-                                            <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
-                                            <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
-                                        </div>
-                                    </div>
-                                </md-list-item>
-                            </md-list>
-                            <md-button ng-click="vm.openAddEventDialog()" class="md-accent" type="button">Add Event</md-button>
-                        </md-card>
-				</md-content>
-
-				<!--<div>
-			<md-card style="overflow:auto;" layout="row" layout-align="space-around center">
-				<h2> Personal Calendar </h2>
-
-				<md-card-actions layout="row" layout-align="end center">
-				<md-button  href="/api/auth/google" onclick="disabled='true';" class="md-primary" type="button" >Google Calendar</md-button>
-					<md-button ng-click="vm.addEvent()" onclick="disabled='true';" class="md-primary" type="button" >Add Event</md-button>
-				</md-card-actions>
-			</md-card>
-
-<md-card layout="row" layout-align="space-around center">
-
-	      <md-subheader class="md-no-sticky">Add a New Event:</md-subheader>
-
-<div layout="column" layout-align="center center">
-<div layout="row" layout-align="space-around center">
-
-      <md-input-container>
-        <label>Event Name</label>
-        <input ng-model="eventName" type="text" name="eventName">
-      </md-input-container>
-      <md-input-container>
-        <label>Description</label>
-        <input ng-model="eventDescription" type="text" name="eventDescription">
-      </md-input-container>
-      <md-input-container>
-        <label>Location</label>
-        <input ng-model="eventLocation" type="text" name="eventLocation">
-      </md-input-container>
-
-		</div>
-
-			<div layout="row" layout-align="space-around center">
-			<md-input-container>
-				<md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
-			</md-input-container>
-			<md-input-container>
-				<label>StartTime</label>
-				<input ng-model="startTime" type="text" name="startTime">
-			</md-input-container>
-			<md-input-container>
-        <label>EndTime</label>
-        <input ng-model="endTime" type="text" name="endTime">
-      </md-input-container>
-		</div>
-	</div>
-
-      <md-button ng-click="vm.addEvent()" class="md-primary" type="button">
-        Add Event
-      </md-button>
-</md-card>
-
-<div ng-repeat="event in events">
-<md-card layout="row">
-<md-card-content layout="column" layout-align="center center">
-<md-card-content> <h2> {{vm.printDate(event)}} </h2> </md-card-content>
-<div> {{vm.printTimes(event)}}</div>
-<div> {{ event.location }} </div>
-</md-card-content>
-<md-card-content  layout="column" layout-align="center center" flex="">
-<div><h2> {{ event.name }}  </h2></div>
-<div> {{ event.description }} </div>
-</md-card-content>
-<md-card-actions layout="column" layout-align="center center">
-<md-button ng-click="vm.editEvent() "onclick="disabled='false';" class="md-primary" type="button" >Edit Event</md-button>
-<md-button ng-click="vm.deleteEvent(event)" onclick="disabled='false';" class="md-primary" type="button" >Delete Event</md-button>
-</md-card-actions>
-</md-card>
-
-			</div>
-		</div>-->
-	</md-content>
+        </div>				
+        <md-card>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h1>Group Calendar</h1>
+                </div>
+            </md-toolbar>
+            <md-list flex>
+                <md-list-item class="md-3-line" ng-repeat="event in events | orderBy:'-startTime' : true" ng-click="vm.openEditEventDialog(event)">
+                    <div class="md-list-item-text" layout="column">
+                        <h2 style="text-align:center;">{{ event.name }}</h2>
+                        <div class="md-list-item-text" layout="row">
+                            <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
+                            <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
+                        </div>
+                    </div>
+                </md-list-item>
+                <md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
+                <md-button href="/api/auth/google" onclick="disabled='true';" class="md-accent" type="button">Import Calendar</md-button>
+            </md-list>
+        </md-card>
+    </md-content>
 </div>

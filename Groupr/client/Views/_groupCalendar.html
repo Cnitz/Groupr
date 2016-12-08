@@ -12,11 +12,11 @@
                 <h1 class="md-toolbar-tools">{{vm.currGroup.name}}</h1>
             </md-toolbar>
             <md-content layout-padding ng-controller="LeftCtrl">
-                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Group Schedule</md-button></p>
-                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Chat</md-button></p>
-                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Tasks</md-button></p>
-                <p>  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Complaint Box</md-button></p>
-                <p>  <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></p>
+                <div style="text-align:center;">  <md-button ng-click="vm.groupCalendar()" class="md-primary" type="button">Group Calendar</md-button></div>
+                <div style="text-align:center;">  <md-button ng-click="vm.groupChat()" class="md-primary" type="button">Chat</md-button></div>
+                <div style="text-align:center;">  <md-button ng-click="vm.groupTasks()" class="md-primary" type="button">Tasks</md-button></div>
+                <div style="text-align:center;">  <md-button ng-click="vm.groupSchedule()" class="md-primary" type="button">Complaint Box</md-button></div>
+                <div style="text-align:center;">  <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></div>
             </md-content>
         </md-sidenav>
             <!----<div>

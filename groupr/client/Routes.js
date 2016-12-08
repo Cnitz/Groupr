@@ -43,7 +43,7 @@ define([
 				.state('groupCalendar', {
 					url:			'/groupCalendar/:groupID',
 					templateUrl:	'Views/_groupCalendar.html',
-					controller:		'Groupr.Controllers.GroupCalendar',
+					controller:		'Groupr.Controllers.GroupCalendarController',
 					controllerAs:  	'vm',
 					params: {
 						groupID: ""

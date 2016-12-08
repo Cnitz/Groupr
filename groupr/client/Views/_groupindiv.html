@@ -12,17 +12,19 @@
                 <h1 class="md-toolbar-tools">{{vm.currGroup.name}}</h1>
             </md-toolbar>
             <md-content layout-padding ng-controller="LeftCtrl">
-                <div style="text-align:center;"><md-button ng-click="vm.groupCalendar()" onclick="disabled='true';" class="md-primary" type="button">Group Schedule</md-button></div>
-                <div style="text-align:center;"><md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Chat</md-button></div>
-                <div style="text-align:center;"><md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Tasks</md-button></div>
-                <div style="text-align:center;"><md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Complaint Box</md-button></div>
+                <div style="text-align:center;"><md-button ng-click="vm.groupCalendar()" class="md-primary" type="button">Group Calendar</md-button></div>
+                <div style="text-align:center;"><md-button ng-click="vm.groupChat()" class="md-primary" type="button">Chat</md-button></div>
+                <div style="text-align:center;"><md-button ng-click="vm.groupTasks()" class="md-primary" type="button">Tasks</md-button></div>
+                <div style="text-align:center;"><md-button ng-click="vm.groupSchedule()" class="md-primary" type="button">Complaint Box</md-button></div>
                 <div style="text-align:center;"><md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></div>
             </md-content>
         </md-sidenav>
         <md-content layout="column" layout-align="center center" flex="">
             <md-card style="overflow:auto; width:60%;">
                 <md-list flex>
-                    <md-subheader class="md-no-sticky">Group Tasks</md-subheader>
+                    <md-toolbar class="md-theme-indigo">
+                        <h1 class="md-toolbar-tools">Group Tasks</h1>
+                    </md-toolbar>
                     <md-list-item data-ng-if="vm.tasks.length == 0">You have no tasks! You may add one below.</md-list-item>
                     <md-list-item class="md-3-line" ng-repeat="task in vm.tasks" ng-click="openEditDialog(task)">
                         <img ng-src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSDFbhtwSvbMcMSVDMF42OmtGFa9OoI4Qy2hYBz_1S4_59bIjxtUA" class="md-avatar" alt="group icon" />
@@ -50,8 +52,10 @@
                         </md-button>
                     </md-list-item>
                 </md-list>
-                <md-subheader class="md-no-sticky">Add a New Task:</md-subheader>
-                <md-input-container>
+                <md-toolbar class="md-theme-indigo">
+                    <h1 class="md-toolbar-tools">Add a new Task</h1>
+                </md-toolbar>
+                <md-input-container style="margin-top:30px;">
                     <label>Task Name</label>
                     <input ng-model="title" type="text" name="title" placeholder="" >
                 </md-input-container>

@@ -107,17 +107,9 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
                     event.endTime = endTime;
                 }
 
-                console.log(event.startTime);
-                console.log(event.endTime);
-
                 newEvent.startTime = (event.startTime - startTime) / 60000;
                 newEvent.endTime = (event.endTime - startTime) / 60000;
-
-                console.log(newEvent.startTime);
-                console.log(newEvent.endTime);
-
                 aggregateCalendar.push(newEvent);
-                console.log("/Else");
             }
         }
     }
