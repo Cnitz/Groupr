@@ -238,6 +238,18 @@ define([
                 })
             }
 
+            function refresh() {
+                CalendarServices.getPersonalCalendar()
+                .then(
+                    function (result) {
+                        $scope.events = result.data;
+                    },
+                    function (result) {
+                        console.log(result.data);
+                    }
+                )
+            }
+
 			activate();
 
 			return vm;
