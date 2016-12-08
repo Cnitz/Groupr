@@ -6,11 +6,11 @@ define([
 	'./GroupController',
 	'./IndividualGroupController',
 	'./ComplaintBoxController',
-	'./ScheduleAssistantController',
 	'./GroupCalendarController',
 	'./GroupChatController',
 	'./AddEventDialogController',
 	'./EditEventDialogController',
 	'./ComplaintBoxController',
 	'./StartDoodleDialogController',
+	'./ScheduleAssistantDialogController',
 ], function () {});

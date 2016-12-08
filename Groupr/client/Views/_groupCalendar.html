@@ -20,6 +20,14 @@
             </md-content>
         </md-sidenav>
         <md-content layout="row" layout-align="center center" flex="">
+            <div width="500" maxwidth="50%" ng-show="!doodleInProgress && !votingActive">
+                <md-button ng-click="vm.openDoodleDialog()" class="md-accent" type="button">
+                    Create new doodle
+                </md-button>
+            </div>
+            <div width="500" maxwidth="50%" ng-show="inProgress">
+
+            </div>
             <div width="500" maxwidth="50%" ng-show="votingActive">
                 <h2> Vote on meeting times </h2>
                 <md-card width="500">
@@ -51,7 +59,7 @@
 
               <md-toolbar>
                   <div class="md-toolbar-tools">
-                  <h1>Propose a New Time</h1>
+                  <h1>Doodle Builder</h1>
                    </div>
               </md-toolbar>
               <md-list flex>
@@ -78,17 +86,6 @@
                     Reccomend A Time
                   </md-button>
                 </md-list-item>
-
-                  <md-list-item class="md-3-line"> <!-- Add Some NG-Repeat Here -->
-                      <div class="md-list-item-text" layout="column">
-                          <h3 style="text-align:center;">This is my message!</h3>
-                        <div class="md-list-item-text" layout="row">
-                            <h4 style="text-align:center;"> Greg Y.</h4>
-                            <h4 style="text-align:center;"> 12/7/16 8:28 PM</h4>
-                        </div>
-                      </div>
-                  </md-list-item>
-
               </md-list>
 
               <!--

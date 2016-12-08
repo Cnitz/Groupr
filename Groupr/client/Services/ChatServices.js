@@ -1,13 +1,13 @@
 define([
 	'./Module'
 ], function(module) {
-	return module.factory('Groupr.Services.MessagingServices', [
+	return module.factory('Groupr.Services.ChatServices', [
 		'$http',
 		function($http) {
 			var service = {};
 
 			var url = 'http://localhost:3000/api/chat/';
-			
+
 			service.getMessages = function(groupID) {
 				return $http({
 					method: 'GET',
