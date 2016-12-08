@@ -245,19 +245,22 @@ tasks.clearUser = function (group_obj, username, cb) {
             res.status(500).json({ message: 'Error: could not remove user from tasks' });
         else {
             for (var task in docs) {
-                //Remove user from being involved with task
-                var i = task.users.indexOf(username);
-                if (i >= 0)
-                    task.users.splice(i, 1);
-
-                //Reassign task owner
-                if (task.creator == username) {
-                    if (task.users[0] != undefined && task.users[0] != null)
-                        task.creator = task.users[0];
-                    else if (username != group_obj.creator)
-                        task.creator = group_obj.creator;
-                    else
-                        Task.findOne({_id: task._id}).remove(function (err) {});
+                if (task != undefined && task != null) {
+                    //Remove user from being involved with task
+                    if (task.user != undefined && task.user != null) {
+                        var i = task.users.indexOf(username);
+                        if (i >= 0)
+                            task.users.splice(i, 1);
+                    }
+                    //Reassign task owner
+                    if (task.creator == username) {
+                        if (task.users[0] != undefined && task.users[0] != null)
+                            task.creator = task.users[0];
+                        else if (username != group_obj.creator)
+                            task.creator = group_obj.creator;
+                        else
+                            Task.findOne({_id: task._id}).remove(function (err) {});
+                    }
                 }
             }
             cb();
