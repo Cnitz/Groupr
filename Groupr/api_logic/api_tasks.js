@@ -136,7 +136,7 @@ tasks.removeTask = function (req, res) {
         }
         else {
             Task.findOne({_id: mongoose.Types.ObjectId(req.body.taskId), creator: user.username}).remove(function (err) {
-                if (err || task == undefined || task == null) {
+                if (err) {
                     res.status(500).json({ message: 'Error: Task not found or user does not own task' });
                 }
                 else {
