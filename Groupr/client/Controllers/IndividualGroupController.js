@@ -25,6 +25,7 @@ define([
             vm.groupCalendar = groupCalendar;
             vm.groupChat = groupChat;
             vm.groupTasks = groupTasks;
+            vm.groupComplaints = groupComplaints;
             vm.logout = logout;
             vm.printDate = printDate;
             vm.printTimes = printTimes;
@@ -227,6 +228,10 @@ define([
 
             function groupTasks() {
                 $state.go('groupindiv', { groupID: vm.groupID });
+            }
+
+            function groupComplaints(){
+                $state.go('groupComplaints', {groupID: vm.groupID});
             }
 
             function activate() {

@@ -4,6 +4,16 @@ define([
 	return module.controller('Groupr.Controllers.ComplaintBoxController', [
 		'$scope',
 		'$state',
+		'Groupr.Services.GroupServices',
+		'Groupr.Services.AccountServices',
+		'$stateParams',
+		'Groupr.Services.CalendarServices',
+		'$mdSidenav',
+		'$log',
+		'$mdDialog',
+		'$sce',
+		'$filter',
+		'ngToast',
 		function ComplaintBoxController($scope, $state) {
 			var vm = this;
 			{
