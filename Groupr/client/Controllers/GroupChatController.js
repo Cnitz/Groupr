@@ -31,7 +31,7 @@ define([
             $scope.users = [];
 
             $scope.newMessage = "";
-            $scope.messages [];
+            $scope.messages = [];
             vm.currGroup = "";
             vm.events = [];
             $scope.toggleLeft = buildDelayedToggler('left');
