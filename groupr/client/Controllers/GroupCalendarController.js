@@ -44,6 +44,8 @@ define([
             vm.submitToGroup = submitToGroup;
             vm.openAddEventDialog = openAddEventDialog;
             vm.openEditEventDialog = openEditEventDialog;
+            vm.openDoodleDialog = openDoodleDialog;  
+            vm.openScheduleAssistantDialog = openScheduleAssistantDialog;
 
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
@@ -54,6 +56,7 @@ define([
             $scope.eventLocation = "";
             $scope.users = [];
             $scope.myDate = new Date();
+            $scope.doodleInProgress = false;
             $scope.votingActive = false;
             $scope.hasVoted = false;
             vm.currGroup = "";
@@ -239,30 +242,27 @@ define([
                             CalendarServices.getGroupCalendar($stateParams.groupID)
                             .then(
                                 function(result) {
-                                    $scope.votingEvents = result.data.schedule_assistant.events;
-
-                                    $scope.votingEvents.forEach(function(event){
-                                      event.selected = false;
-                                    })
-
-                                    $scope.votingActive = result.data.schedule_assistant.active;
                                     vm.events = result.data.events;
-                                    vm.voters = result.data.schedule_assistant.voters;
-                                     /*console.log(result);
-                                     console.log(vm.events);
-                                     console.log($scope.votingEvents);
-                                     console.log(vm.voters);*/
+                                    $scope.doodleInProgress = result.data.schedule_assistant.inProgress;
+                                    $scope.votingActive = result.data.schedule_assistant.active;
 
+                                    if ($scope.doodleInProgress) {
+                                        $scope.eventName = result.data.schedule_assistant.name;
+                                        $scope.eventLocation = result.data.schedule_assistant.location;
+                                        $scope.eventDescription = result.data.schedule_assistant.description;
+                                    }
                                     if (votingActive) {
+                                        vm.voters = result.data.schedule_assistant.voters;
+                                        $scope.votingEvents = result.data.schedule_assistant.events;
+                                        $scope.votingEvents.forEach(function(event){
+                                            event.selected = false;
+                                        })
                                         vm.voters.forEach(function(voter) {
                                             if (voter === $scope.user.username) {
                                                 $scope.hasVoted = true;
                                             }
                                         })
                                     }
-
-                                    //console.log($scope.hasVoted);
-
                                 },
                                 function(result) {
                                     console.log(res.data);
@@ -540,6 +540,41 @@ define([
                     },
                     onRemoving: function(element, removePromise) {
                         refresh();
+                    }
+                })
+            }
+
+            function openDoodleDialog(ev) {
+                console.log("opening doodle dialog");
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.StartDoodleDialog',
+                    templateUrl: './Views/_start_doodle_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: $stateParams.groupID,
+                    },
+                    onRemoving: function(element, removePromise) {
+                        //refresh();
+                    }
+                })
+            }
+
+            function openScheduleAssistantDialog(ev) {
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.StartDoodleDialog',
+                    templateUrl: './Views/_start_doodle_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: $stateParams.groupID,
+                    },
+                    onRemoving: function(element, removePromise) {
+                        //refresh();
                     }
                 })
             }

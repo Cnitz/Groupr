@@ -19,16 +19,8 @@
               <div style="text-align:center;"><md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></div>
             </md-content>
         </md-sidenav>
-        <md-content layout="row" layout-align="center center" flex="">
-            <div width="500" maxwidth="50%" ng-show="!doodleInProgress && !votingActive">
-                <md-button ng-click="vm.openDoodleDialog()" class="md-accent" type="button">
-                    Create new doodle
-                </md-button>
-            </div>
-            <div width="500" maxwidth="50%" ng-show="inProgress">
-
-            </div>
-            <div width="500" maxwidth="50%" ng-show="votingActive">
+        <md-content class="md-padding" layout="row" layout-align="center center" flex="">
+            <div width="500" width="50%" ng-show="votingActive">
                 <h2> Vote on meeting times </h2>
                 <md-card width="500">
                     <md-list flex>
@@ -55,38 +47,38 @@
                     End Vote
                 </md-button>
             </div>
-            <div width="500" maxwidth="50%" ng-show="!votingActive">
-
-              <md-toolbar>
-                  <div class="md-toolbar-tools">
-                  <h1>Doodle Builder</h1>
-                   </div>
-              </md-toolbar>
-              <md-list flex>
-
-                <md-list-item>
-                  <md-input-container>
-                  <md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
-                  </md-input-container>
-                  <md-input-container>
-                      <label>StartTime</label>
-                      <input ng-model="startTime" type="text" name="startTime">
-                  </md-input-container>
-                  <md-input-container>
-                      <label>EndTime</label>
-                      <input ng-model="endTime" type="text" name="endTime">
-                  </md-input-container>
-                </md-list-item>
-
-                <md-list-item>
-                  <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
-                    Propose Event
-                  </md-button>
-                  <md-button ng-click="vm.scheuduleAssistant()" class="md-accent" type="button">
-                    Reccomend A Time
-                  </md-button>
-                </md-list-item>
-              </md-list>
+            <div width="500" minwidth="50%">
+                <md-card overflow="hidden" text-overflow="clip">
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h1>Doodle</h1>
+                        </div>
+                    </md-toolbar>
+                    <div ng-show="!doodleInProgress">
+                        <md-button ng-click="vm.openDoodleDialog()" class="md-accent" type="button">
+                            Create new doodle
+                        </md-button>
+                    </div>
+                    <div ng-show="doodleInProgress">
+                        <div layout="column" style="margin: 50px">
+                            <h2 style="text-align:center;"> {{ eventName }}</h2>
+                            <h4 style="text-align:center;"> {{ eventLocation }} </h4>
+                            <p style="text-align:center;"> {{ eventDescription }} </p>
+                        </div>              
+                        <div layout="row">
+                            <md-button ng-click="vm.openAddEventDialog()" class="md-accent" type="button">
+                                Propose Event
+                            </md-button>
+                            <span flex>
+                            </span>
+                            <md-button ng-click="vm.openAddEventDialog()" class="md-accent" type="button">
+                                Reccomend A Time
+                            </md-button>
+                        </div>
+                    </div>     
+                    
+                </md-card>
+                
 
               <!--
                 useless comment
@@ -149,7 +141,7 @@
                     </md-toolbar>
                     <md-list flex>
                         <md-list-item class="md-3-line" ng-repeat="event in vm.events | orderBy:'-startTime' : true" ng-click="vm.openEditEventDialog(event)">
-                            <div class="md-list-item-text" layout="column">
+                            <div class="md-list-item-text" layout="column" style="margin: 50px">
                                 <h2 style="text-align:center;">{{ event.name }}</h2>
                                 <div class="md-list-item-text" layout="row">
                                     <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
