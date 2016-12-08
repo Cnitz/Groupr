@@ -14,9 +14,6 @@ define([
     //our components
     'Controllers/Index',
     'Services/Index',
-    './Localisation/BrowserLanguage',
-    './Localisation/en',
-    './Localisation/it'
 ], function(ng) {
     'use strict';
     return ng.module('Groupr', [
@@ -52,15 +49,5 @@ define([
             });
             $mdThemingProvider.setDefaultTheme('GrouprTheme');
         }
-    ]).config([
-        '$translateProvider',
-        function($translateProvider) {
-            $translateProvider
-                .translations('en', require('./Localisation/en'))
-                .translations('it', require('./Localisation/it'));
-            $translateProvider.fallbackLanguage('en');
-            $translateProvider.use(require('./Localisation/BrowserLanguage'));
-            $translateProvider.useSanitizeValueStrategy('escape');
-        }
-    ]);
+    ])
 });
