@@ -8,17 +8,18 @@ define([
 
 			var url = 'http://localhost:3000/api/chat/';
 			
-			service.getMessages = function() {
+			service.getMessages = function(groupID) {
 				return $http({
 					method: 'GET',
-					url: url + '',
+					url: url + groupID,
 				});
 			}
 
-			service.sendMessage =  function() {
+			service.sendMessage = function(message, groupID) {
 				return $http({
 					method: 'POST',
-					url: url + '',
+					url: url + groupID+'/send',
+					data: message
 				});
 			}
 
