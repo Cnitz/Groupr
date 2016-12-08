@@ -14,11 +14,42 @@ define([
 			$scope.eventName = event.name;
 			$scope.eventDescription = event.description;
 			$scope.eventLocation = event.location;
-			$scope.startTime = event.startTime;
-			$scope.endTime = event.endTime;
+
+			var startDate1 = new Date(event.startTime);
+			var endDate1 = new Date(event.endTime);
+
+			$scope.startTime = "" + startDate1.getHours() + ":" + startDate1.getMinutes();
+			$scope.endTime = "" + endDate1.getHours() + ":" + endDate1.getMinutes();
+
 			$scope.myDate = new Date(event.startTime);
-			
+
 			$scope.editEvent = function() {
+
+				//Now reading in the time strings and setting times. Remove when better time picker is made
+				$scope.myDate.setSeconds(0);
+				$scope.myDate.setMilliseconds(0);
+				var newStartDate = new Date($scope.myDate);
+				var newEndDate = new Date($scope.myDate);
+
+				console.log($scope.startTime);
+				console.log($scope.endTime);
+
+				var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+				newStartDate.setHours( parseInt(time[1]) + (time[3] ? 12 : 0) );
+				newStartDate.setMinutes( parseInt(time[2]) || 0 );
+
+				var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+				newEndDate.setHours( parseInt(time2[1]) + (time2[3] ? 12 : 0) );
+				newEndDate.setMinutes( parseInt(time2[2]) || 0 );
+
+				event.startTime = newStartDate;
+				event.endTime = newEndDate;
+
+				console.log(event.startTime);
+				console.log(event.endTime);
+
+				//End Time Reading Hack
+
 				if (calendarType == 'group') {
 					CalendarServices.editGroupEvent(event, groupID)
 	                .then(
@@ -41,7 +72,7 @@ define([
 						}
 					)
 				}
-				
+
 			}
 
 			$scope.deleteEvent = function() {
