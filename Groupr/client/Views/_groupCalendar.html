@@ -19,7 +19,7 @@
               <div style="text-align:center;"><md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></div>
             </md-content>
         </md-sidenav>
-        <md-content layout="row" layout-align="space-around center" flex="">
+        <md-content layout="row" layout-align="center center" flex="">
             <div width="500" maxwidth="50%" ng-show="votingActive">
                 <h2> Vote on meeting times </h2>
                 <md-card width="500">
@@ -48,23 +48,54 @@
                 </md-button>
             </div>
             <div width="500" maxwidth="50%" ng-show="!votingActive">
+
+              <md-toolbar>
+                  <div class="md-toolbar-tools">
+                  <h1>Propose a New Time</h1>
+                   </div>
+              </md-toolbar>
+              <md-list flex>
+
+                <md-list-item>
+                  <md-input-container>
+                  <md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
+                  </md-input-container>
+                  <md-input-container>
+                      <label>StartTime</label>
+                      <input ng-model="startTime" type="text" name="startTime">
+                  </md-input-container>
+                  <md-input-container>
+                      <label>EndTime</label>
+                      <input ng-model="endTime" type="text" name="endTime">
+                  </md-input-container>
+                </md-list-item>
+
+                <md-list-item>
+                  <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
+                    Propose Event
+                  </md-button>
+                  <md-button ng-click="vm.scheuduleAssistant()" class="md-accent" type="button">
+                    Reccomend A Time
+                  </md-button>
+                </md-list-item>
+
+                  <md-list-item class="md-3-line"> <!-- Add Some NG-Repeat Here -->
+                      <div class="md-list-item-text" layout="column">
+                          <h3 style="text-align:center;">This is my message!</h3>
+                        <div class="md-list-item-text" layout="row">
+                            <h4 style="text-align:center;"> Greg Y.</h4>
+                            <h4 style="text-align:center;"> 12/7/16 8:28 PM</h4>
+                        </div>
+                      </div>
+                  </md-list-item>
+
+              </md-list>
+
+              <!--
                 <h2> Propose New Event</h2>
                 <md-card layout="row" layout-align="space-around center">
                     <div layout="column" layout-align="center center">
-                        <div layout="row" layout-align="space-around center">
-                            <md-input-container>
-                                <label>Event Name</label>
-                                <input ng-model="eventName" type="text" name="eventName">
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Description</label>
-                                <input ng-model="eventDescription" type="text" name="eventDescription">
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Location</label>
-                                <input ng-model="eventLocation" type="text" name="eventLocation">
-                            </md-input-container>
-                        </div>
+
                         <div layout="row" layout-align="space-around center">
                             <md-input-container>
                             <md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
@@ -109,7 +140,7 @@
                         </md-card-actions>
                     </md-card>
                 </div>
-                <md-button ng-click="vm.submitToGroup()" onclick="disabled='false';" class="md-accent" type="button">Submit for Voting</md-button>
+                <md-button ng-click="vm.submitToGroup()" onclick="disabled='false';" class="md-accent" type="button">Submit for Voting</md-button> -->
             </div>
             <md-content class="md-padding" layout="column" layout-align="center center" flex="">
                 <md-card>
