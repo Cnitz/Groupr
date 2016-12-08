@@ -18,9 +18,6 @@ define([
             vm.groupChat = groupChat;
             vm.groupTasks = groupTasks;
             vm.logout = logout;
-            vm.addEvent = addEvent;
-            vm.deleteEvent = deleteEvent;
-            vm.editEvent = editEvent;
             vm.refresh = refresh;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
             vm.navigateToGroupChat = navigateToGroupChat;
@@ -60,11 +57,11 @@ define([
                 console.log("groupID: " + vm.groupID);
                 $state.go('groupCalendar', { groupID: vm.groupID });
             }
-            
+
             function groupChat() {
                 $state.go('groupChat', { groupID: vm.groupID });
             }
-            
+
             function groupTasks() {
                 $state.go('groupindiv', { groupID: vm.groupID });
             }

@@ -5,14 +5,6 @@
         <span flex></span>
         <md-button ng-click="vm.logout()" onclick="disabled='true';" class="md-primary" type="button">Logout</md-button>
     </md-nav-bar>
-    <md-toolbar layout="row" class="md-hue-3">
-        <div class="md-toolbar-tools">
-            <span>{{vm.currGroup.name}}</span>
-        </div>
-        <md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">
-            Leave Group
-        </md-button>
-    </md-toolbar>
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-md')">
             <md-toolbar class="md-theme-indigo">
@@ -23,10 +15,30 @@
                 <div style="text-align:center;">  <md-button ng-click="vm.groupChat()" onclick="disabled='true';" class="md-primary" type="button">Chat</md-button></div>
                 <div style="text-align:center;">  <md-button ng-click="vm.groupTasks()" onclick="disabled='true';" class="md-primary" type="button">Tasks</md-button></div>
                 <div style="text-align:center;">  <md-button ng-click="vm.groupSchedule()" onclick="disabled='true';" class="md-primary" type="button">Complaint Box</md-button></div>
+                <div style="text-align:center;">  <md-button ng-click="vm.leaveGroup()" class="md-primary" type="button">Leave Group</md-button></div>
             </md-content>
         </md-sidenav>
-
-
-
+        <md-content layout="column" layout-align="center center" flex="">
+          <md-card style="overflow:auto; width:60%;">
+          <md-toolbar>
+              <div class="md-toolbar-tools">
+              <h1>Group Chat</h1>
+               </div>
+          </md-toolbar>
+              <md-list flex>
+                  <md-list-item class="md-3-line"> <!-- Add Some NG-Repeat Here -->
+                      <div class="md-list-item-text" layout="column">
+                          <h3 style="text-align:center;">This is my message!</h3>
+                        <div class="md-list-item-text" layout="row">
+                            <h4 style="text-align:center;"> Greg Y.</h4>
+                            <h4 style="text-align:center;"> 12/7/16 8:28 PM</h4>
+                        </div>
+                      </div>
+                  </md-list-item>
+              </md-list>
+        			<input width="50%" ng-model="chateMessage"></input>
+          <md-button ng-click="vm.sendMessage()" class="md-accent" type="button">Send</md-button>
+      </md-card>
+        </md-content>
       </section>
   </div>
