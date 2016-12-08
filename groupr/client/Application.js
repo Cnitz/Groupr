@@ -13,8 +13,6 @@ define([
     'validation.match',
     //our components
     'Controllers/Index',
-    'Directives/Index',
-    'Filters/Index',
     'Services/Index',
     './Localisation/BrowserLanguage',
     './Localisation/en',
@@ -35,8 +33,6 @@ define([
         'validation.match',
         //our modules
         'Groupr.Controllers',
-        'Groupr.Directives',
-        'Groupr.Filters',
         'Groupr.Services'
     ]).config([
         '$mdThemingProvider',
