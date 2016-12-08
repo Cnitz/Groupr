@@ -487,7 +487,7 @@ router.route('/calendar/start_doodle').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            group.calendar.schedule_assistant.active = true;
+            group.calendar.schedule_assistant.inProgress = true;
             group.calendar.schedule_assistant.name = req.body.name;
             group.calendar.schedule_assistant.location = req.body.location;
             group.calendar.schedule_assistant.description = req.body.description;
@@ -552,6 +552,8 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
+            group.calendar.schedule_assistant.inProgress = false;
+            group.calendar.schedule_assistant.active = true;
             req.body.events.forEach(function(event) {
                 group.calendar.schedule_assistant.events.push(event);
             })
@@ -626,6 +628,7 @@ router.route('/calendar/end_voting').post((req, res) => {
             })
             group.calendar.events.push(winner.event);
             group.calendar.schedule_assistant = {};
+            group.calendar.schedule_assistant.inProgress = false;
             group.calendar.schedule_assistant.active = false;
             group.calendar.schedule_assistant.voters = [];
             group.calendar.schedule_assistant.threshold = 0;
@@ -657,6 +660,7 @@ router.route('/calendar/cancel_voting').post((req, res) => {
         }
         else {
             group.calendar.schedule_assistant = {};
+            group.calendar.schedule_assistant.inProgress = false;
             group.calendar.schedule_assistant.active = false;
             group.calendar.schedule_assistant.voters = [];
             group.calendar.schedule_assistant.threshold = 0;

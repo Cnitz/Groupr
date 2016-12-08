@@ -72,6 +72,7 @@ group.create_group = function(req, res) {
                     var newCalendar = Calendar();
                     newCalendar.events = [];
                     newCalendar.schedule_assistant = {};
+                    newCalendar.schedule_assistant.inProgress = false;
                     newCalendar.schedule_assistant.active = false;
                     newCalendar.schedule_assistant.voters = [];
                     newCalendar.schedule_assistant.threshold = 0;
