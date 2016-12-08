@@ -56,3 +56,4 @@ Groupr/Groupr/node_modules
 .vs
 Groupr.sln
 *.njsproj
+Groupr/client/Controllers/GroupCalendar.js

@@ -2,5 +2,6 @@ define([
 	'./AccountServices',
 	'./GroupServices',
 	'./CalendarServices',
-	'./GoogleServices'
+	'./GoogleServices',
+	'./ChatServices',
 ], function () {});

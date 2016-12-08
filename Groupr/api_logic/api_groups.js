@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 var User = require('../models/user');
 var Group = require('../models/group');
 var Calendar = require('../models/calendar');
+var api_tasks = require('../api_logic/api_tasks');
 
 var group = new Object();
 
@@ -28,13 +29,13 @@ if(req.cookies.grouprToken){
         }
             else{
 
-                
+
                     res.status(200).json({
-                        data: user.groups, 
+                        data: user.groups,
                         message: "User groups fetch successful."
                     });
-                    
-              
+
+
 
             }
     });
@@ -71,6 +72,7 @@ group.create_group = function(req, res) {
                     var newCalendar = Calendar();
                     newCalendar.events = [];
                     newCalendar.schedule_assistant = {};
+                    newCalendar.schedule_assistant.inProgress = false;
                     newCalendar.schedule_assistant.active = false;
                     newCalendar.schedule_assistant.voters = [];
                     newCalendar.schedule_assistant.threshold = 0;
@@ -103,7 +105,7 @@ group.create_group = function(req, res) {
                                                 groupID: newGroup._id
                                             });
                                         }
-                                    });    
+                                    });
                                 }
                             });
                         }
@@ -212,9 +214,11 @@ group.leave_group = function(req, res, group_id){
                                         message: 'Error: Removing user failed'
                                     });
                                 }
-                                else{
-                                    res.status(200).json({
-                                        message: 'User succesfully removed'
+                                else {
+                                    api_tasks.clearUser(group, user.username, function() {
+                                        res.status(200).json({
+                                            message: 'User succesfully removed'
+                                        });
                                     });
                                 }
                            });

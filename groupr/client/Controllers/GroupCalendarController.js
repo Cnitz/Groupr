@@ -1,27 +1,37 @@
 define([
     './Module'
 ], function (module) {
-    return module.controller('Groupr.Controllers.GroupCalendar', [
+    return module.controller('Groupr.Controllers.GroupCalendarController', [
         '$scope',
         '$state',
         'Groupr.Services.GroupServices',
         'Groupr.Services.AccountServices',
         '$stateParams',
         'Groupr.Services.CalendarServices',
-        function IndividualGroupController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log) {
+        '$mdSidenav',
+        '$log',
+        '$mdDialog',
+        function GroupCalendarController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log, $mdDialog) {
             var vm = this;
             {
                 vm.groups = [];
                 vm.tasks = [];
             }
             vm.goHome = goHome;
+
             vm.groupCalendar = groupCalendar;
+            vm.groupChat = groupChat;
+            vm.groupTasks = groupTasks;
+            vm.groupComplaints = groupComplaints;
+            vm.logout = logout;
+
             vm.logout = logout;
             vm.addEvent = addEvent;
             vm.deleteEvent = deleteEvent;
             vm.editEvent = editEvent;
             vm.refresh = refresh;
             vm.printDate = printDate;
+            vm.scheuduleAssistant = scheuduleAssistant;
             vm.printTimes = printTimes;
             vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
             vm.vote = vote;
@@ -32,14 +42,21 @@ define([
             vm.endVoting = endVoting;
             vm.proposeEvent = proposeEvent;
             vm.submitToGroup = submitToGroup;
+            vm.openAddEventDialog = openAddEventDialog;
+            vm.openEditEventDialog = openEditEventDialog;
+            vm.openDoodleDialog = openDoodleDialog;  
+            vm.openScheduleAssistantDialog = openScheduleAssistantDialog;
 
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
+            $scope.durationHours = 0;
+            $scope.durationMinutes = 0;
             $scope.eventName = "";
             $scope.eventDescription = "";
             $scope.eventLocation = "";
             $scope.users = [];
             $scope.myDate = new Date();
+            $scope.doodleInProgress = false;
             $scope.votingActive = false;
             $scope.hasVoted = false;
             vm.currGroup = "";
@@ -109,14 +126,63 @@ define([
 
             };
 
+
+            function scheuduleAssistant(){
+
+
+              var newStartDate = new Date($scope.myDate);
+              var newEndDate = new Date($scope.myDate);
+
+              var time = $scope.startTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+              newStartDate.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+              newStartDate.setMinutes(parseInt(time[2]) || 0);
+
+              var time2 = $scope.endTime.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+              newEndDate.setHours(parseInt(time2[1]) + (time2[3] ? 12 : 0));
+              newEndDate.setMinutes(parseInt(time2[2]) || 0);
+
+              var duration = ($scope.durationHours * 60) + $scope.durationMinutes;
+
+              console.log(newStartDate);
+              console.log(newEndDate);
+
+              newStartDate.setSeconds(0);
+              newStartDate.setMilliseconds(0);
+              newEndDate.setSeconds(0);
+              newEndDate.setMilliseconds(0);
+
+              CalendarServices.scheduleAssistant(newStartDate, newEndDate, duration, vm.groupID).then(
+                function(res){
+                  console.log(res.data);
+                  $scope.pendingEvents.push(res.data);
+                },
+                function(res){
+                  console.log("Failure");
+                  console.log(res.event);
+                });
+            }
+
             function leaveGroup() {
                 GroupServices.leaveGroup(vm.groupID);
                 $state.go('home');
             }
 
             /*Navigates to Group Calendar sub-page*/
-            function groupCalendar(){
-              $state.go('groupCalendar',{groupID: g._id});
+            function groupCalendar() {
+                console.log("groupID: " + vm.groupID);
+                $state.go('groupCalendar', { groupID: vm.groupID });
+            }
+
+            function groupChat() {
+                $state.go('groupChat', { groupID: vm.groupID });
+            }
+
+            function groupTasks() {
+                $state.go('groupindiv', { groupID: vm.groupID });
+            }
+
+            function groupComplaints(){
+                $state.go('groupComplaints', {groupID: vm.groupID});
             }
 
             /* Takes the current proposedEvents and allows the group to vote on them*/
@@ -176,30 +242,27 @@ define([
                             CalendarServices.getGroupCalendar($stateParams.groupID)
                             .then(
                                 function(result) {
-                                    $scope.votingEvents = result.data.schedule_assistant.events;
-
-                                    $scope.votingEvents.forEach(function(event){
-                                      event.selected = false;
-                                    })
-
-                                    $scope.votingActive = result.data.schedule_assistant.active;
                                     vm.events = result.data.events;
-                                    vm.voters = result.data.schedule_assistant.voters;
-                                     /*console.log(result);
-                                     console.log(vm.events);
-                                     console.log($scope.votingEvents);
-                                     console.log(vm.voters);*/
+                                    $scope.doodleInProgress = result.data.schedule_assistant.inProgress;
+                                    $scope.votingActive = result.data.schedule_assistant.active;
 
+                                    if ($scope.doodleInProgress) {
+                                        $scope.eventName = result.data.schedule_assistant.name;
+                                        $scope.eventLocation = result.data.schedule_assistant.location;
+                                        $scope.eventDescription = result.data.schedule_assistant.description;
+                                    }
                                     if (votingActive) {
+                                        vm.voters = result.data.schedule_assistant.voters;
+                                        $scope.votingEvents = result.data.schedule_assistant.events;
+                                        $scope.votingEvents.forEach(function(event){
+                                            event.selected = false;
+                                        })
                                         vm.voters.forEach(function(voter) {
                                             if (voter === $scope.user.username) {
                                                 $scope.hasVoted = true;
                                             }
                                         })
                                     }
-
-                                    //console.log($scope.hasVoted);
-
                                 },
                                 function(result) {
                                     console.log(res.data);
@@ -283,6 +346,8 @@ define([
                     function(res) {
                         $scope.hasVoted = false;
                         $scope.votingActive = false;
+                        $scope.pendingEvents = [];
+                        refresh();
                     },
                     function(res) {
                         console.log(res.data);
@@ -298,6 +363,7 @@ define([
                     function(res) {
                         $scope.hasVoted = false;
                         $scope.votingActive = false;
+                        refresh();
                     },
                     function(res) {
                         console.log(res.data);
@@ -393,7 +459,7 @@ define([
 
             function deleteEvent(event) {
                 CalendarServices.deleteGroupEvent(event, $stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
                         console.log('success deleting event');
                         refresh();
@@ -401,19 +467,19 @@ define([
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
             }
 
             function editEvent() {
                 CalendarServices.editGroupEvent(event, $stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
                         refresh();
                     },
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
             }
 
             function refresh() {
@@ -439,6 +505,78 @@ define([
                         console.log(result.data);
                     }
                 )
+            }
+
+            function openAddEventDialog(ev) {
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.AddEventDialog',
+                    templateUrl: './Views/_add_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: $stateParams.groupID,
+                        calendarType: 'group'
+                    },
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
+            }
+
+            function openEditEventDialog(event, ev) {
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.EditEventDialog',
+                    templateUrl: './Views/_edit_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: $stateParams.groupID,
+                        calendarType: 'group',
+                        event: event
+                    },
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
+            }
+
+            function openDoodleDialog(ev) {
+                console.log("opening doodle dialog");
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.StartDoodleDialog',
+                    templateUrl: './Views/_start_doodle_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: $stateParams.groupID,
+                    },
+                    onRemoving: function(element, removePromise) {
+                        //refresh();
+                    }
+                })
+            }
+
+            function openScheduleAssistantDialog(ev) {
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.StartDoodleDialog',
+                    templateUrl: './Views/_start_doodle_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: $stateParams.groupID,
+                    },
+                    onRemoving: function(element, removePromise) {
+                        //refresh();
+                    }
+                })
             }
 
             return vm;

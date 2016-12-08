@@ -62,7 +62,7 @@ tasks.tasksInGroup = function (req, res) {
             //console.log(JSON.stringify(query));
             //query.group = mongoose.Types.ObjectId(req.body.group);
             Task.find({group : mongoose.Types.ObjectId(req.body.group)}).exec(function (error, docs) {
-                if (error)
+                if (error || docs == undefined || docs == null )
                     res.status(500).json({ message: 'Error: Database access' });
                 else
                     res.status(200).json(docs);
@@ -83,7 +83,7 @@ tasks.tasksByUser = function (req, res) {
             //var query = formTaskQuery({body: req.body, user: user}, true);
             Task.find({ users: user.username }, function (error, docs) {
                 console.log(JSON.stringify(docs));
-                if (error)
+                if (error || docs == undefined || docs == null )
                     res.status(500).json({ message: 'Error: Database access' });
                 else
                     res.status(200).json(docs);
@@ -154,7 +154,7 @@ tasks.updateStatus = function (req, res) {
         }
         else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
             Task.findOne({_id: mongoose.Types.ObjectId(req.body.taskId)}, function (err, task) {
-                if (err) {
+                if (err || task == undefined || task == null) {
                     res.status(500).json({ message: 'Error: Task not found' });
                 }
                 else {
@@ -181,14 +181,19 @@ tasks.updateInfo = function (req, res) {
         if (err || user == null) {
             res.status(500).json({ message: 'Error: invalid user' });
         }
-        else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
+        else {
             Task.findOne({_id: mongoose.Types.ObjectId(req.body.taskId)}, function (err, task) {
-                if (err) {
+                if (err || task == undefined || task == null) {
                     res.status(500).json({ message: 'Error: Task not found' });
                 }
-                else {
-                    task.title = (req.body.title != undefined) ? req.body.title : task.title;
-                    task.description = (req.body.description != undefined) ? req.body.description : task.description;
+                else if (task.creator == user.username) {
+
+                    task.title          = (req.body.title != undefined)         ? req.body.title        : task.title;
+                    task.description    = (req.body.description != undefined)   ? req.body.description  : task.description;
+                    task.status         = (req.body.status != undefined)        ? req.body.status       : task.status;
+                    task.category       = (req.body.category != undefined)      ? req.body.category     : task.category;
+                    task.dueDate        = (req.body.dueDate != undefined)       ? req.body.dueDate      : task.dueDate;
+
                     task.save(function (err, updatedTask){
                         if (err)
                             res.status(500).json({ message: 'Error: could not update task' });
@@ -196,10 +201,10 @@ tasks.updateInfo = function (req, res) {
                             res.status(200).json({ message: 'Successfully updated task' });
                     });
                 }
+                else {
+                    res.status(500).json({ message: 'Error: you do not have permission to edit this task' });
+                }
             });
-        }
-        else {
-            res.status(500).json({ message: 'Error: Access denied, user is not a part of this group' });
         }
     });
 };
@@ -211,7 +216,7 @@ tasks.addUser = function (req, res) {
         }
         else if (req.body.group == undefined || user.groups.indexOf(mongoose.Types.ObjectId(req.body.group)) > -1) {
             Task.findOne({_id: mongoose.Types.ObjectId(req.body.taskId)}, function (err, task) {
-                if (err) {
+                if (err || task == undefined || task == null) {
                     res.status(500).json({ message: 'Error: DB Access' });
                 }
                 else if (task == undefined) {
@@ -230,6 +235,35 @@ tasks.addUser = function (req, res) {
         }
         else {
             res.status(500).json({ message: 'Error: Access denied, user is not a part of this group' });
+        }
+    });
+};
+
+tasks.clearUser = function (group_obj, username, cb) {
+    Task.find({group : group_obj._id}).exec(function (error, docs) {
+        if (error || docs == undefined || docs == null )
+            res.status(500).json({ message: 'Error: could not remove user from tasks' });
+        else {
+            for (var task in docs) {
+                if (task != undefined && task != null) {
+                    //Remove user from being involved with task
+                    if (task.user != undefined && task.user != null) {
+                        var i = task.users.indexOf(username);
+                        if (i >= 0)
+                            task.users.splice(i, 1);
+                    }
+                    //Reassign task owner
+                    if (task.creator == username) {
+                        if (task.users[0] != undefined && task.users[0] != null)
+                            task.creator = task.users[0];
+                        else if (username != group_obj.creator)
+                            task.creator = group_obj.creator;
+                        else
+                            Task.findOne({_id: task._id}).remove(function (err) {});
+                    }
+                }
+            }
+            cb();
         }
     });
 };

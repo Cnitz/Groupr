@@ -8,7 +8,7 @@
 			<span flex=""></span>
 
 			<md-button id="signup-button"  ng-click="signup()" class="md-button" type="button" aria-label="Sign Up">
-				{{ "SIGNUP.SIGNUP" | translate }}
+				Sign Up
 			</md-button>
 		</div>
 	</md-toolbar>
@@ -18,7 +18,7 @@
 				<md-toolbar hide-xs>
 					<div class="md-toolbar-tools">
 						<h1 id="title">
-							<span>{{ "LOGIN.TITLE" | translate }}</span>
+							<span>Login</span>
 						</h1>
 						<!-- central gap -->
 						<span flex=""></span>
@@ -26,24 +26,18 @@
 				</md-toolbar>
 				<md-card-content layout="column" style="padding-bottom: 0px;">
 					<md-input-container style="margin: 0px">
-						<label>{{ "GENERAL.USERNAME_EMAIL" | translate }}</label>
+						<label>Username</label>
 						<input ng-model="username" type="text" name="username" required></input>
-						<div ng-messages="loginForm.username.$error" role="alert">
-							<div ng-message="required">{{ "GENERAL.FORM.ERROR.REQUIRED_FIELD" | translate }}</div>
-						</div>
 					</md-input-container>
 					<md-input-container style="margin: 0px">
-						<label>{{ "GENERAL.PASSWORD" | translate }}</label>
+						<label>Password</label>
 						<input ng-model="password" name="password" type="password" required></input>
-						<div ng-messages="loginForm.password.$error" role="alert">
-							<div ng-message="required">{{ "GENERAL.FORM.ERROR.REQUIRED_FIELD" | translate }}</div>
-						</div>
 					</md-input-container>
 				</md-card-content>
 				<md-card-actions layout="row" layout-align="end center">
 					<span flex=""></span>
 					<md-button id="login-button"class="md-button md-primary" type="submit" aria-label="Login">
-						{{ "LOGIN.LOGIN" | translate }}
+						Login
 					</md-button>
 				</md-card-actions>
 			</md-card>

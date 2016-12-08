@@ -17,6 +17,20 @@ define([
 				});
 			}
 
+			service.startDoodle = function(name, description, location, groupID) {
+				var data = {
+					groupId: groupID,
+					name: name,
+					location: location,
+					description: description,
+				}
+				return $http({
+					method: 'POST',
+					url: url + 'start_doodle',
+					data: data
+				});
+			}
+
 			service.proposedMeetingTimes = function(events, name, description, location, groupId) {
 				var data = {
 					groupId: groupId,
@@ -25,7 +39,6 @@ define([
 					description: description,
 					events: events
 				}
-				console.log(data);
 				return $http({
 					method: 'POST',
 					url: url + 'propose_meeting_times',

@@ -12,6 +12,7 @@ var CalendarSchema = new mongoose.Schema({
     }],
 
     schedule_assistant: {
+        inProgress: Boolean,
         active: Boolean,
         voters: [String],
         threshold: Number,

@@ -341,8 +341,8 @@ router.route('/calendar/get_events').post((req, res) => {
                 res.status(403).json({message: 'Error: Calendar does not exist'});
             }
             else {
-                res.status(200).json({ 
-                    events: group.calendar.events, 
+                res.status(200).json({
+                    events: group.calendar.events,
                     schedule_assistant: group.calendar.schedule_assistant,
                 });
             }
@@ -476,8 +476,39 @@ router.route('/calendar/edit_group_event').post((req, res) => {
     });
 });
 
+/* start a new doodle */
+router.route('/calendar/start_doodle').post((req, res) => {
+    console.log('start doodle');
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            group.calendar.schedule_assistant.inProgress = true;
+            group.calendar.schedule_assistant.name = req.body.name;
+            group.calendar.schedule_assistant.location = req.body.location;
+            group.calendar.schedule_assistant.description = req.body.description;
+            group.calendar.save((err) => {
+                if (err) {
+                    res.status(500).json({message: 'Error: Doodle could not be started'});
+                }
+                else {
+                    res.status(200).json({message: 'Success: Doodle has been started'});
+                }
+            })
+
+        }
+    });
+});
+
 /* generateMeetingTimes */
 router.route('/calendar/schedule_assistant').post((req, res) => {
+    console.log("Request:");
+    console.log(req.body);
+    console.log("Request");
     Group.findOne({ _id: req.body.groupId })
     .populate('calendar')
     .populate('users')
@@ -499,10 +530,10 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
                 })
                 api_calendar.schedule_assistant(calendarList, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
                     if (obj.status != 500) {
-                        res.status(200).json({message: 'Success: The event has been added'})
+                        res.status(obj.status).send(obj.event);
                     }
                     else {
-                        res.status(obj.status).send(obj.event);
+                        res.status(500).json({message: 'Failure'})
                     }
                 });
             })
@@ -521,10 +552,8 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
+            group.calendar.schedule_assistant.inProgress = false;
             group.calendar.schedule_assistant.active = true;
-            group.calendar.schedule_assistant.name = req.body.name;
-            group.calendar.schedule_assistant.location = req.body.location;
-            group.calendar.schedule_assistant.description = req.body.description;
             req.body.events.forEach(function(event) {
                 group.calendar.schedule_assistant.events.push(event);
             })
@@ -536,7 +565,7 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
                     res.status(200).json({message: 'Success: Proposed Meeting Time Added'});
                 }
             })
-            
+
         }
     });
 });
@@ -597,8 +626,9 @@ router.route('/calendar/end_voting').post((req, res) => {
                     winner.votes = event.votes;
                 }
             })
-            group.calendar.events.push(winner.event);           
+            group.calendar.events.push(winner.event);
             group.calendar.schedule_assistant = {};
+            group.calendar.schedule_assistant.inProgress = false;
             group.calendar.schedule_assistant.active = false;
             group.calendar.schedule_assistant.voters = [];
             group.calendar.schedule_assistant.threshold = 0;
@@ -630,6 +660,7 @@ router.route('/calendar/cancel_voting').post((req, res) => {
         }
         else {
             group.calendar.schedule_assistant = {};
+            group.calendar.schedule_assistant.inProgress = false;
             group.calendar.schedule_assistant.active = false;
             group.calendar.schedule_assistant.voters = [];
             group.calendar.schedule_assistant.threshold = 0;
@@ -670,13 +701,28 @@ router.route('/tasks/remove').post((req, res) => {
     api_tasks.removeTask(req, res);
 });
 router.route('/tasks/markComplete').post((req, res) => {
-    api_tasks.removeTask(req, res);
+    //api_tasks.removeTask(req, res);
 });
 router.route('/tasks/updateStatus').post((req, res) => {
     api_tasks.updateStatus(req, res);
 });
 router.route('/tasks/addUser').post((req, res) => {
     api_tasks.addUser(req, res);
+});
+/*
+    Update information for a task
+    Example JSON POST input:
+    {
+        taskId: 'XXXXXX' (string, required),
+        title: 'title' (string, optional),
+        description: 'description' (string, optional),
+        status: 'status' (string, optional),
+        category: 'category' (string, optional),
+        dueDate: mm/dd/yy (Date, optional)
+    }
+*/
+router.route('/tasks/updateInfo').post((req, res) => {
+    api_tasks.updateInfo(req, res);
 });
 
 /*
@@ -687,6 +733,9 @@ router.route('/tasks/addUser').post((req, res) => {
 router.route('/chat/:group/send').post((req, res) => {
     api_chat.sendMessage(req, res);
 });
+router.route('/chat/:group/lastMessageDate').get((req, res) => {
+    api_chat.getLastMessage(req, res);
+});
 router.route('/chat/:group').get((req, res) => {
     api_chat.getMessages(req, res);
 });
@@ -695,13 +744,13 @@ router.route('/chat/:group').get((req, res) => {
 
 /*
  * Complaint api routes
- * 
- * 
- * 
- * 
- * 
- * 
- */ 
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 /*
  * POST

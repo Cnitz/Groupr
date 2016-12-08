@@ -23,6 +23,8 @@ var passUser = function(token, cb){
     });
 };
 
+var lastMessageDate = new Date();
+
 chat.getMessages = function(req, res) {
     passUser(req.cookies.grouprToken, function(uerr, user) {
         if (uerr)
@@ -56,6 +58,7 @@ chat.sendMessage = function(req, res) {
             newMessage.message = req.body.message;
             newMessage.user = user.username;
             newMessage.dateCreated = new Date();
+            lastMessageDate = newMessage.dateCreated;
 
             newMessage.save(function(err) {
                 if (err)
@@ -68,6 +71,10 @@ chat.sendMessage = function(req, res) {
         else
             res.status(500).json({message : "Error: User does not have permission to access this chat, not apart of group"});
     });
+}
+
+chat.getLastMessage = function(req, res) {
+    res.status(200).json({date: lastMessageDate});
 }
 
 module.exports = chat;

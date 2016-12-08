@@ -8,7 +8,8 @@ define([
 		'Groupr.Services.GroupServices',
 		'Groupr.Services.CalendarServices',
 		'Groupr.Services.GoogleServices',
-		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices) {
+		'$mdDialog',
+		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices, $mdDialog) {
 			var vm = this;
 			vm.goHome = goHome;
 			vm.navigateToGroups = navigateToGroups;
@@ -21,10 +22,14 @@ define([
 			vm.googleAuth = googleAuth;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
+			vm.openAddEventDialog = openAddEventDialog;
+            vm.openEditEventDialog = openEditEventDialog;
+            vm.goToTaskGroup = goToTaskGroup;
 			$scope.currentNavItem = "home";
 			$scope.myDate = new Date();
 			$scope.user = {};
 			$scope.events = [];
+
 
 
 			function goHome(){
@@ -33,7 +38,12 @@ define([
 			function printDate(event){
 				var newDate = new Date(event.startTime);
 				return (newDate.getMonth()+1)+'/'+newDate.getDate();
-			}
+            }
+
+            function goToTaskGroup(t) {
+                console.log(t);
+                $state.go('groupindiv', { groupID: t.group });
+            } 
 
 			function printTimes(event){
 				var newStartTime = new Date(event.startTime);
@@ -148,17 +158,38 @@ define([
 							}
 						);
 
-						// get the users groups
-						GroupServices.getGroupByUser()
-						.then(function(res) {
-							vm.groups = res.data.data;
-							}, 
-							function(res) {
-								console.log(res.data);
-								if (res.status == 450)
-									$state.go('login');
-							}
-						);
+                        // get the users groups 
+                        GroupServices.getGroupByUser()
+                            .then(function (res) {
+                                vm.groups = res.data.data;
+                            },
+                            function (res) {
+                                console.log(res.data);
+                                if (res.status == 450)
+                                    $state.go('login');
+                            }
+                            );
+                        AccountServices.getUser()
+                            .then(function (result) {
+                                var user = result.data;
+                                var data = {};
+
+
+
+                                // get the users tasks 
+                                GroupServices.getTasksByUser()
+                                    .then(function (res) {
+                                        vm.tasks = res.data;
+                                        console.log(res);
+
+                                    },
+                                    function (res) {
+                                        console.log(res.data)
+                                        if (res.status == 450)
+                                            $state.go('login');
+                                    }
+                                    );
+                            });
 					},
 					function(result) {
 						console.log(result.data);
@@ -169,6 +200,55 @@ define([
 			function googleAuth(){
 				GoogleServices.googleAuth();
 			}
+
+			function openAddEventDialog(ev) {
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.AddEventDialog',
+                    templateUrl: './Views/_add_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: null,
+                        calendarType: 'personal'
+                    },
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
+            }
+
+            function openEditEventDialog(event, ev) {
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.EditEventDialog',
+                    templateUrl: './Views/_edit_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: null,
+                        calendarType: 'personal',
+                        event: event 
+                    },
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
+            }
+
+            function refresh() {
+                CalendarServices.getPersonalCalendar()
+                .then(
+                    function (result) {
+                        $scope.events = result.data;
+                    },
+                    function (result) {
+                        console.log(result.data);
+                    }
+                )
+            }
 
 			activate();
 
