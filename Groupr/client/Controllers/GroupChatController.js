@@ -24,6 +24,7 @@ define([
             vm.groupTasks = groupTasks;
             vm.groupComplaints = groupComplaints;
             vm.logout = logout;
+            vm.sendMessage = sendMessage;
 
             vm.refresh = refresh;
             $scope.currentNavItem = "groups";
@@ -60,6 +61,11 @@ define([
                 $state.go('home');
             }
 
+            function printDate(res){
+                  var newDate = new Date(res.dateCreated);
+                  return (newDate.getMonth() + 1) + '/' + newDate.getDate() + newDate.getHours() + ":" + newDate.getMinutes();
+            }
+
             /*Navigates to Group Calendar sub-page*/
             function groupCalendar() {
                 console.log("groupID: " + vm.groupID);
@@ -78,16 +84,17 @@ define([
                 $state.go('groupComplaints', {groupID: vm.groupID});
             }
 
-            /*function sendMessge(){
-              ChatServices.sendMessage($scope.message);
-            }*/
+            function sendMessage(){
+              console.log($scope.newMessage);
+              ChatServices.sendMessage($scope.newMessage, vm.groupID);
+            }
 
             function activate() {
 
               ChatServices.getMessages($stateParams.groupID).then(
                   function(res){
                     console.log(res);
-                    $scope.messages = res.messages;
+                    $scope.messages = res.data;
                   }, function(res){
                     console.log(res);
                   }
