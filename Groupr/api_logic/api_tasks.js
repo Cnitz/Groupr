@@ -239,4 +239,30 @@ tasks.addUser = function (req, res) {
     });
 };
 
+tasks.clearUser = function (group_obj, username, cb) {
+    Task.find({group : group_obj._id}).exec(function (error, docs) {
+        if (error || docs == undefined || docs == null )
+            res.status(500).json({ message: 'Error: could not remove user from tasks' });
+        else {
+            for (var task in docs) {
+                //Remove user from being involved with task
+                var i = task.users.indexOf(username);
+                if (i >= 0)
+                    task.users.splice(i, 1);
+
+                //Reassign task owner
+                if (task.creator == username) {
+                    if (task.users[0] != undefined && task.users[0] != null)
+                        task.creator = task.users[0];
+                    else if (username != group_obj.creator)
+                        task.creator = group_obj.creator;
+                    else
+                        Task.findOne({_id: task._id}).remove(function (err) {});
+                }
+            }
+            cb();
+        }
+    });
+};
+
 module.exports = tasks;
