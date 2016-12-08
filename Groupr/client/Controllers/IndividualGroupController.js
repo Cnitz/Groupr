@@ -13,7 +13,8 @@ define([
         '$mdDialog',
         '$sce',
         '$filter',
-        function IndividualGroupController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log, $mdDialog, $sce, $filter) {
+        'ngToast',
+        function IndividualGroupController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log, $mdDialog, $sce, $filter, ngToast) {
             var vm = this;
             {
                 vm.groups = [];
@@ -22,6 +23,8 @@ define([
             vm.goHome = goHome;
             vm.navigateToGroups = navigateToGroups;
             vm.groupCalendar = groupCalendar;
+            vm.groupChat = groupChat;
+            vm.groupTasks = groupTasks;
             vm.logout = logout;
             vm.printDate = printDate;
             vm.printTimes = printTimes;
@@ -136,8 +139,7 @@ define([
                             .then(function (res) {
                                 vm.tasks = res.data;
                             }, function (res) {
-                                console.log("failure");
-                                console.log(res.data.message);
+                                ngToast.danger(res.data.message);
                             });
                     })
             };
@@ -152,8 +154,7 @@ define([
                                 console.log(res.data);
                                 vm.tasks.splice(i, 1);
                             }, function (res) {
-                                console.log("Failure.");
-                                console.log(res.data);
+                                ngToast.danger(res.data.message);
                             });
 
                         break;
@@ -175,12 +176,10 @@ define([
                                     .then(function (res) {
                                         vm.tasks = res.data;
                                     }, function (res) {
-                                        console.log("Failure");
-                                        console.log(res.data.message);
+                                        ngToast.danger(res.data.message);
                                     })
                             }, function (res) {
-                                console.log("Failure.");
-                                console.log(res.data);
+                                ngToast.danger(res.data.message);
                             });
                     });
             };
@@ -201,7 +200,14 @@ define([
             };
 
             function leaveGroup() {
-                GroupServices.leaveGroup(vm.groupID);
+                GroupServices.leaveGroup(vm.groupID)
+                    .then(function (res) {
+                        console.log("success:");
+                        console.log(res.data);
+                        console.log(group);;
+                    }, function (res) {
+                        ngToast.danger(res.data.message);
+                    });
                 $state.go('home');
             }
 
@@ -213,6 +219,14 @@ define([
             function groupCalendar() {
                 console.log("groupID: " + vm.groupID);
                 $state.go('groupCalendar', { groupID: vm.groupID });
+            }
+
+            function groupChat() {
+                $state.go('groupChat', { groupID: vm.groupID });
+            }
+
+            function groupTasks() {
+                $state.go('groupindiv', { groupID: vm.groupID });
             }
 
             function activate() {
@@ -241,7 +255,7 @@ define([
                                 )
 
                         }, function (resOne) {
-                            console.log(res.data);
+                            ngToast.danger(resOne.data.message);
                         });
 
 
@@ -327,5 +341,5 @@ define([
                     });
             };
         });
-        
+
 });
