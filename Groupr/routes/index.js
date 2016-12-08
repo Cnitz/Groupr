@@ -729,6 +729,9 @@ router.route('/tasks/updateInfo').post((req, res) => {
 router.route('/chat/:group/send').post((req, res) => {
     api_chat.sendMessage(req, res);
 });
+router.route('/chat/:group/lastMessageDate').get((req, res) => {
+    api_chat.getLastMessage(req, res);
+});
 router.route('/chat/:group').get((req, res) => {
     api_chat.getMessages(req, res);
 });
