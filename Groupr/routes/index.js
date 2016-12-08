@@ -476,6 +476,34 @@ router.route('/calendar/edit_group_event').post((req, res) => {
     });
 });
 
+/* start a new doodle */
+router.route('/calendar/start_doodle').post((req, res) => {
+    console.log('start doodle');
+    Group.findOne({ _id: req.body.groupId })
+    .populate('calendar')
+    .populate('users')
+    .exec(function(err, group) {
+        if (err) {
+            res.status(500).json({message: 'Error: Database access'});
+        }
+        else {
+            group.calendar.schedule_assistant.active = true;
+            group.calendar.schedule_assistant.name = req.body.name;
+            group.calendar.schedule_assistant.location = req.body.location;
+            group.calendar.schedule_assistant.description = req.body.description;
+            group.calendar.save((err) => {
+                if (err) {
+                    res.status(500).json({message: 'Error: Doodle could not be started'});
+                }
+                else {
+                    res.status(200).json({message: 'Success: Doodle has been started'});
+                }
+            })
+
+        }
+    });
+});
+
 /* generateMeetingTimes */
 router.route('/calendar/schedule_assistant').post((req, res) => {
     console.log("Request:");
@@ -524,10 +552,6 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
             res.status(500).json({message: 'Error: Database access'});
         }
         else {
-            group.calendar.schedule_assistant.active = true;
-            group.calendar.schedule_assistant.name = req.body.name;
-            group.calendar.schedule_assistant.location = req.body.location;
-            group.calendar.schedule_assistant.description = req.body.description;
             req.body.events.forEach(function(event) {
                 group.calendar.schedule_assistant.events.push(event);
             })

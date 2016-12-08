@@ -12,4 +12,5 @@ define([
 	'./AddEventDialogController',
 	'./EditEventDialogController',
 	'./ComplaintBoxController',
+	'./StartDoodleDialogController',
 ], function () {});
