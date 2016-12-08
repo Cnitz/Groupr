@@ -8,7 +8,10 @@ define([
         'Groupr.Services.AccountServices',
         '$stateParams',
         'Groupr.Services.CalendarServices',
-        function GroupCalendarController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log) {
+        '$mdSidenav',
+        '$log',
+        '$mdDialog',
+        function GroupCalendarController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log, $mdDialog) {
             var vm = this;
             {
                 vm.groups = [];
@@ -437,7 +440,7 @@ define([
 
             function deleteEvent(event) {
                 CalendarServices.deleteGroupEvent(event, $stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
                         console.log('success deleting event');
                         refresh();
@@ -445,19 +448,19 @@ define([
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
             }
 
             function editEvent() {
                 CalendarServices.editGroupEvent(event, $stateParams.groupID)
-                    .then(
+                .then(
                     function (result) {
                         refresh();
                     },
                     function (result) {
                         console.log(result.data);
                     }
-                    )
+                )
             }
 
             function refresh() {
@@ -485,28 +488,37 @@ define([
                 )
             }
 
-            function openAddEventDialog() {
+            function openAddEventDialog(ev) {
                 $mdDialog.show({
-                    controller: 'CloudView.Controllers.AddEvent',
+                    controller: 'Groupr.Controllers.AddEventDialog',
                     templateUrl: './Views/_add_event_dialog.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,
                     fullscreen: true,
+                    locals : {
+                        groupID: $stateParams.groupID,
+                        calendarType: 'group'
+                    },
                     onRemoving: function(element, removePromise) {
                         refresh();
                     }
                 })
             }
 
-            function openEditEventDialog() {
+            function openEditEventDialog(event, ev) {
                 $mdDialog.show({
-                    controller: 'CloudView.Controllers.EditEvent',
+                    controller: 'Groupr.Controllers.EditEventDialog',
                     templateUrl: './Views/_edit_event_dialog.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,
                     fullscreen: true,
+                    locals : {
+                        groupID: $stateParams.groupID,
+                        calendarType: 'group',
+                        event: event 
+                    },
                     onRemoving: function(element, removePromise) {
                         refresh();
                     }

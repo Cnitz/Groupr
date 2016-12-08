@@ -8,7 +8,8 @@ define([
 		'Groupr.Services.GroupServices',
 		'Groupr.Services.CalendarServices',
 		'Groupr.Services.GoogleServices',
-		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices) {
+		'$mdDialog',
+		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices, $mdDialog) {
 			var vm = this;
 			vm.goHome = goHome;
 			vm.navigateToGroups = navigateToGroups;
@@ -21,10 +22,13 @@ define([
 			vm.googleAuth = googleAuth;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
+			vm.openAddEventDialog = openAddEventDialog;
+            vm.openEditEventDialog = openEditEventDialog;
 			$scope.currentNavItem = "home";
 			$scope.myDate = new Date();
 			$scope.user = {};
 			$scope.events = [];
+
 
 
 			function goHome(){
@@ -169,6 +173,43 @@ define([
 			function googleAuth(){
 				GoogleServices.googleAuth();
 			}
+
+			function openAddEventDialog(ev) {
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.AddEventDialog',
+                    templateUrl: './Views/_add_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: null,
+                        calendarType: 'personal'
+                    },
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
+            }
+
+            function openEditEventDialog(event, ev) {
+                $mdDialog.show({
+                    controller: 'Groupr.Controllers.EditEventDialog',
+                    templateUrl: './Views/_edit_event_dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    locals : {
+                        groupID: null,
+                        calendarType: 'personal',
+                        event: event 
+                    },
+                    onRemoving: function(element, removePromise) {
+                        refresh();
+                    }
+                })
+            }
 
 			activate();
 

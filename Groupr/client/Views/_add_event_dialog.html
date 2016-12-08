@@ -1,0 +1,42 @@
+<md-dialog aria-label="Add Event">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>New Event</h2>
+		</div>
+	</md-toolbar>
+	<md-dialog-content style="min-width: 300px;" class="md-padding" layout="column" layout-align="center center">
+		<md-input-container style="margin: 0px">
+			<label>Name</label>
+			<input ng-model="eventName"></input>
+		</md-input-container>
+		<md-input-container style="margin: 0px">
+			<label>Description</label>
+			<input ng-model="eventDescription"></input>
+		</md-input-container>
+		<md-input-container style="margin: 0px">
+			<label>Location</label>
+			<input ng-model="eventLocation"></input>
+		</md-input-container>
+		<md-input-container style="margin: 0px">
+			<md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
+		</md-input-container>
+		<md-input-container style="margin: 0px">
+			<label>Start Time</label>
+			<input ng-model="startTime"></input>
+		</md-input-container>
+		<md-input-container style="margin: 0px">
+			<label>End Time</label>
+			<input ng-model="endTime"></input>
+		</md-input-container>
+	</md-dialog-content>
+
+
+	<md-dialog-actions layout="row" layout-align="center center">
+		<md-button type="button" ng-click="close()">
+			Cancel
+		</md-button>
+		<md-button type="button" ng-click="addEvent()">
+			Add
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

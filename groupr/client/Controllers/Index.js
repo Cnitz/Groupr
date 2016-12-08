@@ -9,4 +9,6 @@ define([
 	'./ScheduleAssistantController',
 	'./GroupCalendar',
 	'./GroupChatController',
+	'./AddEventDialogController',
+	'./EditEventDialogController',
 ], function () {});

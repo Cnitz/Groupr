@@ -97,25 +97,24 @@
 
 
 						<md-card>
-							<md-toolbar>
-								<div class="md-toolbar-tools">
+                            <md-toolbar>
+                                <div class="md-toolbar-tools">
                                     <h1>Group Calendar</h1>
                                 </div>
-							</md-toolbar>
-							<md-list flex>
-								<md-list-item class="md-3-line" ng-repeat="event in events" ng-click="vm.addEvent()">
-									<div class="md-list-item-text" layout="column">
+                            </md-toolbar>
+                            <md-list flex>
+                                <md-list-item class="md-3-line" ng-repeat="event in events | orderBy:'-startTime' : true" ng-click="vm.openEditEventDialog(event)">
+                                    <div class="md-list-item-text" layout="column">
                                         <h2 style="text-align:center;">{{ event.name }}</h2>
                                         <div class="md-list-item-text" layout="row">
                                             <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
                                             <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
                                         </div>
                                     </div>
-								</md-list-item>
-								<md-button ng-click="vm.addEvent()" onclick="disabled='false';" class="md-accent" type="button">Add Event</md-button>
-								<md-button  href="/api/auth/google" onclick="disabled='true';" class="md-accent" type="button" >Import Calendar</md-button>
-							</md-list>
-						</md-card>
+                                </md-list-item>
+                            </md-list>
+                            <md-button ng-click="vm.openAddEventDialog()" class="md-accent" type="button">Add Event</md-button>
+                        </md-card>
 				</md-content>
 
 				<!--<div>
