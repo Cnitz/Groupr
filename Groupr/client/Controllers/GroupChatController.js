@@ -6,8 +6,12 @@ define([
         '$state',
         'Groupr.Services.GroupServices',
         'Groupr.Services.AccountServices',
+        'Groupr.Services.ChatServices',
         '$stateParams',
-        function GroupChatController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log) {
+        'Groupr.Services.CalendarServices',
+        '$mdSidenav',
+        '$log',
+        function GroupChatController($scope, $state, GroupServices, AccountServices, ChatServices, $stateParams, CalendarServices, $mdSidenav, $log) {
             var vm = this;
             {
                 vm.groups = [];
@@ -25,6 +29,9 @@ define([
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
             $scope.users = [];
+
+            $scope.newMessage = "";
+            $scope.messages [];
             vm.currGroup = "";
             vm.events = [];
             $scope.toggleLeft = buildDelayedToggler('left');
@@ -71,19 +78,22 @@ define([
                 $state.go('groupComplaints', {groupID: vm.groupID});
             }
 
-
+            /*function sendMessge(){
+              ChatServices.sendMessage($scope.message);
+            }*/
 
             function activate() {
-                if ($stateParams.groupID != null) {
-                    GroupServices.getGroupInfo($stateParams.groupID)
-                        .then(function (resOne) {
-                            vm.currGroup = resOne.data;
-                            var g = { group: vm.currGroup._id };
-                        }, function (resOne) {
-                            ngToast.danger(resOne.data.message);
-                        });
-                }
-            }
+
+              ChatServices.getMessages($stateParams.groupID).then(
+                  function(res){
+                    console.log(res);
+                    $scope.messages = res.messages;
+                  }, function(res){
+                    console.log(res);
+                  }
+                )
+
+              }
             activate();
 
             /**
