@@ -18,6 +18,7 @@ var api_groups = require('../api_logic/api_groups');
 var api_tasks = require('../api_logic/api_tasks');
 var api_chat = require('../api_logic/api_chat');
 var api_complaint = require('../api_logic/api_complaint');
+var api_notification = require('../api_logic/api_notifications');
 
 
 // Models
@@ -319,6 +320,7 @@ router.route('/calendar/edit_event').post((req, res) => {
             eventList.push(req.body);
             api_calendar.event_action(calendarList, eventList, 'edit', (obj) => {
                 if (obj.status != 500) {
+                    api_notification.sendBasicEmail(user.email, "Edited Calendar Event", "You Just edited a calendar event");
                     res.status(200).json({message: 'Success: The event has been edited'})
                 }
                 else {
@@ -768,7 +770,9 @@ router.route('/complaints/create').post((req, res) =>{
 });
 
 
-
+router.route('/notification/email').get((req, res) => {
+    api_notification.sendTestEmail(req, res);
+});
 
 
 
