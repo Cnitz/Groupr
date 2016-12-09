@@ -30,9 +30,7 @@ app.use('/api', require('./routes'));
 // Get the port
 var port = process.env.PORT || 3000;
 
-var j = schedule.scheduleJob('* * 8 * *', function(){
 
-});
 // Start the server
 app.listen(port, () => {
     console.log(`Server listening on port: ${port}`);
