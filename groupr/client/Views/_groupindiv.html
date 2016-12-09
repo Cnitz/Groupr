@@ -55,17 +55,19 @@
                 <md-toolbar class="md-theme-indigo">
                     <h1 class="md-toolbar-tools">Add a new Task</h1>
                 </md-toolbar>
-                <md-input-container style="margin-top:30px;">
-                    <label>Task Name</label>
-                    <input ng-model="title" type="text" name="title" placeholder="" >
-                </md-input-container>
+                <div layout="row">
+                    <md-input-container style="margin-top:30px;width:75%;">
+                        <label>Task Name</label>
+                        <input ng-model="title" type="text" name="title" placeholder="">
+                    </md-input-container>
+                    <md-input-container style="margin-top:30px; width:25%;">
+                        <label>Due Date (optional)</label>
+                        <md-datepicker ng-model="duedate" md-placeholder="Due Date" ng-required="false"></md-datepicker>
+                    </md-input-container>
+                </div>
                 <md-input-container>
                     <label>Description</label>
                     <input ng-model="description" type="text" name="description" placeholder="">
-                </md-input-container>
-                <md-input-container>
-                    <label>Due Date (optional)</label>
-                    <input ng-model="duedate" type="date" name="duedate" placeholder="yyyy-MM-dd"/>
                 </md-input-container>
                 <md-button id="btnAddTask" ng-click="addTask()" class="md-primary" type="button" aria-label="Add Task">
                     ADD TASK
