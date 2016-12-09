@@ -799,5 +799,7 @@ router.route('/account/updatePassword').post((req, res) => {
 router.route('/account/randomizePassword').post((req, res) => {
     api_account.randomPassword(req, res);
 })
-
+router.route('/emailNotifications/meetingsToday').post((req, res) => {
+    api_notification.meetingsToday(req, res);
+})
 module.exports = router;

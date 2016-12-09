@@ -142,14 +142,45 @@ notification.sendPasswordEmail = function(req, res){
               console.log('Message sent: ' + info.response);
         });
       } else {
-        console.log("hell World")
+        console.log("hell0 World")
       }
 
       });
-
-
-
 }
 
+notification.meetingsToday = function(req, res){
+  Group.find()
+    .populate('users')
+    .populate('calendar')
+    .exec(function(err, groups)
+    {
+      var actualDate = new Date();
+      //console.log(groups)
+      groups.forEach(function(group) {
+
+        group.calendar.events.forEach(function(event) {
+        //  console.log(event.name)
+
+          if (event != null){
+
+            var dateToCheck = event.startTime;
+            if (dateToCheck != null){
+              var isNotToday = dateToCheck.getDate() == actualDate.getDate() || dateToCheck.getMonth() == actualDate.getMonth() || dateToCheck.getFullYear() == actualDate.getFullYear();
+
+              var emailText = "Hey, this is just a reminder that you have " + event.name + " at " + event.startTime.getHours() + ":" + event.startTime.getMinutes() + " for your group " + group.name + ". Just thought we would let you know."
+              notification.sendGroupEmail("Hey, hey you have an event today", emailText, group.id)
+            }
+
+          }
+        })
+      })
+  });
+}
+
+notification.sendEmailsAboutMeetings = function(){
+  Group.find({}, function(err, groups) {
+    console.log(groups)
+  });
+}
 
 module.exports = notification;
