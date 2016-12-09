@@ -3,7 +3,7 @@ define([
 	'./GroupServices',
 	'./CalendarServices',
 	'./GoogleServices',
-	'./ChatServices',
+	'./ChatServices', 
 	'./EmailService',
 	'./ComplaintServices',
 ], function () {});
