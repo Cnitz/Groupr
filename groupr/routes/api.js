@@ -4,6 +4,7 @@
  var express = require('express');
  var jwt = require('jsonwebtoken');
  var passport = require('passport');
+ var nodemailer = require('nodemailer');
  var router = express.Router();
 
  // Config
@@ -13,6 +14,9 @@ var User = require('../models/user');
 var Meeting = require('../models/meeting');
 var Group = require('../models/group');
 var Task = require('../models/task');
+
+
+
 /*
  * Group Data API
  */
@@ -162,5 +166,28 @@ router.post('api/tasks/add', function (req, res, next) {
         });
     });
 });
+
+// Email Notifications API
+
+router.post('api/email/Notifications', function (req, res, next)){
+
+    var transporter = nodemailer.createTransport(connection);
+    var mailOptions = {
+      from: '"No Reply Groupr" <noreplygroupr@gmail.com>', // sender address
+      to: "fische17@purdue.edu", // list of receivers
+      subject: 'Hello ✔', // Subject line
+      text: 'Hello world ?', // plaintext body
+      html: '<b>Hello world ?</b>' // html body
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            return console.log(error);
+        }
+        console.log('Message sent: ' + info.response);
+    });
+  }
+}
+
+
 
 module.exports = router;

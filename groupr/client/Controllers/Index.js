@@ -13,4 +13,7 @@ define([
 	'./ComplaintBoxController',
 	'./StartDoodleDialogController',
 	'./ScheduleAssistantDialogController',
+	'./SettingDialogController',
+	'./ForgotPasswordController',
+	'./NewPasswordController',
 ], function () {});

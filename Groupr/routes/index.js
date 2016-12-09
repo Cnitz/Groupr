@@ -18,6 +18,7 @@ var api_groups = require('../api_logic/api_groups');
 var api_tasks = require('../api_logic/api_tasks');
 var api_chat = require('../api_logic/api_chat');
 var api_complaint = require('../api_logic/api_complaint');
+var api_notification = require('../api_logic/api_notifications');
 
 
 // Models
@@ -228,6 +229,7 @@ router.route('/groups').get((req, res) => {
  */
 router.route('/groups/:id').get((req, res) => {
     api_groups.get_group_by_id(req, res, req.params.id);
+
 });
 
 /*
@@ -237,6 +239,10 @@ router.route('/groups/:id').get((req, res) => {
  */
 router.route('/groups/join/:id').put((req, res) => {
     api_groups.join_group(req, res, req.params.id);
+});
+
+router.route('/sendNotifactions').get((req, res) => {
+    api_groups.get_group_by_id(req, res, req.params.id);
 });
 
 /*
@@ -319,6 +325,7 @@ router.route('/calendar/edit_event').post((req, res) => {
             eventList.push(req.body);
             api_calendar.event_action(calendarList, eventList, 'edit', (obj) => {
                 if (obj.status != 500) {
+                    api_notification.sendBasicEmail(user.email, "Edited Calendar Event", "You Just edited a calendar event");
                     res.status(200).json({message: 'Success: The event has been edited'})
                 }
                 else {
@@ -328,6 +335,8 @@ router.route('/calendar/edit_event').post((req, res) => {
         }
     });
 });
+
+
 
 router.route('/calendar/get_events').post((req, res) => {
     if (req.body.calendarType == 'group') {
@@ -772,8 +781,29 @@ router.route('/complaints/group/:groupid').get((req, res) =>{
 });
 
 
+router.route('/emailNotifications/sendTestEmail').get((req, res) => {
+    api_notification.sendTestEmail(req, res);
+});
+router.route('/emailNotifications/sendBasicEmail').post((req, res) => {
+    api_notification.sendEmail(req, res);
 
-
-
-
+});
+router.route('/emailNotifications/sendGroupEmail').post((req, res) => {
+    api_notification.sendMassGroupEmail(req, res);
+});
+router.route('/emailNotifications/updateEmailNotifications').post((req, res) => {
+    api_notification.updateEmailNotifications(req, res);
+});
+router.route('/emailNotifications/sendPasswordEmail').post((req, res) => {
+    api_notification.sendPasswordEmail(req, res);
+});
+router.route('/account/updatePassword').post((req, res) => {
+    api_account.updatePassword(req, res);
+});
+router.route('/account/randomizePassword').post((req, res) => {
+    api_account.randomPassword(req, res);
+})
+router.route('/emailNotifications/meetingsToday').post((req, res) => {
+    api_notification.meetingsToday(req, res);
+})
 module.exports = router;

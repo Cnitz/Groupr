@@ -14,7 +14,7 @@ define([
 			}
 
 			var url = 'http://localhost:3000/api/account/';
-			
+
 			service.login = function(credentials) {
 				console.log(url+'login');
 				return $http({
@@ -23,7 +23,7 @@ define([
 					data: credentials
 				});
 			}
-			
+
 			service.signup = function(userAccount) {
 				return $http({
 					method: 'POST',
@@ -50,6 +50,38 @@ define([
 				});
 			}
 
+			service.updatePassword = function(newPassword, curPassword, email){
+				var data = {
+					email: email,
+					newPassword: newPassword,
+					curPassword: curPassword,
+				}
+				return $http({
+					method: 'POST',
+					url: url + 'updatePassword',
+					data: data
+				});
+			}
+
+
+
+			service.randomPassword = function(email){
+				var length = 8,
+				charset = "abcdefghijklmnopqrstuvwxyz@ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+				retVal = "";
+				for (var i = 0, n = charset.length; i < length; ++i) {
+					retVal += charset.charAt(Math.floor(Math.random() * n));
+				}
+				var data = {
+					email: email,
+					newPassword : retVal
+				}
+				return $http({
+					method: 'POST',
+					url: url + 'randomizePassword',
+					data: data
+				});
+			}
 			return service;
 		}
 	]);

@@ -15,12 +15,15 @@ define([
 				},
 				function(result) {}
 			)*/
-			
+
 			$scope.login = function() {
 				$state.go('login');
 
 			};
 			$scope.signup = function() {
+				$state.go('signup');
+			};
+			$scope.forgotPassword = function() {
 				$state.go('signup');
 			};
 

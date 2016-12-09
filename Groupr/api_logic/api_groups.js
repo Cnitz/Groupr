@@ -6,7 +6,7 @@ var User = require('../models/user');
 var Group = require('../models/group');
 var Calendar = require('../models/calendar');
 var api_tasks = require('../api_logic/api_tasks');
-
+var api_notifications = require('../api_logic/api_notifications');
 var group = new Object();
 
 
@@ -157,6 +157,7 @@ group.join_group = function(req, res, group_id){
                                 });
                             }
                             else {
+                                api_notifications.sendGroupEmail("New user in your Group: " + group.name, "A new user, " + user.name + ", aka " + user.username + " joined your group " + group.name + ". Greet them or Kick them. We don't care." ,group_id)
                                 res.status(200).json({
                                 message:  'Successfully joined group'
                                 });
