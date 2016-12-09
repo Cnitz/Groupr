@@ -536,7 +536,6 @@ define([
                             $scope.eventName = result.data.schedule_assistant.name;
                             $scope.eventLocation = result.data.schedule_assistant.location;
                             $scope.eventDescription = result.data.schedule_assistant.description;
-                            $scope.pendingEvents.push(result.data.schedule_assistant.recommended);
                         }
                         if (votingActive) {
                             vm.voters = result.data.schedule_assistant.voters;

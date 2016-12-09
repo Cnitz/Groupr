@@ -19,10 +19,6 @@ var CalendarSchema = new mongoose.Schema({
         name: String,
         description: String,
         location: String,
-        recommended: {
-            startTime: Date,
-            endTime: Date
-        },
         events: [{ 
             startTime: Date,
             endTime: Date,

@@ -48,18 +48,8 @@ define([
             vm.groupID = $stateParams.groupID;
 
             $scope.openEditDialog = function (task) {
-                var d = new Date(task.dueDate),
-                    month = '' + (d.getMonth() + 1),
-                    day = '' + d.getDate(),
-                    year = d.getFullYear();
+                var d = new Date(task.dueDate);
 
-
-                if (month.length < 2) month = '0' + month;
-                if (day.length < 2) day = '0' + day;
-
-                $scope.realDueDate = $filter("date")(new Date(year, month, day), 'yyyy-MM-dd');
-                if (task.dueDate == null)
-                    $scope.realDueDate = "";
                 $mdDialog.show({
                     controller: DialogController,
                     template:
@@ -78,15 +68,15 @@ define([
                     '       <div class="md-dialog-content" layout="column">' +
                     '           <md-input-container>' +
                     '               <label>Task Name</label>' +
-                    '               <input ng-model="formdata.title" type="text" name="formdata.title" placeholder="New Task Title" ng-init="formdata.title=\'' + task.title + '\'">' +
+                    '               <input ng-model="formdata.title" type="text" name="formdata.title" placeholder="New Task Title" ng-init="formdata.title=formdata.title">' +
                     '           </md-input-container>' +
                     '           <md-input-container>' +
                     '               <label>Task Description</label>' +
-                    '               <input ng-model="formdata.desc" type="text" name="formdata.desc" placeholder="New Task Description" ng-init="formdata.desc=\'' + task.description + '\'">' +
+                    '               <input ng-model="formdata.desc" type="text" name="formdata.desc" placeholder="New Task Description" ng-init="formdata.desc=formdata.desc">' +
                     '           </md-input-container>' +
                     '           <md-input-container>' +
                     '               <label>Due Date (optional)</label>' +
-                    '               <input ng-model="formdata.dd" type="text" name="formdata.dd" placeholder="yyyy-MM-dd" ng-init="formdata.dd=\'' + $scope.realDueDate + '\'">' +
+                    '               <md-datepicker ng-model="formdata.dd" md-placeholder="Due Date" ng-required="false" ng-init="formdata.dd=formdata.dd"></md-datepicker > ' +
                     '           </md-input-container>' +
                     '   </md-dialog-content>' +
                     '   <md-dialog-actions layout="row">' +
@@ -99,26 +89,29 @@ define([
                     '   </md-dialog-actions>' +
                     '</md-dialog>',
                     parent: angular.element(document.body),
+                    locals: { dueDate: d, title: task.title, desc: task.description },
                     clickOutsideToClose: true
                 })
                     .then(function (answer) {
-                        console.log("New Title: " + answer.title + "; New Desc: " + answer.desc + "; New Due Date: " + answer.dd);
-                        var data = { taskId: task._id, title: answer.title, description: answer.desc, dueDate: answer.dd };
+                        if (answer != 'cancel') {
+                            console.log("New Title: " + answer.title + "; New Desc: " + answer.desc + "; New Due Date: " + answer.dd);
+                            var data = { taskId: task._id, title: answer.title, description: answer.desc, dueDate: answer.dd };
 
-                        GroupServices.updateTaskInfo(data)
-                            .then(function (res) {
-                                console.log(res.data);
-                                var g = { group: vm.currGroup._id };
-                                GroupServices.getTasks(g)
-                                    .then(function (res) {
-                                        vm.tasks = res.data;
-                                    }, function (res) {
-                                        ngToast.danger(res.data.message);
-                                    });
-                            }, function (res) {
-                                console.log(res.data);
-                            })
-                    
+                            GroupServices.updateTaskInfo(data)
+                                .then(function (res) {
+                                    console.log(res.data);
+                                    var g = { group: vm.currGroup._id };
+                                    GroupServices.getTasks(g)
+                                        .then(function (res) {
+                                            vm.tasks = res.data;
+                                        }, function (res) {
+                                            ngToast.danger(res.data.message);
+                                        });
+                                }, function (res) {
+                                    console.log(res.data);
+                                })
+                        }
+
 
                     }, function () {
                         console.log('You cancelled the dialog.');
@@ -126,9 +119,12 @@ define([
 
             };
 
-            function DialogController($scope, $mdDialog) {
+            function DialogController($scope, $mdDialog, dueDate, title, desc) {
                 $scope.title = {};
-
+                $scope.formdata = {};
+                $scope.formdata.dd = new Date(dueDate);
+                $scope.formdata.title = title;
+                $scope.formdata.desc = desc;
                 $scope.hide = function () {
                     $mdDialog.hide();
                 };

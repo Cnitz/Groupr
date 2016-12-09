@@ -80,7 +80,6 @@ group.create_group = function(req, res) {
                     newCalendar.schedule_assistant.location = "";
                     newCalendar.schedule_assistant.description = "";
                     newCalendar.schedule_assistant.events = [];
-                    newCalendar.schedule_assistant.recommended = {};
                     newCalendar.save((err, calendar) => {
                         if (err) {
                             res.status(500).json({message: 'Error: Cannot create Calendar'});

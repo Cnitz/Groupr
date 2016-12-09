@@ -88,10 +88,23 @@
                                 Use Schedule Assistant
                             </md-button>
                         </div>
+
+                        <div layout="row" layout-align="space-around center">
+                            <md-input-container>
+                                <label> Hours </label>
+                                <input ng-model="durationHours" type="text" name="durationHours">
+                            </md-input-container>
+                            <md-input-container>
+                                <label> Minutes </label>
+                                <input ng-model="durationMinutes" type="text" name="durationMinutes">
+                            </md-input-container>
+                        </div>
+
                         <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center">
                             <h4 style="text-align:center;"> {{vm.printDate(event)}}&nbsp{{vm.printTimes(event)}}</h4>
                             <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Remove</md-button>
                         </div>
+
                         <div layout="row" layout-align="center center">
                           <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Submit for Voting</md-button>
                         </div>
