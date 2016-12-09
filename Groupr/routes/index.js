@@ -767,6 +767,10 @@ router.route('/complaints/create').post((req, res) =>{
     api_complaint.createComplaint(req, res);
 });
 
+router.route('/complaints/group/:groupid').get((req, res) =>{
+    api_complaint.getGroupComplaints(req, res, req.params.groupid);
+});
+
 
 
 
