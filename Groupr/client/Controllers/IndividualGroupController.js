@@ -199,16 +199,23 @@ define([
             };
 
             $scope.statusChanged = function (task) {
-                console.log(task);
 
-                GroupServices.updateStatus(task._id)
+                    var data = { taskId: task._id, status: task.status};
+                    console.log(data);
+
+                GroupServices.updateTaskInfo(data)
                     .then(function (res) {
-                        console.log("update status success!");
-                        console.log(res);
+                        console.log(res.data);
+                        var g = { group: vm.currGroup._id };
+                        GroupServices.getTasks(g)
+                            .then(function (res) {
+                                vm.tasks = res.data;
+                            }, function (res) {
+                                ngToast.danger(res.data.message);
+                            });
                     }, function (res) {
-                        console.log("update status failure!");
-                        console.log(res);
-                    });
+                        console.log(res.data);
+                    })
 
 
             };
