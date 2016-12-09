@@ -103,6 +103,14 @@ define([
                 });
             }
 
+            service.updateTaskInfo = function (data) {
+                return $http({
+                    method: 'POST',
+                    url: url + 'tasks/updateInfo',
+                    data: data
+                });
+            }
+
 			return service;
 		}
 	]);

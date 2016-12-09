@@ -103,6 +103,23 @@ define([
                 })
                     .then(function (answer) {
                         console.log("New Title: " + answer.title + "; New Desc: " + answer.desc + "; New Due Date: " + answer.dd);
+                        var data = { taskId: task._id, title: answer.title, description: answer.desc, dueDate: answer.dd };
+
+                        GroupServices.updateTaskInfo(data)
+                            .then(function (res) {
+                                console.log(res.data);
+                                var g = { group: vm.currGroup._id };
+                                GroupServices.getTasks(g)
+                                    .then(function (res) {
+                                        vm.tasks = res.data;
+                                    }, function (res) {
+                                        ngToast.danger(res.data.message);
+                                    });
+                            }, function (res) {
+                                console.log(res.data);
+                            })
+                    
+
                     }, function () {
                         console.log('You cancelled the dialog.');
                     });
