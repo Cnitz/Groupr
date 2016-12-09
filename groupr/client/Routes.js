@@ -41,7 +41,7 @@ define([
 					}
 				})
 				.state('groupComplaints', {
-					url:			'/groupindiv/:groupID',
+					url:			'/groupComplaint/:groupID',
 					templateUrl:	'Views/_groupComplaints.html',
 					controller:		'Groupr.Controllers.ComplaintBoxController',
 					controllerAs:  	'vm',

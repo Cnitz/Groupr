@@ -44,8 +44,7 @@ define([
             vm.submitToGroup = submitToGroup;
             vm.openAddEventDialog = openAddEventDialog;
             vm.openEditEventDialog = openEditEventDialog;
-            vm.openDoodleDialog = openDoodleDialog;  
-            vm.openScheduleAssistantDialog = openScheduleAssistantDialog;
+            vm.openDoodleDialog = openDoodleDialog;
 
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
@@ -406,16 +405,68 @@ define([
                 )
             }
 
+            function mapMonth(month) {
+                switch (month) {
+                    case 1:
+                        return 'January';
+                    break;
+                    case 2:
+                        return 'February';
+                    break;
+                    case 3:
+                        return 'March';
+                    break;
+                    case 4:
+                        return 'April';
+                    break;
+                    case 5:
+                        return 'May';
+                    break;
+                    case 6:
+                        return 'June';
+                    break;
+                    case 7:
+                        return 'July';
+                    break;
+                    case 8:
+                        return 'August';
+                    break;
+                    case 9:
+                        return 'September';
+                    break;
+                    case 10:
+                        return 'October';
+                    break;
+                    case 11:
+                        return 'November';
+                    break;
+                    case 12:
+                        return 'December';
+                    break;
+                }
+            }
+
             function printDate(event) {
                 var newDate = new Date(event.startTime);
-                return (newDate.getMonth() + 1) + '/' + newDate.getDate();
+                var month = mapMonth(newDate.getMonth() + 1);
+                return (month + ' ' + newDate.getDate() + ' From ')
             }
 
             function printTimes(event) {
                 var newStartTime = new Date(event.startTime);
                 var newEndTime = new Date(event.endTime);
+                var minutes1= "";
+                var minutes2= "";
 
-                return newStartTime.getHours() + ':' + newStartTime.getMinutes() + ' - ' + newEndTime.getHours() + ':' + newEndTime.getMinutes()
+                if(newStartTime.getMinutes() < 10){
+                  minutes1 = "0"+newStartTime.getMinutes();
+                }
+
+                if(newEndTime.getMinutes() < 10){
+                  minutes2 = "0"+newEndTime.getMinutes();
+                }
+
+                return newStartTime.getHours() + ':' + minutes1 + ' - ' + newEndTime.getHours() + ':' + minutes2;
             }
 
             function addEvent() {
@@ -486,14 +537,21 @@ define([
                 CalendarServices.getGroupCalendar($stateParams.groupID)
                 .then(
                     function (result) {
-                        $scope.votingEvents = result.data.schedule_assistant.events;
-                        $scope.votingEvents.forEach(function(event){
-                          event.selected = false;
-                        })
-                        $scope.votingActive = result.data.schedule_assistant.active;
                         vm.events = result.data.events;
-                        vm.voters = result.data.schedule_assistant.voters;
+                        $scope.doodleInProgress = result.data.schedule_assistant.inProgress;
+                        $scope.votingActive = result.data.schedule_assistant.active;
+
+                        if ($scope.doodleInProgress) {
+                            $scope.eventName = result.data.schedule_assistant.name;
+                            $scope.eventLocation = result.data.schedule_assistant.location;
+                            $scope.eventDescription = result.data.schedule_assistant.description;
+                        }
                         if (votingActive) {
+                            vm.voters = result.data.schedule_assistant.voters;
+                            $scope.votingEvents = result.data.schedule_assistant.events;
+                            $scope.votingEvents.forEach(function(event){
+                                event.selected = false;
+                            })
                             vm.voters.forEach(function(voter) {
                                 if (voter === $scope.user.username) {
                                     $scope.hasVoted = true;
@@ -557,24 +615,7 @@ define([
                         groupID: $stateParams.groupID,
                     },
                     onRemoving: function(element, removePromise) {
-                        //refresh();
-                    }
-                })
-            }
-
-            function openScheduleAssistantDialog(ev) {
-                $mdDialog.show({
-                    controller: 'Groupr.Controllers.StartDoodleDialog',
-                    templateUrl: './Views/_start_doodle_dialog.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: true,
-                    locals : {
-                        groupID: $stateParams.groupID,
-                    },
-                    onRemoving: function(element, removePromise) {
-                        //refresh();
+                        refresh();
                     }
                 })
             }

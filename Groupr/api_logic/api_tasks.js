@@ -106,7 +106,7 @@ tasks.addTask = function (req, res) {
             taskdoc.dateCreated = new Date();
             taskdoc.dueDate = (req.body.dueDate == undefined) ? undefined : req.body.dueDate;
             taskdoc.category = (req.body.category == undefined) ? undefined : req.body.category;
-            taskdoc.status = "Incomplete";
+            taskdoc.status = false;
             taskdoc.users = [];
             taskdoc.save(function (err) {
                 if (err) {
