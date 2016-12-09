@@ -29,15 +29,14 @@ define([
                 newEndDate.setSeconds(0);
                 newEndDate.setMilliseconds(0);
 
-                CalendarServices.scheduleAssistant(newStartDate, newEndDate, duration, vm.groupID)
+                CalendarServices.scheduleAssistant(newStartDate, newEndDate, duration, groupID)
                 .then(
                     function(res){
-                        console.log(res.data);
                         $scope.pendingEvents.push(res.data);
                     },
                     function(res){
                         console.log("Failure");
-                        console.log(res.event);
+                        console.log(res.data);
                     }
                 )
             }

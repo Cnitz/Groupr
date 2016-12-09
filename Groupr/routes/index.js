@@ -530,10 +530,19 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
                 })
                 api_calendar.schedule_assistant(calendarList, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
                     if (obj.status != 500) {
-                        res.status(obj.status).send(obj.event);
+                        group.calendar.schedule_assistant.recommended.startTime = event.startTime;
+                        group.calendar.schedule_assistant.recommended.endTime = event.endTime;
+                        group.calendar.save((err) => {
+                            if (err) {
+                                res.status(500).json({message: 'Error: Meeting times could not be added'});
+                            }
+                            else {
+                                res.status(200).json({message: 'Success: Recommended Meeting Time Added'});
+                            }
+                        })
                     }
                     else {
-                        res.status(500).json({message: 'Failure'})
+                        res.status(500).json({message: 'Failure to recommend time'});
                     }
                 });
             })
@@ -557,6 +566,7 @@ router.route('/calendar/propose_meeting_times').post((req, res) => {
             req.body.events.forEach(function(event) {
                 group.calendar.schedule_assistant.events.push(event);
             })
+            group.calendar.schedule_assistant.events.push(group.calendar.schedule_assistant.recommended);
             group.calendar.save((err) => {
                 if (err) {
                     res.status(500).json({message: 'Error: Meeting times could not be added'});
