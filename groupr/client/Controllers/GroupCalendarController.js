@@ -45,8 +45,7 @@ define([
             vm.openAddEventDialog = openAddEventDialog;
             vm.openEditEventDialog = openEditEventDialog;
             vm.openDoodleDialog = openDoodleDialog;  
-            vm.openScheduleAssistantDialog = openScheduleAssistantDialog;
-
+            
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
             $scope.durationHours = 0;
@@ -598,23 +597,6 @@ define([
                 $mdDialog.show({
                     controller: 'Groupr.Controllers.StartDoodleDialog',
                     templateUrl: './Views/_start_doodle_dialog.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: true,
-                    locals : {
-                        groupID: $stateParams.groupID,
-                    },
-                    onRemoving: function(element, removePromise) {
-                        refresh();
-                    }
-                })
-            }
-
-            function openScheduleAssistantDialog(ev) {
-                $mdDialog.show({
-                    controller: 'Groupr.Controllers.StartDoodleDialog',
-                    templateUrl: './Views/_schedule_assistant.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,

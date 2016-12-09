@@ -117,6 +117,8 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
 
     /* calculate conflict frequency */
     var conflictFrequency = [];
+    console.log('interval is '+ interval);
+    console.log('meeting length is ' + meetingLength);
     for (var i = 0; i < interval; i++) {
         conflictFrequency[i] = 0;
     }
@@ -152,10 +154,7 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
             curCount -= conflictFrequency[i - meetingLength];
             curCount += conflictFrequency[i];
 
-            if (curCount == 0) {
-                // TODO
-            }
-            else if (curCount < bestFit.score) {
+            if (curCount < bestFit.score) {
                 bestFit.startIndex = i - meetingLength + 1;
                 bestFit.endIndex = i + 1;
                 bestFit.score = curCount;
@@ -193,6 +192,7 @@ calendar.schedule_assistant = function(calendarList, startTimeUTC, endTimeUTC, m
 
     console.log(finalStartTime);
     console.log(finalEndTime);
+
 
     reponseObj.status = 200;
     reponseObj.event = { startTime: finalStartTime, endTime: finalEndTime };
