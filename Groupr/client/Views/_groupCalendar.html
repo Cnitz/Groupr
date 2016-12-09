@@ -77,13 +77,12 @@
                                 <label>EndTime</label>
                                 <input ng-model="endTime" type="text" name="endTime">
                             </md-input-container>
-                        </div>              
+                        </div>
                         <div layout="row">
                             <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
                                 Propose Meeting Time
                             </md-button>
-                            <span flex>
-                            </span>
+                            <md-button ng-click="vm.openAddEventDialog()" class="md-accent" type="button">Submit for Voting</md-button>
                             <md-button ng-click="vm.openScheduleAssistantDialog()" class="md-accent" type="button">
                                 Use Schedule Assistant
                             </md-button>
@@ -91,12 +90,12 @@
                         <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center">
                             <h4 style="text-align:center;"> {{vm.printDate(event)}}&nbsp{{vm.printTimes(event)}}</h4>
                             <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Remove</md-button>
-                        </div>                    
+                        </div>
                     </div>
-                </div> 
-            </md-card>             
-                
-                
+                </div>
+            </md-card>
+
+
 
               <!--
                 useless comment
