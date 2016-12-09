@@ -140,7 +140,6 @@ define([
 					});
 				}
 				else{
-
 					ngToast.danger('Please finish filling out complaint before submission.');
 				}
 		}
