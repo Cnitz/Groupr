@@ -82,7 +82,8 @@
                             <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
                                 Propose Meeting Time
                             </md-button>
-                            <md-button ng-click="vm.openAddEventDialog()" class="md-accent" type="button">Submit for Voting</md-button>
+                            <span flex>
+                            </span>
                             <md-button ng-click="vm.openScheduleAssistantDialog()" class="md-accent" type="button">
                                 Use Schedule Assistant
                             </md-button>
@@ -90,6 +91,9 @@
                         <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center">
                             <h4 style="text-align:center;"> {{vm.printDate(event)}}&nbsp{{vm.printTimes(event)}}</h4>
                             <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Remove</md-button>
+                        </div>
+                        <div layout="row" layout-align="center center">
+                          <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Submit for Voting</md-button>
                         </div>
                     </div>
                 </div>
