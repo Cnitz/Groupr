@@ -11,7 +11,7 @@ var TaskSchema = new mongoose.Schema({
     dateCreated: { type: Date, required: true },
     dueDate: Date,
     category: String,
-    status: { type: String, required: true }
+    status: { type: Boolean, required: true }
 
 });
 
