@@ -4,4 +4,5 @@ define([
 	'./CalendarServices',
 	'./GoogleServices',
 	'./ChatServices',
+	'./EmailService'
 ], function () {});

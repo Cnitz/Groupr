@@ -73,6 +73,18 @@ define([
 					controller:		'Groupr.Controllers.Group',
 					controllerAs:   'vm',
 				})
+				.state('forgotPassword', {
+					url:			'/forgotPassword',
+					templateUrl:	'Views/_forgotPassword.html',
+					controller:		'Groupr.Controllers.ForgotPassword',
+					controllerAs:   'vm',
+				})
+				.state('newPassword', {
+					url:			'/newPassword',
+					templateUrl:	'Views/_newPassword.html',
+					controller:		'Groupr.Controllers.NewPassword',
+					controllerAs:   'vm',
+				})
 				.state('scheduleAssistant', {
 					url:			'/scheduleAssistant',
 					templateUrl:	'Views/_shedule_assistant.html',

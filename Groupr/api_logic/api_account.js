@@ -61,7 +61,7 @@ account.login = function(username, password, TOKEN_SECRET, res) {
                         res.status(200).cookie('grouprToken', token).json({message: 'Successful account login'});
                     }
                 });
-            }     
+            }
         }
     });
 }
@@ -113,6 +113,47 @@ account.get_user = function(token, res) {
             res.status(200).json(user);
         }
     });
+}
+account.updatePassword = function(req, res) {
+  User.findOne({ email : req.body.email})
+  .exec(function(err, user) {
+      if (user.password == req.body.curPassword){
+          user.password = req.body.newPassword
+          user.save((err) => {
+              if(err){
+                  res.status(500).json({
+                      error: err,
+                      message: 'Error: Password Update failed'
+                  });
+              }
+              else {
+                  res.status(200).json({
+                      message: 'Password Notification Update',
+                  });
+              }
+          });
+      }
+  })
+}
+account.randomPassword = function(req, res) {
+  User.findOne({ email : req.body.email})
+  .exec(function(err, user) {
+        user.password = req.body.newPassword
+        console.log(req.body.newPassword)
+        user.save((err) => {
+            if(err){
+                res.status(500).json({
+                    error: err,
+                    message: 'Error: Password Update failed'
+                });
+            }
+            else {
+                res.status(200).json({
+                    message: 'Password Randomized Update',
+                });
+            }
+        });
+  })
 }
 
 module.exports = account;

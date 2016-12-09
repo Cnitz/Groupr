@@ -35,6 +35,10 @@ define([
 			$scope.signup = function() {
 				$state.go('signup');
 			};
+			$scope.forgotPassword = function() {
+				
+				$state.go('forgotPassword');
+			};
 		}
 	]);
 });

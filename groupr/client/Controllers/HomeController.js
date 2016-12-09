@@ -9,7 +9,8 @@ define([
 		'Groupr.Services.CalendarServices',
 		'Groupr.Services.GoogleServices',
 		'$mdDialog',
-		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices, $mdDialog) {
+		'Groupr.Services.EmailService',
+		function HomeController($scope, $state, AccountServices, GroupServices, CalendarServices, GoogleServices, $mdDialog, EmailService) {
 			var vm = this;
 			vm.goHome = goHome;
 			vm.navigateToGroups = navigateToGroups;
@@ -17,14 +18,15 @@ define([
 			vm.goToGroup = goToGroup;
 			vm.activate = activate;
 			vm.addEvent = addEvent;
+			vm.openSettingsDialog = openSettingsDialog;
 			vm.deleteEvent = deleteEvent;
 			vm.editEvent = editEvent;
 			vm.googleAuth = googleAuth;
 			vm.printDate = printDate;
 			vm.printTimes = printTimes;
 			vm.openAddEventDialog = openAddEventDialog;
-            vm.openEditEventDialog = openEditEventDialog;
-            vm.goToTaskGroup = goToTaskGroup;
+      vm.openEditEventDialog = openEditEventDialog;
+      vm.goToTaskGroup = goToTaskGroup;
 			$scope.currentNavItem = "home";
 			$scope.myDate = new Date();
 			$scope.user = {};
@@ -43,7 +45,7 @@ define([
             function goToTaskGroup(t) {
                 console.log(t);
                 $state.go('groupindiv', { groupID: t.group });
-            } 
+            }
 
 			function printTimes(event){
 				var newStartTime = new Date(event.startTime);
@@ -158,7 +160,7 @@ define([
 							}
 						);
 
-                        // get the users groups 
+                        // get the users groups
                         GroupServices.getGroupByUser()
                             .then(function (res) {
                                 vm.groups = res.data.data;
@@ -176,7 +178,7 @@ define([
 
 
 
-                                // get the users tasks 
+                                // get the users tasks
                                 GroupServices.getTasksByUser()
                                     .then(function (res) {
                                         vm.tasks = res.data;
@@ -230,7 +232,7 @@ define([
                     locals : {
                         groupID: null,
                         calendarType: 'personal',
-                        event: event 
+                        event: event
                     },
                     onRemoving: function(element, removePromise) {
                         refresh();
@@ -249,6 +251,23 @@ define([
                     }
                 )
             }
+
+						function openSettingsDialog(ev) {
+			                $mdDialog.show({
+												controller: 'Groupr.Controllers.SettingDialog',
+		                    templateUrl: './Views/_setting_dialog.html',
+		                    parent: angular.element(document.body),
+		                    targetEvent: ev,
+		                    clickOutsideToClose: true,
+		                    fullscreen: true,
+		                    locals : {
+
+		                    },
+			                    onRemoving: function(element, removePromise) {
+			                        refresh();
+			                    }
+			                })
+			            }
 
 			activate();
 

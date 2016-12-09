@@ -241,6 +241,10 @@ router.route('/groups/join/:id').put((req, res) => {
     api_groups.join_group(req, res, req.params.id);
 });
 
+router.route('/sendNotifactions').get((req, res) => {
+    api_groups.get_group_by_id(req, res, req.params.id);
+});
+
 /*
  * PUT
  * Lets user leave a group specified by groupid
@@ -331,6 +335,8 @@ router.route('/calendar/edit_event').post((req, res) => {
         }
     });
 });
+
+
 
 router.route('/calendar/get_events').post((req, res) => {
     if (req.body.calendarType == 'group') {
@@ -771,10 +777,27 @@ router.route('/complaints/create').post((req, res) =>{
 });
 
 
-router.route('/notification/email').get((req, res) => {
+router.route('/emailNotifications/sendTestEmail').get((req, res) => {
     api_notification.sendTestEmail(req, res);
 });
+router.route('/emailNotifications/sendBasicEmail').post((req, res) => {
+    api_notification.sendEmail(req, res);
 
-
+});
+router.route('/emailNotifications/sendGroupEmail').post((req, res) => {
+    api_notification.sendMassGroupEmail(req, res);
+});
+router.route('/emailNotifications/updateEmailNotifications').post((req, res) => {
+    api_notification.updateEmailNotifications(req, res);
+});
+router.route('/emailNotifications/sendPasswordEmail').post((req, res) => {
+    api_notification.sendPasswordEmail(req, res);
+});
+router.route('/account/updatePassword').post((req, res) => {
+    api_account.updatePassword(req, res);
+});
+router.route('/account/randomizePassword').post((req, res) => {
+    api_account.randomPassword(req, res);
+})
 
 module.exports = router;

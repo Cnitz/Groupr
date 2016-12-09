@@ -10,6 +10,8 @@ var UserSchema = new mongoose.Schema({
     token: { type: String, index : { unique: true } },
     calendar: { type: ObjectId, ref: 'Calendar' },
     groups : [{ type: ObjectId, ref: 'Group' } ],
+    emailNotifications : { type: Boolean, default: true},
+    tempPassword : {type: Boolean, default: false},
 });
 
 module.exports = mongoose.model('User', UserSchema);

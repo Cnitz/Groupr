@@ -64,6 +64,15 @@ notification.sendBasicEmail = function(tooEmail, subjectEmail, textEmail) {
             console.log('Message sent: ' + info.response);
       });
 }
+
+notification.sendEmail = function(req, res){
+  notification.sendBasicEmail(req.body.tooEmail, req.body.subject, req.body.text)
+}
+
+notification.sendMassGroupEmail = function(req, res){
+  notification.sendGroupEmail(req.body.subjectEmail, req.body.textEmail, req.body.group_id)
+}
+
 notification.sendGroupEmail = function(subjectEmail, textEmail, group_id) {
       var transporter = nodemailer.createTransport(connection);
       Group.findOne({ _id: group_id})
@@ -75,24 +84,72 @@ notification.sendGroupEmail = function(subjectEmail, textEmail, group_id) {
           else {
                 console.log(group)
                 group.users.forEach(function(user) {
-                  var mailOptions = {
-                    from: '"No Reply Groupr" <noreplygroupr@gmail.com>', // sender address
-                    to: user.email, // list of receivers
-                    subject: subjectEmail, // Subject line
-                    text: textEmail
-                  }
+                  if (user.emailNotifications){
+                    var mailOptions = {
+                      from: '"No Reply Groupr" <noreplygroupr@gmail.com>', // sender address
+                      to: user.email, // list of receivers
+                      subject: subjectEmail, // Subject line
+                      text: textEmail
+                    }
 
-                    transporter.sendMail(mailOptions, function(error, info){
-                        if(error){
-                            return console.log(error);
-                        }
-                        console.log('Message sent: ' + info.response);
-                  });
+                      transporter.sendMail(mailOptions, function(error, info){
+                          if(error){
+                              return console.log(error);
+                          }
+                          console.log('Message sent: ' + info.response);
+                    });
+                  }
                 })
               }
         })
     }
 
+notification.updateEmailNotifications = function(req, res){
+      User.findOne({ token : req.cookies.grouprToken})
+      .exec(function(err, user) {
+          user.emailNotifications = req.body.result;
+          user.save((err) => {
+              if(err){
+                  res.status(500).json({
+                      error: err,
+                      message: 'Error: Notification Update failed'
+                  });
+              }
+              else {
+                  res.status(200).json({
+                      message: 'Successful Notification Update',
+                  });
+              }
+          });
+      })
+}
+
+notification.sendPasswordEmail = function(req, res){
+  User.findOne({ email : req.body.email})
+  .exec(function(err, user) {
+      if (user){
+        var transporter = nodemailer.createTransport(connection);
+        var mailOptions = {
+          from: '"No Reply Groupr" <noreplygroupr@gmail.com>', // sender address
+          to: user.email, // list of receivers
+          subject: 'Top Secret Email From Groupr', // Subject line
+          text: 'Your Password is ' + user.password
+        }
+          transporter.sendMail(mailOptions, function(error, info){
+              if(error){
+                  return console.log(error);
+              }
+              console.log('Message sent: ' + info.response);
+        });
+      } else {
+        console.log("hell World")
+      }
+
+      });
+
+
+
+}
 
 
 module.exports = notification;
