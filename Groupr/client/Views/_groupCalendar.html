@@ -94,7 +94,7 @@
                         <div layout="row" layout-align="center center">
                             <md-button ng-click="vm.scheuduleAssistant()" class="md-accent" type="button">Use Schedule Assistant</md-button>
                         </div>
-                        <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center" ng-show="votingActive">
+                        <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center">
                             <h4 style="text-align:center;"> {{vm.printDate(event)}}&nbsp{{vm.printTimes(event)}}</h4>
                             <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Remove</md-button>
                         </div>
