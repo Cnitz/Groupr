@@ -40,7 +40,7 @@ define([
             vm.currGroup = "";
             vm.events = [];
             $scope.pendingEvents = [];
-            $scope.checkBoxData = [];
+            $scope.checkBoxData = {};
             $scope.toggleLeft = buildDelayedToggler('left');
             $sce.trustAsResourceUrl("http://lh3.ggpht.com/_LOoKjxVTcbc/Snzl2ZTp6DI/AAAAAAAAGn0/OG3FBZrF_N4/6.png");
 
@@ -199,9 +199,9 @@ define([
             };
 
             $scope.statusChanged = function (task) {
-
-                    var data = { taskId: task._id, status: task.status};
-                    console.log(data);
+                $scope.checkBoxData[task.title];
+                var data = { taskId: task._id, status: $scope.checkBoxData[task.title] };
+                console.log(data);
 
                 GroupServices.updateTaskInfo(data)
                     .then(function (res) {
@@ -250,8 +250,8 @@ define([
                 $state.go('groupindiv', { groupID: vm.groupID });
             }
 
-            function groupComplaints(){
-                $state.go('groupComplaints', {groupID: vm.groupID});
+            function groupComplaints() {
+                $state.go('groupComplaints', { groupID: vm.groupID });
             }
 
             function activate() {
@@ -264,6 +264,12 @@ define([
                             GroupServices.getTasks(g)
                                 .then(function (resTwo) {
                                     vm.tasks = resTwo.data;
+
+                                    vm.tasks.forEach(function (element) {
+                                        $scope.checkBoxData[element.title] = element.status;
+                                    });
+
+
                                 }, function (resTwo) {
                                     console.log(resTwo.data);
                                 });
@@ -286,6 +292,8 @@ define([
 
 
                 }
+
+                
             }
 
             activate();

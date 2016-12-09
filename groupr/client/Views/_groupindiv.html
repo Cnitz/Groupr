@@ -38,7 +38,7 @@
                             <p style="text-align:center; color:darkred" ng-if="task.users.length == 0">No users assigned to this task</p>
                             <div style="text-align:center;" ng-if="task.dueDate != null">Due Date: {{task.dueDate | date: 'MM-dd-yyyy'}}</div>
                             <div flex-gt-sm="50" style="text-align:center;">
-                                <md-checkbox ng-model="task.status" aria-label="Completed?" ng-change="statusChanged(task)">
+                                <md-checkbox ng-model="checkBoxData[task.title]" aria-label="Completed?" ng-change="statusChanged(task)">
                                     Task Complete?
                                 </md-checkbox>
                             </div>
