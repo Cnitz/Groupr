@@ -44,8 +44,8 @@ define([
             vm.submitToGroup = submitToGroup;
             vm.openAddEventDialog = openAddEventDialog;
             vm.openEditEventDialog = openEditEventDialog;
-            vm.openDoodleDialog = openDoodleDialog;  
-            
+            vm.openDoodleDialog = openDoodleDialog;
+
             $scope.currentNavItem = "groups";
             $scope.customFullscreen = false;
             $scope.durationHours = 0;
@@ -407,40 +407,40 @@ define([
 
             function mapMonth(month) {
                 switch (month) {
-                    case 1: 
+                    case 1:
                         return 'January';
                     break;
-                    case 2: 
+                    case 2:
                         return 'February';
                     break;
-                    case 3: 
+                    case 3:
                         return 'March';
                     break;
-                    case 4: 
+                    case 4:
                         return 'April';
                     break;
-                    case 5: 
+                    case 5:
                         return 'May';
                     break;
-                    case 6: 
+                    case 6:
                         return 'June';
                     break;
-                    case 7: 
+                    case 7:
                         return 'July';
                     break;
-                    case 8: 
+                    case 8:
                         return 'August';
                     break;
-                    case 9: 
+                    case 9:
                         return 'September';
                     break;
-                    case 10: 
+                    case 10:
                         return 'October';
                     break;
-                    case 11: 
+                    case 11:
                         return 'November';
                     break;
-                    case 12: 
+                    case 12:
                         return 'December';
                     break;
                 }
@@ -455,8 +455,18 @@ define([
             function printTimes(event) {
                 var newStartTime = new Date(event.startTime);
                 var newEndTime = new Date(event.endTime);
+                var minutes1= "";
+                var minutes2= "";
 
-                return newStartTime.getHours() + ':' + newStartTime.getMinutes() + ' - ' + newEndTime.getHours() + ':' + newEndTime.getMinutes()
+                if(newStartTime.getMinutes() < 10){
+                  minutes1 = "0"+newStartTime.getMinutes();
+                }
+
+                if(newEndTime.getMinutes() < 10){
+                  minutes2 = "0"+newEndTime.getMinutes();
+                }
+
+                return newStartTime.getHours() + ':' + minutes1 + ' - ' + newEndTime.getHours() + ':' + minutes2;
             }
 
             function addEvent() {
