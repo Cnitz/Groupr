@@ -19,7 +19,7 @@
               <div style="text-align:center;"><md-button id="btnLeaveGroup" ng-click="vm.leaveGroup()" class="md-primary" type="button" aria-label="Leave Group">  Leave Group</md-button></div>
             </md-content>
         </md-sidenav>
-        <md-content class="md-padding" layout="row" layout-align="center center" flex="">
+        <md-content layout="row" layout-align="left">
             <div width="500" width="50%" ng-show="votingActive">
                 <h2> Vote on meeting times </h2>
                 <md-card width="500">
@@ -64,20 +64,38 @@
                             <h2 style="text-align:center;"> {{ eventName }}</h2>
                             <h4 style="text-align:center;"> {{ eventLocation }} </h4>
                             <p style="text-align:center;"> {{ eventDescription }} </p>
+                        </div>
+                        <div layout="row">
+                            <md-input-container>
+                            <md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>StartTime</label>
+                                <input ng-model="startTime" type="text" name="startTime">
+                            </md-input-container>
+                            <md-input-container>
+                                <label>EndTime</label>
+                                <input ng-model="endTime" type="text" name="endTime">
+                            </md-input-container>
                         </div>              
                         <div layout="row">
-                            <md-button ng-click="vm.openAddEventDialog()" class="md-accent" type="button">
-                                Propose Event
+                            <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
+                                Propose Meeting Time
                             </md-button>
                             <span flex>
                             </span>
-                            <md-button ng-click="vm.openAddEventDialog()" class="md-accent" type="button">
-                                Reccomend A Time
+                            <md-button ng-click="vm.openScheduleAssistantDialog()" class="md-accent" type="button">
+                                Use Schedule Assistant
                             </md-button>
                         </div>
-                    </div>     
-                    
-                </md-card>
+                        <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center">
+                            <h4 style="text-align:center;"> {{vm.printDate(event)}}&nbsp{{vm.printTimes(event)}}</h4>
+                            <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Remove</md-button>
+                        </div>                    
+                    </div>
+                </div> 
+            </md-card>             
+                
                 
 
               <!--
@@ -132,7 +150,7 @@
                 </div>
                 <md-button ng-click="vm.submitToGroup()" onclick="disabled='false';" class="md-accent" type="button">Submit for Voting</md-button> -->
             </div>
-            <md-content class="md-padding" layout="column" layout-align="center center" flex="">
+            <md-content layout="column" layout-align="" flex="">
                 <md-card>
                     <md-toolbar>
                         <div class="md-toolbar-tools">
@@ -141,12 +159,12 @@
                     </md-toolbar>
                     <md-list flex>
                         <md-list-item class="md-3-line" ng-repeat="event in vm.events | orderBy:'-startTime' : true" ng-click="vm.openEditEventDialog(event)">
-                            <div class="md-list-item-text" layout="column" style="margin: 50px">
+                            <div layout="column" style="margin: 20px">
                                 <h2 style="text-align:center;">{{ event.name }}</h2>
-                                <div class="md-list-item-text" layout="row">
-                                    <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
-                                    <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
-                                </div>
+                                <h4 style="text-align:center;"> {{ event.location }} </h4>
+                                <p style="text-align:center;"> {{ event.description }} </p>
+                                <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
+                                <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
                             </div>
                         </md-list-item>
                     </md-list>
