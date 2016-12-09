@@ -19,6 +19,10 @@ define([
             }
             vm.goHome = goHome;
 
+            vm.chatRefresh;
+            vm.checkForMessages = checkForMessages;
+            vm.lastMessageDate = new Date();
+
             vm.groupCalendar = groupCalendar;
             vm.groupChat = groupChat;
             vm.groupTasks = groupTasks;
@@ -52,11 +56,11 @@ define([
                         console.log("update status failure!");
                         console.log(res);
                     });
-
-
             };
 
+
             function leaveGroup() {
+                clearInterval(vm.chatRefresh);
                 GroupServices.leaveGroup(vm.groupID);
                 $state.go('home');
             }
@@ -68,19 +72,44 @@ define([
 
             /*Navigates to Group Calendar sub-page*/
             function groupCalendar() {
+                clearInterval(vm.chatRefresh);
                 console.log("groupID: " + vm.groupID);
                 $state.go('groupCalendar', { groupID: vm.groupID });
             }
 
+            function checkForMessages(){
+              ChatServices.getLastMessage().then(
+                function(res){
+                  var date2 = new Date(res.data.date);
+                  if(vm.lastMessageDate < date2){
+                  ChatServices.getMessages($stateParams.groupID).then(
+                      function(res2){
+                        $scope.messages = res2.data;
+                        vm.lastMessageDate = new Date();
+                      }, function(res2){
+                        console.log("Failing in res2");
+                      }
+                    )
+                  }
+
+                }, function(res){
+                  console.log("Failing in res1");
+                }
+              )
+            }
+
             function groupChat() {
+                clearInterval(vm.chatRefresh);
                 $state.go('groupChat', { groupID: vm.groupID });
             }
 
             function groupTasks() {
+                clearInterval(vm.chatRefresh);
                 $state.go('groupindiv', { groupID: vm.groupID });
             }
 
             function groupComplaints(){
+                clearInterval(vm.chatRefresh);
                 $state.go('groupComplaints', {groupID: vm.groupID});
             }
 
@@ -99,6 +128,7 @@ define([
                     console.log(res);
                   }
                 )
+                vm.chatRefresh = setInterval(checkForMessages, 3000);
 
               }
             activate();

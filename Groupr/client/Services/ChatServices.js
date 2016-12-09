@@ -23,6 +23,13 @@ define([
 				});
 			}
 
+			service.getLastMessage = function(groupID) {
+				return $http({
+					method: 'GET',
+					url: url + groupID+'/lastMessageDate',
+				});
+			}
+
 			return service;
 		}
 	]);
