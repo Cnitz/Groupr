@@ -19,32 +19,45 @@
             </md-content>
         </md-sidenav>
         <md-content layout="column" layout-align="center center" flex="">
-          <md-card style="overflow:auto; width:60%;">
-          <md-toolbar>
-              <div class="md-toolbar-tools">
-              <h1>Complaints</h1>
-               </div>
-          </md-toolbar>
-              <md-list flex>
-                  <md-list-item class="md-3-line" ng-repeat="complaint in vm.complaints | orderBy: dateCreated"> <!-- Add Some NG-Repeat to this md-list-item tag -->
-                      <div class="md-list-item-text" layout="column">
-                          <h3 style="text-align:center;">{{complaint.title}}</h3>
-                        <div class="md-list-item-text" layout="row">
-                            <p style="text-align:center;"> {{complaint.message}}</p><br />  
+            <md-card style="overflow:auto; width:60%;">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h1>Complaints</h1>
+                    </div>
+                </md-toolbar>
+                <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat="complaint in vm.complaints | orderBy: dateCreated">
+                        <!-- Add Some NG-Repeat to this md-list-item tag -->
+                        <div class="md-list-item-text" layout="column">
+                            <h3 style="text-align:center;">{{complaint.title}}</h3>
+                            <div class="md-list-item-text" layout="row">
+                                <p style="text-align:center;"> {{complaint.message}}</p><br />
+                            </div>
+                            <h4 style="text-align:center;">Created on: {{complaint.dateCreated | date: 'MM-dd-yyyy'}}</h4>
+                            <h5 style="text-align:center;">
+                                Urgency:
+                                <span data-ng-if="complaint.urgency == 'Low'" style="color:darkgreen">{{complaint.urgency}}</span>
+                                <span data-ng-if="complaint.urgency == 'Medium'" style="color:darkorange">{{complaint.urgency}}</span>
+                                <span data-ng-if="complaint.urgency == 'High'" style="color:darkred">{{complaint.urgency}}</span>
+                            </h5>
                         </div>
-                        <h4 style="text-align:center;"> {{complaint.dateCreated}}</h4>
-                      </div>
-                  </md-list-item>
-              </md-list>
-        			<label>Title</label><input width="50%" ng-model="vm.complaint.title"></input>
-        			<label>Message</label><input width="50%" ng-model="vm.complaint.message"></input>
-                    <form>
-                        <input type="radio" ng-model="vm.complaint.urgency" name="urgency" value="Low"> Low</input>
-                        <input type="radio" ng-model="vm.complaint.urgency" name="urgency" value="Medium"> Medium</input>
-                        <input type="radio" ng-model="vm.complaint.urgency" name="urgency" value="High"> High</input>
-                    </form>
-          <md-button ng-click="vm.createComplaint(vm.complaint)" class="md-accent" type="button">Send</md-button>
-      </md-card>
+                    </md-list-item>
+                </md-list>
+                <md-input-container>
+                    <label>Title</label>
+                    <input width="50%" ng-model="vm.complaint.title">
+                </md-input-container>
+                <md-input-container>
+                    <label>Message</label>
+                    <input width="50%" ng-model="vm.complaint.message">
+                </md-input-container>
+                <md-radio-group layout="row" style="margin-left:10px;" ng-model="vm.complaint.urgency">
+                    <md-radio-button name="urgency" value="Low"> Low</md-radio-button>
+                    <md-radio-button name="urgency" value="Medium"> Medium</md-radio-button>
+                    <md-radio-button name="urgency" value="High"> High</md-radio-button>
+                </md-radio-group>
+                <md-button ng-click="vm.createComplaint(vm.complaint)" class="md-accent" type="button">Send</md-button>
+            </md-card>
         </md-content>
-      </section>
-  </div>
+    </section>
+</div>

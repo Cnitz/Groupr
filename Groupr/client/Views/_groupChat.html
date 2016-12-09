@@ -19,22 +19,31 @@
             </md-content>
         </md-sidenav>
         <md-content layout="column" layout-align="center center" flex="">
-          <md-card style="overflow:auto; width:60%; height: 100%;">
-          <md-toolbar>
-              <div class="md-toolbar-tools">
-              <h1>Group Chat</h1>
-               </div>
-          </md-toolbar>
-              <md-list flex style="overflow: auto; height: 500px;">
-                  <md-list-item class="md-3-line" ng-repeat="message in messages"> <!-- Add Some NG-Repeat Here -->
-                      <div class="md-list-item-text" layout="column" layout-align="start start">
-                          <h4 style="text-align:center;">{{message.user}} : {{message.message}}</h4>
-                      </div>
-                  </md-list-item>
-              </md-list>
-        			<input width="50%" ng-model="newMessage"></input>
-          <md-button ng-click="vm.sendMessage()" class="md-accent" type="button">Send</md-button>
-      </md-card>
+            <md-card style="overflow:auto; width:60%; height: 100%;">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h1>Group Chat</h1>
+                    </div>
+                </md-toolbar>
+                <md-list flex style="overflow: auto; height: 500px;">
+                    <md-list-item class="md-2-line md-long-text" ng-repeat="message in messages">
+                        <!-- Add Some NG-Repeat Here -->
+                        <img ng-src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/2000px-User_icon_2.svg.png" class="md-avatar" alt="{{message.user}}" />
+                        <div class="md-list-item-text" layout-align="start start">
+                            <h4>{{message.user}}</h4>
+                            <p><b>{{message.message}}</b></p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+                <form ng-submit="vm.sendMessage()" layout="column">
+                    <md-input-container>
+                        <label>Send Message:</label>
+                        <input ng-model="newMessage" placeholder="Say something!">
+                    </md-input-container>
+
+                    <md-button ng-click="vm.sendMessage()" class="md-accent" type="button">Send</md-button>
+                </form>
+            </md-card>
         </md-content>
-      </section>
-  </div>
+    </section>
+</div>
