@@ -455,7 +455,7 @@ define([
             function printTimes(event) {
                 var newStartTime = new Date(event.startTime);
                 var newEndTime = new Date(event.endTime);
-                /*var minutes1= "";
+                var minutes1= "";
                 var minutes2= "";
 
                 if(newStartTime.getMinutes() < 10){
@@ -464,9 +464,9 @@ define([
 
                 if(newEndTime.getMinutes() < 10){
                   minutes2 = "0"+newEndTime.getMinutes();
-                }*/
+                }
 
-                return newStartTime.getHours() + ':' + newStartTime.getMinutes() + ' - ' + newEndTime.getHours() + ':' + newEndTime.getMinutes();
+                return newStartTime.getHours() + ':' + minutes1 + ' - ' + newEndTime.getHours() + ':' + minutes2;
             }
 
             function addEvent() {
