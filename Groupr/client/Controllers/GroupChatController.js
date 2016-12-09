@@ -128,7 +128,7 @@ define([
                     console.log(res);
                   }
                 )
-                vm.chatRefresh = setInterval(checkForMessages, 3000);
+                vm.chatRefresh = setInterval(checkForMessages, 1000);
 
               }
             activate();
