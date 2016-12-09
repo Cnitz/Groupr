@@ -530,7 +530,7 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
                 })
                 api_calendar.schedule_assistant(calendarList, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
                     if (obj.status != 500) {
-                        res.status(200).json({message: 'Success'});
+                        res.status(200).send(obj.event);
                     }
                     else {
                         res.status(500).json({message: 'Failure to recommend time'});
@@ -765,6 +765,10 @@ router.route('/chat/:group').get((req, res) => {
 
 router.route('/complaints/create').post((req, res) =>{
     api_complaint.createComplaint(req, res);
+});
+
+router.route('/complaints/group/:groupid').get((req, res) =>{
+    api_complaint.getGroupComplaints(req, res, req.params.groupid);
 });
 
 
