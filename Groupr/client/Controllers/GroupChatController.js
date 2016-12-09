@@ -20,7 +20,7 @@ define([
             vm.goHome = goHome;
 
             vm.checkForMessages = checkForMessages;
-            vm.chatRefresh =s etInterval(checkForMessages, 1000);
+            vm.chatRefresh = setInterval(checkForMessages, 1000);
             vm.lastMessageDate = new Date();
 
             vm.groupCalendar = groupCalendar;
