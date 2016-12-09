@@ -22,7 +22,7 @@ var CalendarSchema = new mongoose.Schema({
         recommended: {
             startTime: Date,
             endTime: Date
-        }
+        },
         events: [{ 
             startTime: Date,
             endTime: Date,
