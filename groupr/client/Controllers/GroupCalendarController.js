@@ -528,14 +528,21 @@ define([
                 CalendarServices.getGroupCalendar($stateParams.groupID)
                 .then(
                     function (result) {
-                        $scope.votingEvents = result.data.schedule_assistant.events;
-                        $scope.votingEvents.forEach(function(event){
-                          event.selected = false;
-                        })
-                        $scope.votingActive = result.data.schedule_assistant.active;
                         vm.events = result.data.events;
-                        vm.voters = result.data.schedule_assistant.voters;
+                        $scope.doodleInProgress = result.data.schedule_assistant.inProgress;
+                        $scope.votingActive = result.data.schedule_assistant.active;
+
+                        if ($scope.doodleInProgress) {
+                            $scope.eventName = result.data.schedule_assistant.name;
+                            $scope.eventLocation = result.data.schedule_assistant.location;
+                            $scope.eventDescription = result.data.schedule_assistant.description;
+                        }
                         if (votingActive) {
+                            vm.voters = result.data.schedule_assistant.voters;
+                            $scope.votingEvents = result.data.schedule_assistant.events;
+                            $scope.votingEvents.forEach(function(event){
+                                event.selected = false;
+                            })
                             vm.voters.forEach(function(voter) {
                                 if (voter === $scope.user.username) {
                                     $scope.hasVoted = true;
@@ -607,7 +614,7 @@ define([
             function openScheduleAssistantDialog(ev) {
                 $mdDialog.show({
                     controller: 'Groupr.Controllers.StartDoodleDialog',
-                    templateUrl: './Views/_start_doodle_dialog.html',
+                    templateUrl: './Views/_schedule_assistant.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true,
