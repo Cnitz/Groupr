@@ -229,6 +229,7 @@ router.route('/groups').get((req, res) => {
  */
 router.route('/groups/:id').get((req, res) => {
     api_groups.get_group_by_id(req, res, req.params.id);
+
 });
 
 /*

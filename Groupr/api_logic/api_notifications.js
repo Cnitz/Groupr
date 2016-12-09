@@ -64,20 +64,35 @@ notification.sendBasicEmail = function(tooEmail, subjectEmail, textEmail) {
             console.log('Message sent: ' + info.response);
       });
 }
-notification.sendGroupEmail = function(tooEmail, subjectEmail, textEmail, group) {
+notification.sendGroupEmail = function(subjectEmail, textEmail, group_id) {
       var transporter = nodemailer.createTransport(connection);
-      var mailOptions = {
-        from: '"No Reply Groupr" <noreplygroupr@gmail.com>', // sender address
-        to: tooEmail, // list of receivers
-        subject: subjectEmail, // Subject line
-        text: textEmail
-      }
-        transporter.sendMail(mailOptions, function(error, info){
-            if(error){
-                return console.log(error);
-            }
-            console.log('Message sent: ' + info.response);
-      });
-}
+      Group.findOne({ _id: group_id})
+      .populate('users')
+      .exec(function(err, group) {
+          if (err) {
+              res.status(500).json({message: 'Error: Database access'});
+          }
+          else {
+                console.log(group)
+                group.users.forEach(function(user) {
+                  var mailOptions = {
+                    from: '"No Reply Groupr" <noreplygroupr@gmail.com>', // sender address
+                    to: user.email, // list of receivers
+                    subject: subjectEmail, // Subject line
+                    text: textEmail
+                  }
+
+                    transporter.sendMail(mailOptions, function(error, info){
+                        if(error){
+                            return console.log(error);
+                        }
+                        console.log('Message sent: ' + info.response);
+                  });
+                })
+              }
+        })
+    }
+
+
 
 module.exports = notification;
