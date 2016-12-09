@@ -6,17 +6,24 @@
 	</md-toolbar>
 	<md-dialog-content style="min-width: 300px;" class="md-padding" layout="column" layout-align="center center">
 		<md-input-container style="margin: 0px">
-			<label>Name</label>
-			<input ng-model="eventName"></input>
+			<md-datepicker ng-model="myDate" name="myDate" md-placeholder="Enter date"></md-datepicker>
 		</md-input-container>
 		<md-input-container style="margin: 0px">
-			<label>Description</label>
-			<input ng-model="eventDescription"></input>
+			<label>Start Time</label>
+			<input ng-model="startTime"></input>
 		</md-input-container>
 		<md-input-container style="margin: 0px">
-			<label>Location</label>
-			<input ng-model="eventLocation"></input>
+			<label>End Time</label>
+			<input ng-model="endTime"></input>
 		</md-input-container>
+		<md-input-container>
+            <label> Hours </label>
+            <input ng-model="durationHours" type="text" name="durationHours">
+        </md-input-container>
+        <md-input-container>
+            <label> Minutes </label>
+            <input ng-model="durationMinutes" type="text" name="durationMinutes">
+        </md-input-container>
 	</md-dialog-content>
 
 

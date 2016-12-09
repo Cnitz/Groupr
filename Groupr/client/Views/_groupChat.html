@@ -19,13 +19,13 @@
             </md-content>
         </md-sidenav>
         <md-content layout="column" layout-align="center center" flex="">
-          <md-card style="overflow:auto; width:60%;">
+          <md-card style="overflow:auto; width:60%; height: 100%;">
           <md-toolbar>
               <div class="md-toolbar-tools">
               <h1>Group Chat</h1>
                </div>
           </md-toolbar>
-              <md-list flex>
+              <md-list flex style="overflow: auto; height: 500px;">
                   <md-list-item class="md-3-line" ng-repeat="message in messages"> <!-- Add Some NG-Repeat Here -->
                       <div class="md-list-item-text" layout="column" layout-align="start start">
                           <h4 style="text-align:center;">{{message.user}} : {{message.message}}</h4>

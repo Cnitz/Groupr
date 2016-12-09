@@ -77,7 +77,7 @@
                                 <label>EndTime</label>
                                 <input ng-model="endTime" type="text" name="endTime">
                             </md-input-container>
-                        </div>              
+                        </div>
                         <div layout="row">
                             <md-button ng-click="vm.proposeEvent()" class="md-accent" type="button">
                                 Propose Meeting Time
@@ -88,15 +88,31 @@
                                 Use Schedule Assistant
                             </md-button>
                         </div>
+
+                        <div layout="row" layout-align="space-around center">
+                            <md-input-container>
+                                <label> Hours </label>
+                                <input ng-model="durationHours" type="text" name="durationHours">
+                            </md-input-container>
+                            <md-input-container>
+                                <label> Minutes </label>
+                                <input ng-model="durationMinutes" type="text" name="durationMinutes">
+                            </md-input-container>
+                        </div>
+
                         <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center">
                             <h4 style="text-align:center;"> {{vm.printDate(event)}}&nbsp{{vm.printTimes(event)}}</h4>
                             <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Remove</md-button>
-                        </div>                    
+                        </div>
+
+                        <div layout="row" layout-align="center center">
+                          <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Submit for Voting</md-button>
+                        </div>
                     </div>
-                </div> 
-            </md-card>             
-                
-                
+                </div>
+            </md-card>
+
+
 
               <!--
                 useless comment
@@ -149,7 +165,6 @@
                     </md-card>
                 </div>
                 <md-button ng-click="vm.submitToGroup()" onclick="disabled='false';" class="md-accent" type="button">Submit for Voting</md-button> -->
-            </div>
             <md-content layout="column" layout-align="" flex="">
                 <md-card>
                     <md-toolbar>
@@ -160,11 +175,10 @@
                     <md-list flex>
                         <md-list-item class="md-3-line" ng-repeat="event in vm.events | orderBy:'-startTime' : true" ng-click="vm.openEditEventDialog(event)">
                             <div layout="column" style="margin: 20px">
-                                <h2 style="text-align:center;">{{ event.name }}</h2>
-                                <h4 style="text-align:center;"> {{ event.location }} </h4>
-                                <p style="text-align:center;"> {{ event.description }} </p>
-                                <h3 style="text-align:center;"> {{vm.printDate(event)}}&nbsp</h3>
-                                <h3 style="text-align:center;"> {{vm.printTimes(event)}}</h3>
+                                <h3 style="text-align:center;">{{ event.name }}</h3>
+                                <h4 style="text-align:center;"> {{vm.printDate(event)}} {{" "+vm.printTimes(event)}} </h4>
+                                <div style="text-align:center;"> {{ event.location }} </div>
+                                 <div style="text-align:center;"> {{ event.description }} </div>
                             </div>
                         </md-list-item>
                     </md-list>

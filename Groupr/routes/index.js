@@ -530,10 +530,10 @@ router.route('/calendar/schedule_assistant').post((req, res) => {
                 })
                 api_calendar.schedule_assistant(calendarList, req.body.startTime, req.body.endTime, req.body.length, (obj) => {
                     if (obj.status != 500) {
-                        res.status(obj.status).send(obj.event);
+                        res.status(200).json({message: 'Success'});
                     }
                     else {
-                        res.status(500).json({message: 'Failure'})
+                        res.status(500).json({message: 'Failure to recommend time'});
                     }
                 });
             })
