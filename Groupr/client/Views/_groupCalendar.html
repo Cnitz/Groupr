@@ -54,12 +54,12 @@
                             <h1>Doodle</h1>
                         </div>
                     </md-toolbar>
-                    <div ng-show="!doodleInProgress">
+                    <div ng-show="!doodleInProgress && !votingActive">
                         <md-button ng-click="vm.openDoodleDialog()" class="md-accent" type="button">
                             Create new doodle
                         </md-button>
                     </div>
-                    <div ng-show="doodleInProgress">
+                    <div ng-show="doodleInProgress && !votingActive">
                         <div layout="column" style="margin: 50px">
                             <h2 style="text-align:center;"> {{ eventName }}</h2>
                             <h4 style="text-align:center;"> {{ eventLocation }} </h4>
@@ -100,7 +100,7 @@
                             </md-input-container>
                         </div>
 
-                        <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center">
+                        <div layout="row" ng-repeat="event in pendingEvents" layout-align="center center" ng-show="votingActive">
                             <h4 style="text-align:center;"> {{vm.printDate(event)}}&nbsp{{vm.printTimes(event)}}</h4>
                             <md-button ng-click="vm.deleteProposedEvent(event)" class="md-accent" type="button">Remove</md-button>
                         </div>
