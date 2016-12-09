@@ -14,11 +14,17 @@ define([
 		'$sce',
 		'$filter',
 		'ngToast',
-		function ComplaintBoxController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $sce, $filter, ngToast) {
+		'Groupr.Services.ComplaintServices',
+		function ComplaintBoxController($scope, $state, GroupServices, AccountServices, $stateParams, CalendarServices, $mdSidenav, $log, $mdDialog, $sce, $filter, ngToast, ComplaintServices) {
 			var vm = this;
 			{
 					vm.groups = [];
 					vm.tasks = [];
+					vm.complaint = {'title' : null,
+									'message': null,
+									'urgency': null,
+									'group': $stateParams.groupID};
+					vm.complaints = [];
 			}
 			vm.goHome = goHome;
 			vm.groupCalendar = groupCalendar;
@@ -29,6 +35,7 @@ define([
 			vm.refresh = refresh;
 			vm.navigateToScheduleAssistant = navigateToScheduleAssistant;
 			vm.navigateToGroupChat = navigateToGroupChat;
+			vm.createComplaint = createComplaint;
 			$scope.currentNavItem = "groups";
 			$scope.customFullscreen = false;
 			$scope.users = [];
@@ -54,6 +61,7 @@ define([
 
 
 			};
+
 
 			function leaveGroup() {
 					GroupServices.leaveGroup(vm.groupID);
@@ -94,6 +102,7 @@ define([
 											GroupServices.getTasks(g)
 													.then(function (resTwo) {
 															vm.tasks = resTwo.data;
+															getAllComplaints($stateParams.groupID);
 													}, function (resTwo) {
 															console.log(resTwo.data);
 													});
@@ -119,6 +128,23 @@ define([
 			}
 
 			activate();
+	
+			function createComplaint(complaint){
+				if(complaint.title && complaint.message && complaint.urgency){
+					
+					return ComplaintServices.createComplaint(complaint).then(function(){
+						complaint.title = null;
+						complaint.message = null;
+						complaint.urgency = null;
+						getAllComplaints(vm.groupID);
+					});
+				}
+				else{
+
+					ngToast.danger('Please finish filling out complaint before submission.');
+				}
+		}
+
 
 			/**
 			* Supplies a function that will continue to operate until the
@@ -136,6 +162,12 @@ define([
 									func.apply(context, args);
 							}, wait || 10);
 					};
+			}
+
+			function getAllComplaints(id){
+				return ComplaintServices.getAllComplaints(id).then(function(res){
+						vm.complaints = res.data.complaints;
+				});
 			}
 
 			/**

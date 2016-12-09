@@ -18,6 +18,8 @@ var complaint = new Object();
 
 complaint.createComplaint = function(req, res) {
      
+    console.log(res.body);
+
     User.findOne({token: req.cookies.grouprToken}).exec(function(err, user){
         if(err){
             res.status(500).json({
@@ -79,5 +81,26 @@ complaint.createComplaint = function(req, res) {
         });
 }
 
+
+complaint.getGroupComplaints = function (req, res, groupid) {
+    console.log(groupid);
+        Group.findOne({_id: groupid}).populate('complaints').exec(function(err, group){
+         if (err) {
+                            res.status(500).json({
+                                error: err,
+                                message: 'Error: Complaints not found'
+                            });
+                        }
+                        else {
+                            res.status(200).json({
+                                message: 'Complaints Retreived Succesfullly!',
+                                complaints: group.complaints
+                            })
+                        }
+    
+        });
+
+
+}
 
 module.exports = complaint;
