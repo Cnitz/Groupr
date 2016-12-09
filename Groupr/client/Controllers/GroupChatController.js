@@ -19,8 +19,8 @@ define([
             }
             vm.goHome = goHome;
 
-            vm.chatRefresh;
             vm.checkForMessages = checkForMessages;
+            vm.chatRefresh =s etInterval(checkForMessages, 1000);
             vm.lastMessageDate = new Date();
 
             vm.groupCalendar = groupCalendar;
@@ -128,7 +128,6 @@ define([
                     console.log(res);
                   }
                 )
-                vm.chatRefresh = setInterval(checkForMessages, 1000);
 
               }
             activate();
