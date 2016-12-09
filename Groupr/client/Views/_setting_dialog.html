@@ -1,0 +1,20 @@
+<md-dialog aria-label="Settings">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Settings</h2>
+		</div>
+	</md-toolbar>
+	<md-dialog-content style="min-width: 300px;" class="md-padding" layout="column" layout-align="center center">
+		<md-checkbox style="margin: 0px" ng-model="emailNotifications">
+			<label>Recieve Email Notifications</label>
+		</md-checkbox>
+	</md-dialog-content>
+	<md-dialog-actions layout="row" layout-align="center center">
+		<md-button type="button" ng-click="close()">
+			Cancel
+		</md-button>
+		<md-button type="button" ng-click="save()">
+			Save
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

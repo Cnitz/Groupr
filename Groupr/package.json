@@ -19,7 +19,9 @@
     "passport": "^0.3.2",
     "requirejs": "^2.3.2",
     "google-calendar": "^*",
-    "passport-google-oauth2": "*"
+    "passport-google-oauth2": "*",
+    "nodemailer": "*",
+    "node-schedule":"*"
   },
   "author": "",
   "license": "ISC"

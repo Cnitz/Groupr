@@ -176,7 +176,6 @@ define([
 				});
 			}
 			service.authenticateUser = function() {
-				console.log("testing");
 				return $http({
 					method: 'get',
 					url: "http://localhost:3000/api/calendar/auth/google",
