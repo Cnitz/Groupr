@@ -130,13 +130,13 @@ group.join_group = function(req, res, group_id){
             if(user.groups.indexOf(group_id) == -1){
 
             Group.findOne({_id: group_id}, function (err, group){
-                if (err) {
+                if (err || group == undefined || group == null || group.creator == user._id) {
                     res.status(500).json({
                         error: err,
                         message:  'Error: Joining group failed'
                     });
                 }
-                if(group.users.indexOf(user._id) == -1){
+                else if(group.users.indexOf(user._id) == -1){
                 group.users.push(user._id);
 
                 group.save((err) => {
